@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+import SiteFooter from "../components/SiteFooter.astro";
+import firaSansSemibold from "../assets/fonts/fira-sans-semibold.woff2?url";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+}
+
+const { title, description, canonical } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const homeHref = `${base.replace(/\/$/, "")}/`;
+const fullTitle = `${title} — Thoughts by Christopher Kuhrt`;
+const isOverview = Astro.url.pathname === homeHref;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="preload"
+      href={firaSansSemibold}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a
+          class="site-brand"
+          href="https://chriskuhrt.de"
+          aria-label="Christopher Kuhrt"
+        >
+          <span class="site-brand__mark" aria-hidden="true"></span>
+          <img
+            class="site-brand__wordmark"
+            src={`${base}images/ck.svg`}
+            alt=""
+          />
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href={homeHref} aria-current={isOverview ? "page" : undefined}>
+            Sharing Thoughts
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="main-content">
+      <div class="site-shell">
+        <slot />
+      </div>
+    </main>
+    <SiteFooter />
+  </body>
+</html>

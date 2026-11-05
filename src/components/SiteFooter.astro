@@ -1,0 +1,193 @@
+---
+const socialColumns = [
+  [
+    { label: "LinkedIn", href: "https://linkedin.chriskuhrt.de/" },
+    { label: "Xing", href: "https://xing.chriskuhrt.de/" },
+    { label: "Twitter/X", href: "https://twitter.chriskuhrt.de/" },
+  ],
+  [
+    { label: "Github", href: "https://github.chriskuhrt.de/" },
+    { label: "Medium", href: "https://medium.chriskuhrt.de/" },
+    { label: "500px", href: "https://500px.chriskuhrt.de/" },
+    { label: "Vimeo", href: "https://vimeo.chriskuhrt.de/" },
+  ],
+];
+
+const projects = [
+  { label: "UX Freiburg", href: "https://uxfreiburg.de/" },
+  { label: "Pixelbricks", href: "https://pixelbricks.de/" },
+];
+---
+
+<footer class="site-footer">
+  <div class="site-footer__stack">
+    <div class="site-footer__sections">
+      <section class="site-footer__section" aria-labelledby="footer-social-title">
+        <h2 id="footer-social-title">You can find me on</h2>
+        <nav aria-label="Social profiles" class="site-footer__social-links">
+          {
+            socialColumns.map((column) => (
+              <ul class="site-footer__link-list">
+                {column.map(({ label, href }) => (
+                  <li>
+                    <a href={href}>{label}</a>
+                  </li>
+                ))}
+              </ul>
+            ))
+          }
+        </nav>
+      </section>
+
+      <section class="site-footer__section" aria-labelledby="footer-projects-title">
+        <h2 id="footer-projects-title">Passion &amp; Projects</h2>
+        <nav aria-label="Passion and projects">
+          <ul class="site-footer__link-list">
+            {projects.map(({ label, href }) => (
+              <li>
+                <a href={href}>{label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </section>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>© 2008 - {new Date().getFullYear()}</p>
+      <nav aria-label="Legal">
+        <a href="https://chriskuhrt.de/impressum/">Imprint</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: 128px 48px;
+    color: var(--foreground-inverse);
+    background: #000;
+  }
+
+  .site-footer__stack {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    font-family: var(--page-font-body);
+  }
+
+  .site-footer__sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .site-footer__section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .site-footer__section h2 {
+    margin: 0;
+    color: var(--foreground-inverse);
+    font-family: var(--page-font-title);
+    font-size: 18px;
+    font-weight: var(--page-weight-semibold);
+    line-height: 1.35;
+  }
+
+  .site-footer__social-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .site-footer__link-list {
+    margin: 0;
+    padding: 0 0 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    list-style: none;
+  }
+
+  .site-footer a {
+    color: #bfbfbf;
+    font-family: var(--page-font-body);
+    font-size: 16px;
+    font-weight: var(--page-weight-regular);
+    line-height: 1.7;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__bottom {
+    margin-top: 72px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #bfbfbf;
+    font-family: var(--page-font-title);
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .site-footer__bottom p {
+    margin: 0;
+    font-family: var(--page-font-title);
+    font-size: inherit;
+    font-weight: var(--page-weight-regular);
+    line-height: inherit;
+  }
+
+  .site-footer__bottom nav a {
+    font-family: var(--page-font-title);
+    font-size: inherit;
+    font-weight: var(--page-weight-regular);
+    line-height: inherit;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer {
+      padding: 80px 16px 32px;
+    }
+
+    .site-footer__sections {
+      grid-template-columns: 1fr;
+      gap: 72px;
+    }
+
+    .site-footer__section h2 {
+      font-size: 16px;
+    }
+
+    .site-footer a {
+      font-size: 14px;
+    }
+
+    .site-footer__bottom {
+      margin-top: 72px;
+      padding-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .site-footer__bottom p {
+      font-family: var(--page-font-title);
+      line-height: 1.35;
+    }
+
+    .site-footer__bottom nav a {
+      font-family: var(--page-font-body);
+      line-height: 1.7;
+    }
+  }
+</style>

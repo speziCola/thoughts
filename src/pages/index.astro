@@ -1,0 +1,125 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "../layouts/BlogLayout.astro";
+
+const base = import.meta.env.BASE_URL;
+const canonical = "https://chriskuhrt.de/thoughts/";
+const posts = await getCollection(
+  "thoughts",
+  ({ data }) => import.meta.env.DEV || !data.draft,
+);
+const coverImages = import.meta.glob<string>(
+  "../content/thoughts/**/assets/*.{avif,gif,jpeg,jpg,png,webp}",
+  {
+    eager: true,
+    import: "default",
+    query: "?url",
+  },
+);
+
+const articles = posts
+  .map((post) => {
+    const body = post.body;
+    if (typeof body !== "string") {
+      throw new Error(`Missing article body in ${post.filePath ?? post.id}.`);
+    }
+
+    const title = body.match(/^#\s+(.+)$/m)?.[1];
+    if (!title) {
+      throw new Error(`Missing H1 title in ${post.filePath ?? post.id}.`);
+    }
+
+    const slug = post.id.replace(/\/index$/, "");
+    const coverPath = post.data.cover?.replace(/^\.\//, "");
+    const coverKey = coverPath
+      ? `../content/thoughts/${slug}/${coverPath}`
+      : undefined;
+    const coverImage = coverKey ? coverImages[coverKey] : undefined;
+
+    if (coverKey && !coverImage) {
+      throw new Error(
+        `Cover image "${coverKey}" for article "${slug}" was not found.`,
+      );
+    }
+
+    const coverMarkdown = coverPath
+      ? [...body.matchAll(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].find(
+          (match) => match[2].replace(/^\.\//, "") === coverPath,
+        )
+      : undefined;
+    const date = post.data.date;
+
+    return {
+      slug,
+      title,
+      description: post.data.description,
+      date: date.toISOString().slice(0, 10),
+      formattedDate: date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }),
+      coverImage,
+      coverAlt: coverMarkdown?.[1] || title,
+      tags: post.data.tags ?? [],
+    };
+  })
+  .sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BlogLayout
+  title="Sharing Thoughts"
+  description="Articles and ideas by Christopher Kuhrt about design, prototyping, and building products."
+  canonical={canonical}
+>
+  <section class="thoughts-overview" aria-labelledby="overview-title">
+    <h1 class="thoughts-overview__title" id="overview-title">
+      Sharing Thoughts
+    </h1>
+
+    <div class="thoughts-overview__articles">
+      {
+        articles.map((article, index) => (
+          <article class="article-card" aria-labelledby={`article-${article.slug}`}>
+            <div class="article-card__content">
+              <div class="article-card__heading">
+                <time class="article-card__date" datetime={article.date}>
+                  {article.formattedDate}
+                </time>
+                <h2 class="article-card__title" id={`article-${article.slug}`}>
+                  <a href={`${base}${article.slug}/`}>{article.title}</a>
+                </h2>
+              </div>
+              <p class="article-card__description">{article.description}</p>
+              <a class="article-card__link" href={`${base}${article.slug}/`}>
+                Read article
+              </a>
+            </div>
+
+            {
+              article.coverImage && (
+                <figure class="article-card__media">
+                  <div class="article-card__image">
+                    <img
+                      src={article.coverImage}
+                      alt={article.coverAlt}
+                      loading={index === 0 ? "eager" : "lazy"}
+                    />
+                  </div>
+                  {article.tags.length > 0 && (
+                    <figcaption class="article-card__tags">
+                      {article.tags.map((tag) => (
+                        <span>#{tag}</span>
+                      ))}
+                    </figcaption>
+                  )}
+                </figure>
+              )
+            }
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BlogLayout>
