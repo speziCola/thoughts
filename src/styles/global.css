@@ -8,6 +8,14 @@
 
 @font-face {
   font-family: "Fira Sans";
+  src: url("../assets/fonts/fira-sans-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fira Sans";
   src: url("../assets/fonts/fira-sans-semibold.woff2") format("woff2");
   font-style: normal;
   font-weight: 600;
@@ -42,14 +50,18 @@
   font-family: "Supreme";
   src: url("../assets/fonts/supreme-bold.woff2") format("woff2");
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   font-display: swap;
 }
 
 :root {
   color-scheme: light;
   /* Viewport ranges: mobile 0-900px; laptop 901-1400px; desktop 1401px+. */
-  --page-background: #f4f1ef;
+  --background-textblock: #e8e5e3;
+  --background-page: #f4f1ef;
+  --background-card: #fff;
+  --background-inverse: #000;
+  --page-background: var(--background-page);
   --foreground-strong: #0a0a0a;
   --foreground-regular: #414141;
   --foreground-light: #656565;
@@ -141,7 +153,7 @@ a:focus-visible {
 
 .skip-link {
   position: absolute;
-  z-index: 2;
+  z-index: 20;
   top: 8px;
   left: 8px;
   padding: 8px 12px;
@@ -155,13 +167,22 @@ a:focus-visible {
 }
 
 .site-header {
+  position: sticky;
+  z-index: 10;
+  top: 0px;
+  padding: 16px 16px 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.site-header__wrapper {
   height: 64px;
-  margin: 16px 16px 0;
+  padding: 16px 16px 0;
   padding: 8px 16px;
   display: flex;
   align-items: center;
   border-radius: 8px;
-  background: #fafafa;
+  background: rgb(250 250 250 / 75%);
   box-shadow: inset 0 1px 0 #fff;
 }
 
@@ -222,7 +243,7 @@ a:focus-visible {
 }
 
 .main-content > .site-shell {
-  margin-top: 32px;
+  margin-top: 64px;
 }
 
 .thoughts-overview__title {
@@ -235,13 +256,16 @@ a:focus-visible {
 }
 
 .thoughts-overview__title::after {
-  width: 80px;
+  width: 56px;
   height: 5px;
   margin-top: 4px;
   display: block;
   border-radius: 999px;
   background: #191929;
   content: "";
+  @media (max-width: 900px) {
+    width: 32px;
+  }
 }
 
 .thoughts-overview__articles {
@@ -377,17 +401,26 @@ a:focus-visible {
   line-height: var(--blog-title-md-line-height);
 }
 
-.blog-article h2:has(+ h3) {
+.blog-article h2:has(+ h3, + h4) {
   padding-bottom: 0;
 }
 
-/* Provisional – design pending. */
 .blog-article h3 {
+  margin: 0;
+  color: var(--foreground-strong);
+  font-family: var(--blog-font-title);
+  font-size: var(--blog-body-md-size);
+  font-weight: 500;
+  line-height: var(--blog-body-md-line-height);
+}
+
+/* Provisional – design pending. */
+.blog-article h4 {
   margin: 0 0 16px;
   color: var(--foreground-light);
   font-family: var(--blog-font-title);
   font-size: var(--blog-title-sm-size);
-  font-weight: 600;
+  font-weight: 500;
   line-height: var(--blog-title-sm-line-height);
 }
 
@@ -498,11 +531,34 @@ a:focus-visible {
 
 /* Provisional – design pending. */
 .blog-article blockquote {
-  max-width: 640px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 0 24px 0;
+  padding: 16px 80px 16px 24px;
+  border-left: 2px solid var(--foreground-strong);
+  border-radius: 0 8px 8px 0;
+  color: var(--foreground-strong);
+  background: var(--background-textblock);
+  font-size: var(--blog-body-md-size);
+  font-style: italic;
+  line-height: var(--blog-body-md-line-height);
+}
+
+.blog-article blockquote p {
+  max-width: none;
   margin: 0;
-  padding: 16px 24px;
-  border-left: 2px solid var(--foreground-light);
-  color: var(--foreground-regular);
+}
+
+.blog-article blockquote p + p {
+  margin-top: 8px;
+}
+
+.blog-article blockquote cite {
+  display: block;
+  color: var(--foreground-light);
+  font-size: var(--blog-utility-xs-size);
+  font-style: normal;
+  line-height: var(--blog-utility-xs-line-height);
 }
 
 .blog-article :not(pre) > code {
@@ -552,6 +608,7 @@ a:focus-visible {
 
 @media (max-width: 900px) {
   .site-header {
+    top: 0;
     margin: 0;
     padding: 20px 16px;
     border-radius: 0;
@@ -572,6 +629,10 @@ a:focus-visible {
   .blog-article {
     width: 100%;
     margin-inline: auto;
+  }
+
+  .blog-article blockquote {
+    padding-right: 24px;
   }
 
 

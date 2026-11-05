@@ -1,11 +1,11 @@
 ---
-date: 2023-05-31
+date: 2026-10-05
 description: What AI-assisted prototyping gets right, why more output is not more value, and how teams can keep collaboration at the center.
 tags:
-  - AI
-  - Wireframes
-  - Team
-  - Process
+  - ai
+  - wireframes
+  - team
+  - process
 cover: ./assets/hero.png
 ---
 
@@ -42,7 +42,7 @@ It looks convincing. Sometimes too convincing. Stakeholders assume the concept i
 
 ## The journey
 
-### Bringing low fidelity back with AI
+#### Bringing low fidelity back with AI
 
 I recently experimented with a different approach. Instead of asking AI to create yet another polished interface, I wanted to see whether it could help us explore concepts while staying close to our existing products.
 
@@ -54,7 +54,7 @@ The result surprised me (LLM also got an huge update the last months/weeks). It 
 
 ## Solution approach
 
-### From workshop to working prototype
+#### From workshop to working prototype
 
 The next experiment went a little further. We had conducted a workshop exploring new user groups, different needs, and potential features. The outcome was familiar: a FigJam board filled with sticky notes, questions, assumptions, and ideas.
 
@@ -73,7 +73,7 @@ These weren't final solutions. They were alternatives we could compare. Even bet
 
 ## Learnings
 
-### More prototypes don't automatically mean better decisions
+#### More prototypes don't automatically mean better decisions
 
 The technical possibilities are impressive. But the real challenge isn't generating interfaces anymore. It's managing the decisions around them.
 
@@ -99,7 +99,7 @@ Because in the end, AI can help us build a solution. But we still have to unders
 
 ---
 
-## Resources
+### Resources
 
 - [The people ARE the process](https://productpicnic.beehiiv.com/p/the-people-are-the-process)
-- AI Can Build the Solution... You Still Have to Design the Problem
+- [AI Can Build the Solution... You Still Have to Design the Problem](https://www.oneknightinproduct.com/pavel-samsonov/?utm_campaign=ai-is-not-a-substitute-for-knowing-how-to-run-software-projects&utm_medium=referral&utm_source=productpicnic.beehiiv.com)
