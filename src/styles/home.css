@@ -147,9 +147,9 @@
 .intro__title {
   margin: 0;
   color: var(--home-text-strong);
-  font-family: var(--page-font-body);
+  font-family: var(--page-font-title); /* Fira Sans */
   font-size: clamp(24px, calc(20.3077px + 1.0256vw), 40px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.5;
 }
 
