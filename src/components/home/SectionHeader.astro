@@ -50,7 +50,7 @@ const { id, title, icon } = Astro.props;
     flex: 1;
     min-width: 0;
     margin: 0;
-    padding-bottom: 7px;
+    padding-bottom: 10px;
     display: flex;
     align-items: center;
     color: #000;
@@ -60,14 +60,15 @@ const { id, title, icon } = Astro.props;
     line-height: 1.35;
   }
 
-  /* 48×3 accent line under the title (Figma "line"). */
+  /* 80×6 rounded accent line under the title. */
   .section-header__title::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 48px;
-    height: 3px;
+    width: 80px;
+    height: 6px;
+    border-radius: 999px;
     background: #000;
   }
 </style>
