@@ -406,6 +406,15 @@ a:focus-visible {
   margin-top: 64px;
 }
 
+/*
+ * The page content column is a size container ("page"), so layouts react to
+ * the space they actually get: next to the hero art it is narrower than the viewport.
+ */
+.site-shell,
+.split-page__main {
+  container: page / inline-size;
+}
+
 .blog-article {
   width: min(720px, 100%);
   margin-inline: auto;

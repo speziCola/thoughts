@@ -153,6 +153,7 @@ const articles = [
   title="What I Do"
   description="How I help product teams align strategy, build design foundations, scale UX, and continuously improve."
   canonical={canonical}
+  layout="split"
 >
   <div class="what-i-do">
     <section aria-labelledby="what-i-do-title">
@@ -471,7 +472,7 @@ const articles = [
     object-fit: cover;
   }
 
-  @media (max-width: 900px) {
+  @container page (max-width: 867px) {
     .community__stats {
       flex-direction: column;
     }

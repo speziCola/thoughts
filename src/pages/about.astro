@@ -12,6 +12,7 @@ const canonical = "https://chriskuhrt.de/thoughts/about/";
   title="About"
   description="Designer, Product Strategist, DesignOps and UX Educator. I build the systems and structures that help teams deliver great product experiences."
   canonical={canonical}
+  layout="split"
 >
   <section class="about-page" aria-labelledby="about-title">
     <SectionTitle as="h1" id="about-title">About</SectionTitle>
@@ -312,7 +313,7 @@ const canonical = "https://chriskuhrt.de/thoughts/about/";
     outline-offset: 4px;
   }
 
-  @media (max-width: 700px) {
+  @container page (max-width: 667px) {
     .about-page__intro {
       grid-template-columns: 1fr;
     }

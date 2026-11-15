@@ -12,6 +12,7 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
   title="Timeline"
   description="Work experience, projects, freelance work, further education, volunteer work and more – the full timeline of Chris Kuhrt."
   canonical={canonical}
+  layout="split"
 >
   <div class="timeline">
     <header class="timeline__header">
@@ -290,7 +291,9 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
     .timeline {
       --timeline-scroll-offset: 100px;
     }
+  }
 
+  @container page (max-width: 867px) {
     .timeline__layout {
       grid-template-columns: minmax(0, 1fr);
     }

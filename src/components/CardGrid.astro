@@ -58,17 +58,19 @@ const {
     gap: 16px;
   }
 
-  @media (max-width: 1199px) {
+  @container page (max-width: 1167px) {
     .card-grid--cols-4 {
       --card-grid-columns: 2;
     }
   }
 
-  @media (max-width: 900px) {
+  @container page (max-width: 867px) {
     .card-grid {
       --card-grid-columns: 1;
     }
+  }
 
+  @media (max-width: 900px) {
     .card-grid--gap-sm {
       gap: 8px;
     }
