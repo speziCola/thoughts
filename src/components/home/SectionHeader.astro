@@ -13,30 +13,36 @@ const { id, title, icon } = Astro.props;
 
 <div class="section-header">
   <span class="section-header__icon" aria-hidden="true">
-    <Image src={icon} alt="" width={32} height={32} />
+    <Image src={icon} alt="" width={48} height={48} />
   </span>
   <h2 class="section-header__title" id={id}>{title}</h2>
 </div>
 
 <style>
+  /* Tile 56px / title 32px on desktop, scaling down to 40px / 20px on mobile
+     (fluid between the 360px and 1920px designs). */
   .section-header {
+    --section-tile: clamp(40px, calc(36.3077px + 1.0256vw), 56px);
     display: flex;
-    gap: 8px;
-    align-items: stretch;
+    gap: 12px;
+    align-items: center;
   }
 
   .section-header__icon {
-    display: flex;
+    width: var(--section-tile);
+    height: var(--section-tile);
+    display: grid;
     flex: none;
-    padding: 4px;
+    place-items: center;
     border-radius: var(--radius-4);
     background: var(--background-inverse);
   }
 
   .section-header__icon img {
     display: block;
-    width: 32px;
-    height: 32px;
+    width: calc(var(--section-tile) - 8px);
+    height: calc(var(--section-tile) - 8px);
+    filter: invert(1); /* icons are black; show them white on the black tile */
   }
 
   .section-header__title {
@@ -45,10 +51,9 @@ const { id, title, icon } = Astro.props;
     min-width: 0;
     margin: 0;
     padding-bottom: 7px;
-    align-self: center;
     color: #000;
     font-family: var(--home-font-mono);
-    font-size: 20px;
+    font-size: clamp(20px, calc(17.2308px + 0.7692vw), 32px);
     font-weight: 700;
     line-height: 1.35;
   }
