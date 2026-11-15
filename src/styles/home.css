@@ -56,9 +56,10 @@
 }
 
 .home-divider {
-  height: 1px;
-  margin: 0;
+  height: 2px;
+  margin: 0 48px; /* a bit narrower than the content */
   border: 0;
+  border-radius: 999px;
   background: var(--home-surface-muted);
 }
 
@@ -127,7 +128,7 @@
 /* ---------- Intro ---------- */
 
 .intro {
-  padding: 48px 0;
+  padding: 48px 0 64px; /* 64px links → divider */
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -487,8 +488,12 @@
   }
 
   .intro {
-    padding: 0 0 48px;
+    padding: 0 0 64px;
     gap: 24px;
+  }
+
+  .home-divider {
+    margin: 0 16px;
   }
 
   .intro__head {
