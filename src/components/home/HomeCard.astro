@@ -6,8 +6,8 @@
  */
 interface Props {
   layout?: "stack" | "split";
-  /** Column gap in split layout – Figma uses 16px or 48px. */
-  gap?: 16 | 48;
+  /** Column gap in split layout. */
+  gap?: 16 | 48 | 64;
   /** Put the last child first when stacked (e.g. images above the text). */
   mediaFirst?: boolean;
   /** Desktop padding. Mobile is always 24px (or --home-card-padding-mobile). */
