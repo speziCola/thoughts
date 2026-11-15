@@ -383,6 +383,22 @@
   aspect-ratio: 587 / 198;
 }
 
+/* Two columns: the gallery takes the height of the text column instead of
+   its own aspect ratio, so the card is no taller than the text needs. */
+@container (min-width: 641px) {
+  .uxf-gallery {
+    contain: size; /* don't let the images' intrinsic height grow the row */
+    align-self: stretch;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .uxf-gallery__row--a,
+  .uxf-gallery__row--b {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+}
+
 .uxf-gallery img {
   display: block;
   width: 100%;
