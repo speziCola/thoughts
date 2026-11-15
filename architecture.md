@@ -8,7 +8,7 @@ Articles live in `src/content/thoughts/<slug>/index.md`, with local images besid
 
 The article body must contain exactly one level-one heading. The Markdown rendering registry checks this rule and turns titled images into semantic figures with captions and label badges. Two adjacent standalone images become a responsive image row. The original Markdown remains the source of truth for article text and placement.
 
-The static About and What I Do pages follow the content of their main-site pages; What I Do follows the Figma frame "What I Do" (`134:3728`). All images are served locally (`src/assets/what-i-do/`, exported from Figma).
+The static About and What I Do pages follow the content of their main-site pages; What I Do follows the Figma frame "What I Do" (`134:3728`). All images live in `src/assets/images/`, all icons in `src/assets/icons/` (blog post images stay next to their Markdown).
 
 Shared components in `src/components/`:
 

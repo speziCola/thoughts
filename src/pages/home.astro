@@ -4,8 +4,7 @@
  * Desktop reference: "desktop < 1920" (8156:4854). Mobile: "mobile > 320" (8043:3353).
  * Entrance motion mirrors the live Framer site (chriskuhrt.de), see home.css.
  *
- * Placeholder assets live in src/assets/home/icons (SVG) and src/assets/home/images (raster) – replace the files, keep the names
- * (see src/assets/home/README.md).
+ * All images live in src/assets/images, all icons in src/assets/icons (see src/assets/README.md).
  */
 import { Image } from "astro:assets";
 import BlogLayout from "../layouts/BlogLayout.astro";
@@ -15,36 +14,37 @@ import ArticleTeaser from "../components/ArticleTeaser.astro";
 import CardGrid from "../components/CardGrid.astro";
 import "../styles/home.css";
 
-import heroArt from "../assets/home/images/hero-art.png";
-import iconTeam from "../assets/home/icons/icon-team.svg";
-import iconDesignSystem from "../assets/home/icons/icon-designsystem.svg";
-import iconFinance from "../assets/home/icons/icon-finance.svg";
-import iconEcom from "../assets/home/icons/icon-ecom.svg";
-import sectionTeam from "../assets/home/icons/section-team.svg";
-import sectionDesignSystem from "../assets/home/icons/section-designsystem.svg";
-import sectionFinance from "../assets/home/icons/section-finance.svg";
-import sectionEcom from "../assets/home/icons/section-ecom.svg";
-import socialLinkedin from "../assets/home/icons/social-linkedin.svg";
-import socialTwitter from "../assets/home/icons/social-twitter.svg";
-import channelLinkedin from "../assets/what-i-do/icon-linkedin.svg";
-import channelMeetup from "../assets/what-i-do/icon-meetup.svg";
-import channelDiscord from "../assets/what-i-do/icon-discord.svg";
-import refChrono24 from "../assets/home/images/ref-chrono24.png";
-import refDfb from "../assets/home/images/ref-dfb.png";
-import refSwisscom from "../assets/home/images/ref-swisscom.png";
-import refScFreiburg from "../assets/home/images/ref-scfreiburg.png";
-import refReservix from "../assets/home/images/ref-reservix.png";
-import uxfRooftop from "../assets/what-i-do/community-1.png";
-import uxfSpeaker from "../assets/what-i-do/community-2.png";
-import uxfChallenges from "../assets/what-i-do/community-3.png";
-import uxfAgenda from "../assets/what-i-do/community-4.png";
-import abundantia from "../assets/home/images/abundantia.png";
-import logoEtops from "../assets/home/images/logo-etops.png";
-import logoPatronas from "../assets/home/images/logo-patronas.png";
-import logoChrono24 from "../assets/home/images/logo-chrono24.png";
-import logoReservix from "../assets/home/images/logo-reservix.png";
-import processCover from "../assets/what-i-do/article-process.png";
-import sessionsCover from "../assets/what-i-do/article-sessions.png";
+import portrait from "../assets/images/about-portrait.jpg";
+import heroArt from "../assets/images/hero-art.png";
+import iconTeam from "../assets/icons/icon-team.svg";
+import iconDesignSystem from "../assets/icons/icon-designsystem.svg";
+import iconFinance from "../assets/icons/icon-finance.svg";
+import iconEcom from "../assets/icons/icon-ecom.svg";
+import sectionTeam from "../assets/icons/section-team.svg";
+import sectionDesignSystem from "../assets/icons/section-designsystem.svg";
+import sectionFinance from "../assets/icons/section-finance.svg";
+import sectionEcom from "../assets/icons/section-ecom.svg";
+import socialLinkedin from "../assets/icons/social-linkedin.svg";
+import socialTwitter from "../assets/icons/social-twitter.svg";
+import channelLinkedin from "../assets/icons/channel-linkedin.svg";
+import channelMeetup from "../assets/icons/channel-meetup.svg";
+import channelDiscord from "../assets/icons/channel-discord.svg";
+import refChrono24 from "../assets/images/ref-chrono24.png";
+import refDfb from "../assets/images/ref-dfb.png";
+import refSwisscom from "../assets/images/ref-swisscom.png";
+import refScFreiburg from "../assets/images/ref-scfreiburg.png";
+import refReservix from "../assets/images/ref-reservix.png";
+import uxfRooftop from "../assets/images/community-1.png";
+import uxfSpeaker from "../assets/images/community-2.png";
+import uxfChallenges from "../assets/images/community-3.png";
+import uxfAgenda from "../assets/images/community-4.png";
+import abundantia from "../assets/images/abundantia.png";
+import logoEtops from "../assets/images/logo-etops.png";
+import logoPatronas from "../assets/images/logo-patronas.png";
+import logoChrono24 from "../assets/images/logo-chrono24.png";
+import logoReservix from "../assets/images/logo-reservix.png";
+import processCover from "../assets/images/article-process.png";
+import sessionsCover from "../assets/images/article-sessions.png";
 
 const base = import.meta.env.BASE_URL;
 const site = "https://chriskuhrt.de";
@@ -116,7 +116,7 @@ const channels = [
       </div>
       <img
         class="intro__portrait enter"
-        src={`${base}images/about-portrait.jpg`}
+        src={portrait.src}
         alt="Portrait of Chris Kuhrt"
         width="256"
         height="256"

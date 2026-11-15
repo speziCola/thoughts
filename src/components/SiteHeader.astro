@@ -1,5 +1,6 @@
 ---
 import FloatingMenu from "./FloatingMenu.astro";
+import ckWordmark from "../assets/icons/ck.svg";
 
 /** One menu for every page of the site. */
 const base = import.meta.env.BASE_URL;
@@ -26,7 +27,7 @@ const navItems = [
         <span class="site-brand__mark" aria-hidden="true"></span>
         <img
           class="site-brand__wordmark"
-          src={`${base}images/ck.svg`}
+          src={ckWordmark.src}
           alt=""
         />
       </a>

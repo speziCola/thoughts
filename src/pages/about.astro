@@ -1,4 +1,5 @@
 ---
+import portrait from "../assets/images/about-portrait.jpg";
 import Card from "../components/Card.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import BlogLayout from "../layouts/BlogLayout.astro";
@@ -50,7 +51,7 @@ const canonical = "https://chriskuhrt.de/thoughts/about/";
         </div>
         <img
           class="about-page__portrait"
-          src={`${base}images/about-portrait.jpg`}
+          src={portrait.src}
           alt="Portrait of Chris Kuhrt"
           width="512"
           height="512"
