@@ -100,7 +100,7 @@ const channels = [
   </div>
 
   <section class="intro" aria-labelledby="intro-title">
-    <div class="intro__head">
+    <div class="intro__text">
       <div class="intro__heading">
         <h1 class="intro__title enter" id="intro-title">
           Hi, my name is Chris Kuhrt,
@@ -110,29 +110,31 @@ const channels = [
           UX Strategy, DesignOps, Design Systems
         </p>
       </div>
-      <img
-        class="intro__portrait enter"
-        src={portrait.src}
-        alt="Portrait of Chris Kuhrt"
-        width="256"
-        height="256"
-        loading="eager"
-      />
+
+      <div class="intro__body enter">
+        <p class="home-text">
+          For over 10 years, I’ve shaped digital products across finance,
+          marketplaces and digital platforms. Today, I focus on building the
+          systems behind great design: aligning product, design and engineering
+          through shared standards, clear workflows and scalable infrastructure.
+          I help teams collaborate better, navigate complexity and make UX a
+          shared capability, not just a role.
+        </p>
+        <nav class="intro__links" aria-label="More about Chris">
+          <a class="home-action" href={`${base}what-i-do/`}>What I do</a>
+          <a class="home-action" href={`${base}about/`}>About</a>
+        </nav>
+      </div>
     </div>
 
-    <div class="intro__body enter">
-      <p class="home-text">
-        For over 10 years, I’ve shaped digital products across finance,
-        marketplaces and digital platforms. Today, I focus on building the systems behind great design: aligning
-        product, design and engineering through shared standards, clear
-        workflows and scalable infrastructure. I help teams collaborate better,
-        navigate complexity and make UX a shared capability, not just a role.
-      </p>
-      <nav class="intro__links" aria-label="More about Chris">
-        <a class="home-action" href={`${base}what-i-do/`}>What I do</a>
-        <a class="home-action" href={`${base}about/`}>About</a>
-      </nav>
-    </div>
+    <img
+      class="intro__portrait enter"
+      src={portrait.src}
+      alt="Portrait of Chris Kuhrt"
+      width="256"
+      height="256"
+      loading="eager"
+    />
   </section>
 
   <hr class="home-divider" />
