@@ -5,8 +5,6 @@
  */
 import { Image } from "astro:assets";
 import heroArt from "../assets/images/hero-art.png";
-import socialLinkedin from "../assets/icons/social-linkedin.svg";
-import socialTwitter from "../assets/icons/social-twitter.svg";
 ---
 
 <div class="art-panel">
@@ -20,16 +18,10 @@ import socialTwitter from "../assets/icons/social-twitter.svg";
   />
   <ul class="art-panel__links" aria-label="Social profiles">
     <li>
-      <a href="https://linkedin.chriskuhrt.de/">
-        <Image src={socialLinkedin} alt="" width={20} height={20} />
-        LinkedIn
-      </a>
+      <a href="https://linkedin.chriskuhrt.de/">LinkedIn</a>
     </li>
     <li>
-      <a href="https://twitter.chriskuhrt.de/">
-        <Image src={socialTwitter} alt="" width={20} height={20} />
-        Twitter
-      </a>
+      <a href="https://twitter.chriskuhrt.de/">Twitter</a>
     </li>
   </ul>
 </div>
@@ -82,13 +74,14 @@ import socialTwitter from "../assets/icons/social-twitter.svg";
 }
 
 .art-panel__links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   color: #fff;
   font-family: var(--page-font-body);
   font-size: 13px;
   line-height: 24px;
+}
+
+.art-panel__links a:hover {
+  color: var(--foreground-link-hover);
 }
 
 .art-panel__links a:focus-visible {
