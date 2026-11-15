@@ -234,6 +234,7 @@
   min-width: 0;
   font-family: var(--page-font-body);
   font-size: 14px;
+  font-weight: 600; /* Supreme Bold */
   line-height: 24px;
   text-decoration: underline;
   text-underline-offset: 0.15em;
@@ -241,8 +242,8 @@
 
 .area-card__icon {
   flex: none;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
   border-radius: 8px;
