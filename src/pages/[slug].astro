@@ -40,7 +40,7 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
 });
 ---
 
-<BlogLayout title={title} description={post.data.description} canonical={canonical}>
+<BlogLayout title={title} description={post.data.description} canonical={canonical} layout="split">
   <article class="blog-article">
     <time class="post-date" datetime={date}>{formattedDate}</time>
     <Content />
