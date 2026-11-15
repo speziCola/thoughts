@@ -1,0 +1,364 @@
+---
+/**
+ * Floating pill menu for mobile (≤900px), copied from the live site
+ * (chriskuhrt.de, Framer): a black pill pinned to the bottom of the viewport
+ * that opens a white panel wrapping the pill.
+ *
+ * Measured on the live site at 375px:
+ * - pill: 64px high, radius 100px, padding 16/24, gap 16, Fira Sans 16/500 white,
+ *   16px from the side, 24px from the bottom
+ * - menu icon: 32px box, three 24×2px bars 8px apart, #bfbfbf; springs into an X
+ * - panel: white, padding-top 16px, extends 8px past the pill on the side and
+ *   bottom; links 56px high, padding 16/24, Fira Sans 14/600, underlined
+ * - open/close: 200ms ease-in-out. The panel box grows from a 48×48 square in
+ *   the pill's top outer corner to its full size while fading in; the links keep their size
+ *   and are clipped by the growing box. Closing is the exact reverse.
+ *
+ * Native <details>, so it opens and closes without JavaScript; the script adds
+ * the animation, close-on-link, Escape and outside-click.
+ */
+interface Props {
+  label: string;
+  /** Accessible name for the panel navigation. */
+  navLabel: string;
+  icon?: "menu" | "chevron";
+  side?: "left" | "right";
+  /** Width of the open panel; defaults to fitting its links. */
+  panelWidth?: string;
+  /** Fill the bottom edge, leaving room (16px gap) for the Menu pill opposite. */
+  stretch?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  navLabel,
+  icon = "menu",
+  side = "right",
+  panelWidth,
+  stretch = false,
+  class: className,
+} = Astro.props;
+---
+
+<details
+  class:list={[
+    "floating-menu",
+    `floating-menu--${side}`,
+    `floating-menu--${icon}`,
+    { "floating-menu--stretch": stretch },
+    className,
+  ]}
+  data-floating-menu
+>
+  <summary class="floating-menu__pill">
+    {
+      icon === "menu" ? (
+        <span class="floating-menu__burger" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
+      ) : null
+    }
+    <span class="floating-menu__label">{label}</span>
+    {
+      icon === "chevron" ? (
+        <svg class="floating-menu__chevron" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      ) : null
+    }
+  </summary>
+  <nav
+    class="floating-menu__panel"
+    aria-label={navLabel}
+    style={panelWidth ? `--floating-menu-panel-width: ${panelWidth}` : undefined}
+  >
+    <div class="floating-menu__inner"><slot /></div>
+  </nav>
+</details>
+
+<script>
+  const DURATION = 200;
+  const EASING = "cubic-bezier(0.44, 0, 0.56, 1)"; // Framer's default ease-in-out
+  const START_SIZE = 48; // the panel grows out of a 48×48 square at the icon
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const menus = document.querySelectorAll<HTMLDetailsElement>("[data-floating-menu]");
+  const running = new WeakMap<HTMLDetailsElement, Animation>();
+
+  /** Keyframes from the 48px square (at the pill's icon) to the open panel. */
+  function frames(menu: HTMLDetailsElement, panel: HTMLElement) {
+    const pill = menu.querySelector("summary")!.getBoundingClientRect();
+    const box = panel.getBoundingClientRect();
+    const right = menu.classList.contains("floating-menu--right");
+    // Live site: the square sits in the pill's top outer corner
+    // (top-right for the Menu pill, mirrored for a left pill).
+    const squareX = right ? pill.right - START_SIZE : pill.left;
+    const squareY = pill.top;
+    const dx = squareX - box.left;
+    const dy = squareY - box.top;
+    return {
+      from: {
+        opacity: 0,
+        clipPath: `inset(${dy}px ${box.width - dx - START_SIZE}px ${box.height - dy - START_SIZE}px ${dx}px)`,
+      },
+      to: { opacity: 1, clipPath: "inset(0px 0px 0px 0px)" },
+      // The links ride along with the box's top-left corner.
+      shift: { x: dx, y: dy },
+    };
+  }
+
+  function animate(menu: HTMLDetailsElement, opening: boolean, done?: () => void) {
+    const panel = menu.querySelector<HTMLElement>(".floating-menu__panel")!;
+    const inner = menu.querySelector<HTMLElement>(".floating-menu__inner")!;
+    running.get(menu)?.cancel();
+
+    if (reducedMotion.matches) {
+      done?.();
+      return;
+    }
+
+    const { from, to, shift } = frames(menu, panel);
+    const options: KeyframeAnimationOptions = { duration: DURATION, easing: EASING, fill: "both" };
+    const box = panel.animate(opening ? [from, to] : [to, from], options);
+    const moveFrom = { transform: `translate(${shift.x}px, ${shift.y}px)` };
+    const moveTo = { transform: "none" };
+    const content = inner.animate(opening ? [moveFrom, moveTo] : [moveTo, moveFrom], options);
+    running.set(menu, box);
+
+    box.finished
+      .then(() => {
+        done?.();
+        box.cancel();
+        content.cancel();
+      })
+      .catch(() => content.cancel());
+  }
+
+  function open(menu: HTMLDetailsElement) {
+    menus.forEach((other) => other !== menu && close(other));
+    menu.classList.remove("is-closing");
+    menu.open = true;
+    animate(menu, true);
+  }
+
+  function close(menu: HTMLDetailsElement, focusPill = false) {
+    if (!menu.open || menu.classList.contains("is-closing")) return;
+    menu.classList.add("is-closing"); // icon animates back immediately
+    animate(menu, false, () => {
+      menu.open = false;
+      menu.classList.remove("is-closing");
+    });
+    if (focusPill) menu.querySelector("summary")?.focus();
+  }
+
+  menus.forEach((menu) => {
+    menu.querySelector("summary")!.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (menu.open && !menu.classList.contains("is-closing")) close(menu);
+      else open(menu);
+    });
+    menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => close(menu)));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") menus.forEach((menu) => close(menu, true));
+  });
+
+  document.addEventListener("click", (event) => {
+    menus.forEach((menu) => {
+      if (!menu.contains(event.target as Node)) close(menu);
+    });
+  });
+</script>
+
+<style>
+  .floating-menu {
+    /* Spring from the live site's icon animation (~500ms, slight overshoot). */
+    --floating-menu-spring: linear(
+      0, 0.13 6%, 0.39 12%, 0.72 20%, 0.9 28%, 0.99 35%, 1.025 43%,
+      1.024 50%, 1.019 58%, 1.01 70%, 1.004 82%, 1
+    );
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .floating-menu {
+      position: fixed;
+      z-index: 30;
+      bottom: 24px;
+      display: block;
+    }
+
+    /* An open menu (incl. while it animates closed) sits above the other pill. */
+    .floating-menu[open] {
+      z-index: 31;
+    }
+
+    .floating-menu--right {
+      right: 16px;
+    }
+
+    .floating-menu--left {
+      left: 16px;
+    }
+
+    /* Stretched pill: up to the Menu pill (136px) plus a 16px gap. */
+    .floating-menu--stretch.floating-menu--left {
+      right: calc(16px + 136px + 16px);
+    }
+
+    .floating-menu--stretch.floating-menu--right {
+      left: calc(16px + 136px + 16px);
+    }
+
+    .floating-menu--stretch .floating-menu__pill {
+      justify-content: space-between;
+    }
+
+    .floating-menu__pill {
+      position: relative;
+      z-index: 1;
+      height: 64px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-radius: 100px;
+      color: #fff;
+      background: #000;
+      font-family: var(--page-font-title);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .floating-menu__pill::-webkit-details-marker {
+      display: none;
+    }
+
+    .floating-menu__pill:focus-visible {
+      outline: 2px solid var(--foreground-strong);
+      outline-offset: 3px;
+    }
+
+    /* Burger → X (outer bars rotate, middle bar collapses to the right). */
+    .floating-menu__burger {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      flex: none;
+    }
+
+    .floating-menu__burger span {
+      position: absolute;
+      left: 4px;
+      width: 24px;
+      height: 2px;
+      background: #bfbfbf;
+      transition:
+        transform 500ms var(--floating-menu-spring),
+        opacity 300ms ease;
+    }
+
+    .floating-menu__burger span:nth-child(1) {
+      top: 7px;
+    }
+
+    .floating-menu__burger span:nth-child(2) {
+      top: 15px;
+    }
+
+    .floating-menu__burger span:nth-child(3) {
+      top: 23px;
+    }
+
+    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(2) {
+      opacity: 0;
+      transform: translateX(11px) scaleX(0.0833);
+    }
+
+    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .floating-menu__chevron {
+      flex: none;
+      transition: transform 500ms var(--floating-menu-spring);
+    }
+
+    .floating-menu[open]:not(.is-closing) .floating-menu__chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Panel wraps the pill: 8px past its side and bottom edges. Bottom padding
+       = 16px gap + 64px pill + 8px. */
+    .floating-menu__panel {
+      position: absolute;
+      bottom: -8px;
+      width: var(--floating-menu-panel-width, max-content);
+      min-width: calc(100% + 16px);
+      max-width: calc(100vw - 16px);
+      padding: 16px 0 88px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #fff;
+    }
+
+    .floating-menu--right .floating-menu__panel {
+      right: -8px;
+    }
+
+    .floating-menu--left .floating-menu__panel {
+      left: -8px;
+    }
+
+    .floating-menu__panel :global(ul) {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .floating-menu__panel :global(a) {
+      height: 56px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #000;
+      font-family: var(--page-font-title);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 24.5px;
+      text-decoration: none;
+    }
+
+    /* Underline the text only, never the emoji/icon beside it. */
+    .floating-menu__panel :global(a .floating-menu__text) {
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+
+    .floating-menu__panel :global(a:hover),
+    .floating-menu__panel :global(a[aria-current]) {
+      color: var(--foreground-link-hover);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-menu__burger span,
+    .floating-menu__chevron {
+      transition: none;
+    }
+  }
+</style>

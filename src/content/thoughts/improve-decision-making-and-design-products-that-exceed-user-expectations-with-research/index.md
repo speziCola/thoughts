@@ -9,13 +9,15 @@ cover: ./assets/hero.png
 
 # Improve decision-making and design products that exceed user expectations with research (#8)
 
-![](<./assets/hero.png>)
+![A whiteboard-style illustration of design roles and activities connected around UX design.](<./assets/hero.png> "UX research: Connecting research and design work helps teams make informed product decisions.")
 
 ## Motivation
 
 Without comprehensive research, designers cannot effectively influence key decisions, such as which features to prioritize or how much effort is needed for successful delivery. A lack of research typically delays reaching the desired outcome because teams risk investing in solutions that may not work.
 
 Although designers cannot predict the future, research empowers them to guide the team toward better decisions. Beyond verifying usability, research helps designers grasp the full context of the user experience.
+
+---
 
 ## Challenge
 
@@ -35,6 +37,8 @@ Many of these decisions occur without UX input, even though they significantly a
 
 As organizations grow, stakeholders often become increasingly disconnected from real user needs. Consequently, the gap between user experiences and stakeholder understanding widens, leading to a decline in awareness of user requirements at higher hierarchical levels.
 
+---
+
 ## Solution approach
 
 To facilitate good decisions, every decision-maker must be exposed to reliable data. We will know we have succeeded when:
@@ -46,7 +50,9 @@ To facilitate good decisions, every decision-maker must be exposed to reliable d
 
 Designers should position themselves as the foremost experts on user needs, ensuring everyone in the organization can benefit from this knowledge—especially for decisions that most significantly affect the user experience. Moving from “design research” (building it right) to “experience research” (building the right thing) requires gradually increasing research maturity. Steadily push the organization beyond its comfort zone to foster continuous improvement.
 
-###### Resources
+---
+
+### Resources
 
 - [Advancing Your UX Practice from “Design Research” to “Experiences Research”](<https://www.centercentre.com/>)
 - [How much research is just enough research? How much is too much?](<https://tomkerwin.substack.com/p/how-much-research-is-just-enough?s=r>)

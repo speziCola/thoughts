@@ -40,6 +40,47 @@ test("requires exactly one H1 in the article body", () => {
   );
 });
 
+test("maps a standalone italic paragraph to a note", () => {
+  const note = {
+    type: "element",
+    tagName: "p",
+    properties: {},
+    children: [
+      { type: "text", value: "\n" },
+      {
+        type: "element",
+        tagName: "em",
+        properties: {},
+        children: [{ type: "text", value: "Note text" }],
+      },
+      { type: "text", value: "\n" },
+    ],
+  };
+  const paragraphWithEmphasis = {
+    type: "element",
+    tagName: "p",
+    properties: {},
+    children: [
+      { type: "text", value: "Regular " },
+      {
+        type: "element",
+        tagName: "em",
+        properties: {},
+        children: [{ type: "text", value: "emphasis" }],
+      },
+    ],
+  };
+  const tree = {
+    type: "root",
+    children: [heading(), note, paragraphWithEmphasis],
+  };
+
+  run(tree);
+
+  assert.deepEqual(note.properties.className, ["blog-note"]);
+  assert.equal(paragraphWithEmphasis.properties.className, undefined);
+});
+
 test("maps adjacent titled images to a responsive figure row", () => {
   const tree = {
     type: "root",
@@ -72,5 +113,44 @@ test("maps adjacent titled images to a responsive figure row", () => {
   assert.equal(
     row.children[1].children[1].children[1].children[0].value,
     "High fidelity",
+  );
+});
+
+test("keeps image links and captions inside the generated figure", () => {
+  const tree = {
+    type: "root",
+    children: [
+      heading(),
+      {
+        type: "element",
+        tagName: "p",
+        properties: {},
+        children: [
+          {
+            type: "element",
+            tagName: "a",
+            properties: { href: "https://example.com/video" },
+            children: [image("video.png", "Video: John Maeda on design.")],
+          },
+        ],
+      },
+    ],
+  };
+
+  run(tree);
+
+  const figure = tree.children[1];
+  const link = figure.children[0].children[0];
+  assert.equal(figure.tagName, "figure");
+  assert.equal(link.tagName, "a");
+  assert.equal(link.properties.href, "https://example.com/video");
+  assert.equal(link.children[0].properties.src, "video.png");
+  assert.equal(
+    figure.children[1].children[0].children[0].value,
+    "John Maeda on design.",
+  );
+  assert.equal(
+    figure.children[1].children[1].children[0].value,
+    "Video",
   );
 });

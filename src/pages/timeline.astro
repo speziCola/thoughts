@@ -1,0 +1,303 @@
+---
+import Card from "../components/Card.astro";
+import FloatingMenu from "../components/FloatingMenu.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import { timelineSections } from "../data/timeline";
+
+const canonical = "https://chriskuhrt.de/thoughts/timeline/";
+---
+
+<BlogLayout
+  title="Timeline"
+  description="Work experience, projects, freelance work, further education, volunteer work and more – the full timeline of Chris Kuhrt."
+  canonical={canonical}
+>
+  <div class="timeline">
+    <header class="timeline__header">
+      <SectionTitle as="h1">Timeline</SectionTitle>
+      <p class="page-body-default timeline__intro">
+        I am filled with gratitude for every experience. Each one has helped
+        shape the designer I am today, and I look forward to the next chapter
+        of this ever-evolving journey.
+      </p>
+    </header>
+
+    <div class="timeline__layout">
+      <!-- Desktop: sticky jump navigation beside the sections. -->
+      <nav class="timeline__aside" aria-label="Timeline sections">
+        <Card as="div" padding="sm" class="timeline__nav-card">
+          <ul class="timeline__nav-list" data-timeline-nav>
+            {
+              timelineSections.map((section) => (
+                <li>
+                  <a class="timeline__nav-link" href={`#${section.id}`}>
+                    <span class="timeline__nav-icon" aria-hidden="true">{section.icon}</span>
+                    <span class="timeline__nav-label">{section.title}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </Card>
+      </nav>
+
+      <div class="timeline__sections">
+        {
+          timelineSections.map((section) => (
+            <Card
+              as="section"
+              padding="lg"
+              class="timeline-section"
+              id={section.id}
+              aria-labelledby={`${section.id}-title`}
+              data-timeline-section
+            >
+              <h2 class="page-heading-level-2 timeline-section__title" id={`${section.id}-title`}>
+                <span class="timeline-section__icon" aria-hidden="true">{section.icon}</span>
+                {section.title}
+              </h2>
+
+              <ol class="timeline-section__entries">
+                {section.entries.map((entry) => (
+                  <li class="timeline-entry">
+                    <p class="timeline-entry__date">{entry.date}</p>
+                    <h3 class="page-heading-level-4 timeline-entry__organisation">
+                      {entry.href ? <a href={entry.href}>{entry.organisation}</a> : entry.organisation}
+                    </h3>
+                    <p class="page-body-small timeline-entry__role">{entry.role}</p>
+                    <p class="page-body-medium timeline-entry__description">{entry.description}</p>
+                    {entry.highlights && (
+                      <ul class="page-body-medium timeline-entry__highlights">
+                        {entry.highlights.map((item) => (
+                          <li>
+                            {item.label && <strong>{item.label}:</strong>} {item.text}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Mobile: floating "Timeline" pill (left) next to the main "Menu" pill. -->
+    <FloatingMenu label="Timeline" navLabel="Timeline sections" icon="chevron" side="left" stretch>
+      <ul data-timeline-nav>
+        {
+          timelineSections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>
+                <span aria-hidden="true">{section.icon}</span>
+                <span class="floating-menu__text">{section.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </FloatingMenu>
+  </div>
+</BlogLayout>
+
+<script>
+  // Progressive enhancement: highlight the section currently in view.
+  const sections = document.querySelectorAll<HTMLElement>("[data-timeline-section]");
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-timeline-nav] a");
+
+  const setActive = (id: string) => {
+    links.forEach((link) => {
+      if (link.hash === `#${id}`) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  if ("IntersectionObserver" in window && sections.length) {
+    const visible = new Map<string, boolean>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => visible.set(entry.target.id, entry.isIntersecting));
+        const current = [...sections].find((section) => visible.get(section.id));
+        if (current) setActive(current.id);
+      },
+      // A thin band just below the sticky header decides the active section.
+      { rootMargin: "-120px 0px -70% 0px" },
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
+
+</script>
+
+<style>
+  .timeline {
+    /* Sticky header = 16px offset + 64px bar (desktop); 20 + 64 + 20 (mobile). */
+    --timeline-sticky-top: 96px;
+    --timeline-scroll-offset: var(--timeline-sticky-top);
+  }
+
+  .timeline :is(h2, h3, p) {
+    margin: 0;
+  }
+
+  .timeline__intro {
+    max-width: 640px;
+    color: var(--foreground-ink);
+  }
+
+  .timeline__layout {
+    margin-top: clamp(24px, 3vw, 40px);
+    display: grid;
+    grid-template-columns: minmax(220px, 312px) minmax(0, 1fr);
+    align-items: start;
+    gap: 16px;
+  }
+
+  /* Sticky jump navigation */
+  .timeline__aside {
+    position: sticky;
+    top: var(--timeline-sticky-top);
+  }
+
+  .timeline__nav-card :global(.card__content) {
+    gap: 0;
+  }
+
+  .timeline__nav-list {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .timeline__nav-link {
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: var(--radius-4);
+    color: var(--foreground-strong);
+    font-family: var(--page-font-title);
+    font-size: var(--page-navigation-link-size);
+    font-weight: var(--page-weight-semibold);
+    line-height: var(--page-navigation-link-line-height);
+    text-decoration: none;
+  }
+
+  .timeline__nav-label {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .timeline__nav-link:hover,
+  .timeline__nav-link[aria-current] {
+    color: var(--foreground-link-hover);
+  }
+
+  .timeline__nav-icon {
+    width: 20px;
+    flex: none;
+    text-align: center;
+  }
+
+  /* Sections */
+  .timeline__sections {
+    display: grid;
+    gap: 16px;
+  }
+
+  .timeline-section {
+    scroll-margin-top: var(--timeline-scroll-offset);
+  }
+
+  .timeline-section :global(.card__content) {
+    gap: 32px;
+  }
+
+  .timeline-section__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--foreground-ink);
+  }
+
+  .timeline-section__icon {
+    font-size: 0.85em;
+  }
+
+  .timeline-section__entries {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(24px, 2.5vw, 32px);
+    list-style: none;
+  }
+
+  .timeline-entry {
+    display: grid;
+    gap: 2px;
+  }
+
+  .timeline-entry__date {
+    color: var(--foreground-ink);
+    font-family: var(--page-font-title);
+    font-size: var(--page-caption-default-size);
+    font-weight: var(--page-weight-semibold);
+    line-height: var(--page-caption-default-line-height);
+  }
+
+  .timeline-entry__organisation {
+    color: var(--foreground-strong);
+  }
+
+  .timeline-entry__organisation a {
+    color: inherit;
+    text-underline-offset: 0.15em;
+  }
+
+  .timeline-entry__organisation a:hover {
+    color: var(--foreground-link-hover);
+  }
+
+  .timeline-entry__role {
+    margin-bottom: 8px;
+    color: var(--foreground-strong);
+  }
+
+  .timeline-entry__description,
+  .timeline-entry__highlights {
+    max-width: 800px;
+    color: var(--foreground-regular);
+  }
+
+  .timeline-entry__highlights {
+    margin: 8px 0 0;
+    padding-left: 21px;
+    display: grid;
+    gap: 4px;
+    list-style: disc;
+  }
+
+  .timeline-entry__highlights strong {
+    color: var(--foreground-strong);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .timeline {
+      --timeline-scroll-offset: 100px;
+    }
+
+    .timeline__layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .timeline__aside {
+      display: none;
+    }
+  }
+
+</style>

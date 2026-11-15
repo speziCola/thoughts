@@ -1,0 +1,153 @@
+---
+/**
+ * Shared card surface (Figma: card-01, Card-Article).
+ *
+ * - `width`: "full" spans every column of a CardGrid; "half" takes one column.
+ * - `padding`: sm 32/16, md 32/24, lg 64/48/24 (desktop / laptop / mobile).
+ * - `layout`: "stack" puts the media slot above the content; "split" puts
+ *   content and media side by side and stacks them (media first) on mobile.
+ * - `accent`: a colour for the 4px bottom bar (stage cards).
+ *
+ * Content is always rendered before media in the DOM so reading order follows
+ * the text; the media position is purely visual.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: "article" | "section" | "div" | "li";
+  width?: "full" | "half";
+  padding?: "sm" | "md" | "lg";
+  layout?: "stack" | "split";
+  accent?: string;
+};
+
+const {
+  as: Tag = "article",
+  width = "half",
+  padding = "lg",
+  layout = "stack",
+  accent,
+  class: className,
+  style,
+  ...attrs
+} = Astro.props;
+
+const hasMedia = Astro.slots.has("media");
+---
+
+<Tag
+  class:list={[
+    "card",
+    `card--${width}`,
+    `card--padding-${padding}`,
+    `card--${layout}`,
+    { "card--has-media": hasMedia, "card--accent": accent },
+    className,
+  ]}
+  style={accent ? `--card-accent: ${accent};${style ?? ""}` : style}
+  {...attrs}
+>
+  <div class="card__content"><slot /></div>
+  {hasMedia && <div class="card__media"><slot name="media" /></div>}
+</Tag>
+
+<style>
+  .card {
+    --card-padding: 64px;
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: var(--card-padding);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 24px;
+    overflow: hidden;
+    border-radius: var(--radius-8);
+    background: var(--background-card);
+    box-shadow: var(--shadow-card);
+    list-style: none;
+  }
+
+  .card--full {
+    grid-column: 1 / -1;
+  }
+
+  .card--padding-sm {
+    --card-padding: 32px;
+  }
+
+  .card--padding-md {
+    --card-padding: 32px;
+  }
+
+  /* Figma "Buttom-Border": a 4px bar laid over the bottom padding, clipped by
+     the card's radius (overflow: hidden) instead of a border that adds height. */
+  .card--accent::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: var(--card-accent);
+    content: "";
+  }
+
+  .card__content {
+    min-width: 0;
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card__media {
+    min-width: 0;
+    grid-area: media;
+    align-self: start;
+  }
+
+  .card--stack {
+    grid-template-areas: "content";
+  }
+
+  .card--stack.card--has-media {
+    grid-template-areas:
+      "media"
+      "content";
+  }
+
+  .card--split {
+    grid-template-areas: "content";
+    gap: 56px;
+  }
+
+  .card--split.card--has-media {
+    grid-template-areas: "content media";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 901px) and (max-width: 1400px) {
+    .card--padding-lg {
+      --card-padding: 48px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .card--padding-sm {
+      --card-padding: 16px;
+    }
+
+    .card--padding-md,
+    .card--padding-lg {
+      --card-padding: 24px;
+    }
+
+    .card--split.card--has-media {
+      grid-template-areas:
+        "media"
+        "content";
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+  }
+</style>

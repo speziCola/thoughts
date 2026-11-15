@@ -1,0 +1,76 @@
+---
+/**
+ * Responsive grid for Card components.
+ *
+ * Columns collapse at the project viewport ranges: 4 → 2 below 1200px (four
+ * stage cards get too narrow on laptops), everything → 1 on mobile (≤900px).
+ * `gap`: sm 16/8, md 16/16, lg 24/24 (desktop / mobile), taken from Figma.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: "div" | "ul" | "ol" | "section";
+  columns?: 1 | 2 | 3 | 4;
+  gap?: "sm" | "md" | "lg";
+};
+
+const {
+  as: Tag = "div",
+  columns = 2,
+  gap = "lg",
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<Tag
+  class:list={["card-grid", `card-grid--cols-${columns}`, `card-grid--gap-${gap}`, className]}
+  {...attrs}
+>
+  <slot />
+</Tag>
+
+<style>
+  .card-grid {
+    --card-grid-columns: 1;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--card-grid-columns), minmax(0, 1fr));
+    gap: 24px;
+    list-style: none;
+  }
+
+  .card-grid--cols-2 {
+    --card-grid-columns: 2;
+  }
+
+  .card-grid--cols-3 {
+    --card-grid-columns: 3;
+  }
+
+  .card-grid--cols-4 {
+    --card-grid-columns: 4;
+  }
+
+  .card-grid--gap-sm,
+  .card-grid--gap-md {
+    gap: 16px;
+  }
+
+  @media (max-width: 1199px) {
+    .card-grid--cols-4 {
+      --card-grid-columns: 2;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .card-grid {
+      --card-grid-columns: 1;
+    }
+
+    .card-grid--gap-sm {
+      gap: 8px;
+    }
+  }
+</style>

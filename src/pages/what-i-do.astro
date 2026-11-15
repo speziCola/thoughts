@@ -1,0 +1,489 @@
+---
+import { Image } from "astro:assets";
+import ArticleTeaser from "../components/ArticleTeaser.astro";
+import Card from "../components/Card.astro";
+import CardGrid from "../components/CardGrid.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import articleProcess from "../assets/what-i-do/article-process.png";
+import articleSessions from "../assets/what-i-do/article-sessions.png";
+import communityDinner from "../assets/what-i-do/community-1.png";
+import communityTalk from "../assets/what-i-do/community-2.png";
+import communityRoundtable from "../assets/what-i-do/community-3.png";
+import communityAudience from "../assets/what-i-do/community-4.png";
+import iconDiscord from "../assets/what-i-do/icon-discord.svg?url";
+import iconLinkedin from "../assets/what-i-do/icon-linkedin.svg?url";
+import iconMeetup from "../assets/what-i-do/icon-meetup.svg?url";
+
+const base = import.meta.env.BASE_URL;
+const canonical = "https://chriskuhrt.de/thoughts/what-i-do/";
+const uxFreiburgHref = "https://uxfreiburg.de/";
+
+const services = [
+  {
+    title: "Product Strategy",
+    description:
+      "Framing ambiguous product problems before teams commit to expensive solutions.",
+  },
+  {
+    title: "Alignment & Enablement",
+    description:
+      "Turning fragmented product teams into shared decisions, language and ways of working.",
+  },
+  {
+    title: "Design Systems & DesignOps",
+    description:
+      "Unifying interaction patterns, foundations and workflows across products and frontend stacks.",
+  },
+];
+
+const stages = [
+  {
+    name: "Establish Foundations",
+    intro: "Before products improve, organizations need structure.",
+    focus: "Build the Foundation",
+    actions: [
+      "Define UX vision and principles",
+      "Establish governance and ownership",
+      "Introduce research practices",
+      "Build trust across leadership",
+      "Define measurable success",
+    ],
+    outcome: "The goal is not better screens. It is organizational clarity.",
+  },
+  {
+    name: "Align Direction",
+    intro: "Great products require shared understanding.",
+    focus: "Align Around Outcomes",
+    actions: [
+      "Connect UX with business strategy",
+      "Facilitate product discovery",
+      "Align stakeholders across teams",
+      "Define measurable outcomes",
+      "Prioritize customer value",
+    ],
+    outcome: "Alignment reduces waste long before development starts.",
+  },
+  {
+    name: "Structure for Scale",
+    intro: "With direction defined, I focus on scalable implementation.",
+    focus: "Scale Design Operations",
+    actions: [
+      "Build and evolve design systems",
+      "Standardize workflows",
+      "Improve designer and developer collaboration",
+      "Introduce reusable patterns",
+      "Increase design maturity",
+    ],
+    outcome: "The goal is sustainable delivery across products and teams.",
+  },
+  {
+    name: "Deliver, Measure, Evolve",
+    intro: "Shipping is not the end. It is part of a continuous system.",
+    focus: "Create Continuous Improvement",
+    actions: [
+      "Measure customer impact",
+      "Run continuous user research",
+      "Coach designers and product teams",
+      "Refine governance and standards",
+      "Scale successful practices",
+    ],
+    outcome: "Long-term success comes from continuous learning.",
+  },
+];
+
+/* Add `href` to turn a stat into a link; the live site has no targets yet. */
+const communityStats: {
+  label: string;
+  count: string;
+  icon: string;
+  iconWidth: number;
+  iconHeight: number;
+  href?: string;
+}[] = [
+  { label: "Linkedin", count: "219", icon: iconLinkedin, iconWidth: 16.0307, iconHeight: 16 },
+  { label: "Meetup", count: "364", icon: iconMeetup, iconWidth: 20, iconHeight: 20 },
+  { label: "Discord", count: "87", icon: iconDiscord, iconWidth: 19.5387, iconHeight: 14.0517 },
+];
+
+const galleryRows = [
+  [
+    {
+      src: communityDinner,
+      alt: "UX Freiburg members chatting over food on a rooftop terrace",
+    },
+    {
+      src: communityTalk,
+      alt: "A speaker addressing the audience at a UX Freiburg meetup",
+    },
+  ],
+  [
+    {
+      src: communityRoundtable,
+      alt: "A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”",
+    },
+    {
+      src: communityAudience,
+      alt: "An audience watching a talk with an agenda slide at a UX Freiburg event",
+    },
+  ],
+];
+
+const articles = [
+  {
+    title: "Process optimization to deliver a better user experience",
+    description:
+      "The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects.",
+    image: articleProcess,
+    alt: "A mind map of UX design activities such as research, personas and user testing",
+    href: `${base}process-optimization-to-deliver-a-better-user-experience/`,
+  },
+  {
+    title: "Doing effective Sessions & Meetings",
+    description:
+      "I use visualization tools like Miro, Mural, and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion.",
+    image: articleSessions,
+    alt: "A digital whiteboard with clustered sticky notes from a mapping session",
+    href: `${base}doing-sessions-instead-of-meetings/`,
+  },
+];
+---
+
+<BlogLayout
+  title="What I Do"
+  description="How I help product teams align strategy, build design foundations, scale UX, and continuously improve."
+  canonical={canonical}
+>
+  <div class="what-i-do">
+    <section aria-labelledby="what-i-do-title">
+      <SectionTitle as="h1" id="what-i-do-title">What I do</SectionTitle>
+
+      <CardGrid as="ul" columns={3} gap="sm">
+        {
+          services.map((service) => (
+            <Card as="li" padding="sm" class="service">
+              <h2 class="page-heading-level-6">{service.title}</h2>
+              <p class="page-body-small">{service.description}</p>
+            </Card>
+          ))
+        }
+      </CardGrid>
+    </section>
+
+    <section aria-labelledby="how-i-work-title">
+      <SectionTitle id="how-i-work-title">How I work</SectionTitle>
+      <p class="page-body-medium what-i-do__intro">
+        Scaling UX requires structure. My work follows four stages that help
+        teams move from fragmented execution to aligned delivery.
+      </p>
+
+      <CardGrid as="ol" columns={4} gap="md">
+        {
+          stages.map((stage, index) => (
+            <Card
+              as="li"
+              padding="md"
+              class="stage"
+              accent={`var(--foreground-stage0${index + 1})`}
+            >
+              <hgroup class="stage__heading">
+                <p class="page-body-small stage__name">{stage.name}</p>
+                <h3 class="page-heading-level-3">Stage {index + 1}</h3>
+              </hgroup>
+              <p class="page-body-small">{stage.intro}</p>
+              <div>
+                <h4 class="page-heading-level-6 stage__focus">{stage.focus}</h4>
+                <ul class="page-body-small stage__actions">
+                  {stage.actions.map((action) => <li>{action}</li>)}
+                </ul>
+              </div>
+              <p class="page-body-small">{stage.outcome}</p>
+            </Card>
+          ))
+        }
+      </CardGrid>
+    </section>
+
+    <section aria-labelledby="enabling-people-title">
+      <SectionTitle id="enabling-people-title">Enabling People</SectionTitle>
+
+      <CardGrid columns={2}>
+        <Card width="full" layout="split" class="community">
+          <h3 class="page-card-article-title community__title">
+            <a href={uxFreiburgHref}>UX Meetup &amp; German UPA regional group Freiburg</a>
+          </h3>
+          <div class="community__text page-body-medium">
+            <p>
+              I co-founded <strong>UX Freiburg</strong>, the official German UPA
+              regional group for Freiburg, to strengthen the local UX, Product
+              and Tech community. We organize regular meetups, create
+              opportunities for knowledge sharing, and connect designers,
+              researchers, product managers and engineers across companies and
+              industries.
+            </p>
+            <p>
+              Today, the community reaches <strong>600+ professionals</strong>,
+              hosts regular events, and brings together members from companies
+              such as Haufe, Lexware, JobRad, SICK and many others.
+            </p>
+          </div>
+          <a class="community__visit" href={uxFreiburgHref}>Visit UX Freiburg.de</a>
+
+          <ul class="community__stats" aria-label="Community members per channel">
+            {
+              communityStats.map((stat) => {
+                const Tag = stat.href ? "a" : "div";
+                return (
+                  <li>
+                    <Tag class="stat" href={stat.href}>
+                      <span class="stat__icon">
+                        <img src={stat.icon} width={stat.iconWidth} height={stat.iconHeight} alt="" />
+                      </span>
+                      <span class="stat__text">
+                        <span class="stat__label">{stat.label}</span>
+                        <span class="stat__count page-body-small">{stat.count}</span>
+                      </span>
+                    </Tag>
+                  </li>
+                );
+              })
+            }
+          </ul>
+
+          <div class="gallery" slot="media">
+            {
+              galleryRows.map((row, rowIndex) => (
+                <div class={`gallery__row gallery__row--${rowIndex + 1}`}>
+                  {row.map((image) => (
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      widths={[320, 640]}
+                      sizes="(max-width: 900px) 50vw, 300px"
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              ))
+            }
+          </div>
+        </Card>
+
+        {
+          articles.map((article) => (
+            <ArticleTeaser {...article} headingLevel={3} />
+          ))
+        }
+      </CardGrid>
+    </section>
+  </div>
+</BlogLayout>
+
+<style>
+  /* Figma "Devider" on this page is a spacer only: 98px desktop, 48px mobile. */
+  .what-i-do > section + section {
+    margin-top: clamp(48px, calc(36.4615px + 3.2051vw), 98px);
+  }
+
+  .what-i-do :is(h2, h3, h4, p):not(.section-title) {
+    margin: 0;
+  }
+
+  .what-i-do__intro {
+    padding-bottom: 16px;
+    color: var(--foreground-ink);
+  }
+
+  /* Service + stage card text: flat 16px instead of the 13–14px small styles. */
+  .service :is(h2, p),
+  .stage :is(p, h4, ul) {
+    font-size: 1rem;
+  }
+
+  /* Service cards */
+  .service :global(.card__content) {
+    gap: 4px;
+  }
+
+  .service h2 {
+    color: var(--foreground-strong);
+  }
+
+  .service p {
+    color: var(--foreground-ink);
+  }
+
+  /* Stage cards */
+  .stage :global(.card__content) {
+    gap: 16px;
+  }
+
+  .stage p,
+  .stage__actions {
+    color: var(--foreground-ink);
+  }
+
+  .stage__heading {
+    position: relative;
+  }
+
+  .stage__heading::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(-1 * var(--card-padding));
+    width: 6px;
+    border-radius: 0 2px 2px 0;
+    background: var(--card-accent);
+    content: "";
+  }
+
+  .stage .stage__name,
+  .stage__focus {
+    color: var(--card-accent);
+  }
+
+  .stage h3 {
+    color: var(--foreground-strong);
+  }
+
+  .stage__actions {
+    margin: 0;
+    padding-left: 21px;
+    list-style: disc;
+  }
+
+  /* Community card */
+  .community__title {
+    padding-bottom: 8px;
+    color: var(--foreground-strong);
+  }
+
+  .community__text {
+    padding-bottom: 24px;
+    color: var(--foreground-regular);
+  }
+
+  .community__text p + p {
+    margin-top: 1.7em;
+  }
+
+  .community__text strong {
+    font-weight: 600;
+  }
+
+  .community__visit {
+    align-self: flex-start;
+    margin-bottom: 16px;
+    color: var(--foreground-strong);
+    font-family: var(--page-font-title);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: var(--page-lineheight-compact);
+  }
+
+  .community a:hover {
+    color: var(--foreground-link-hover);
+  }
+
+  .community__stats {
+    margin: auto 0 0;
+    padding: 24px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .stat {
+    min-height: 100%;
+    padding: 16px 24px 16px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: var(--radius-4);
+    color: var(--foreground-regular);
+    background: var(--background-page);
+    text-decoration: none;
+  }
+
+  a.stat {
+    transition: background-color 160ms ease;
+  }
+
+  a.stat:hover {
+    background: var(--background-textblock);
+  }
+
+  .stat__icon {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    display: grid;
+    place-items: center;
+  }
+
+  .stat__text {
+    display: flex;
+    flex-direction: column;
+    line-height: var(--page-lineheight-wide);
+    white-space: nowrap;
+  }
+
+  .stat__label {
+    color: var(--foreground-strong);
+    font-family: var(--page-font-body);
+    font-size: 14px;
+  }
+
+  a.stat .stat__label {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* Gallery: two rows whose column ratios and heights follow Figma (548px wide). */
+  .gallery {
+    display: grid;
+    gap: 16px;
+  }
+
+  .gallery__row {
+    display: grid;
+    gap: 16px;
+  }
+
+  .gallery__row--1 {
+    grid-template-columns: 236fr 296fr;
+    aspect-ratio: 548 / 233;
+  }
+
+  .gallery__row--2 {
+    grid-template-columns: 188fr 344fr;
+    aspect-ratio: 548 / 225;
+  }
+
+  .gallery :global(img) {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: block;
+    border-radius: var(--radius-4);
+    object-fit: cover;
+  }
+
+  @media (max-width: 900px) {
+    .community__stats {
+      flex-direction: column;
+    }
+
+    .stat {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a.stat {
+      transition: none;
+    }
+  }
+</style>

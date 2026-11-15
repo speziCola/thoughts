@@ -41,8 +41,13 @@ The separate `Semantic: Typography` collection supplies the page styles used by 
 | `page/label/default` | 14 / 21 | 16 / 24 |
 | `page/label/regular` | 12 / 20.4 | 12 / 20.4 |
 | `page/caption/default` | 12 / 18 | 14 / 21 |
+| `page/heading/level-6` (style `page/title/level-6`) | 13 / 1.35 | 14 / 1.35 |
+| `page/body/medium` (style `page/body/md/regular`) | 15 / 1.7 | 16 / 1.7 |
+| `page/body/small` (style `page/body/sm/regular`) | 13 / 1.7 | 14 / 1.7 |
 
 Page font families are Fira Sans (title) and Supreme (body), with regular 400 and semibold 600 weights. The page card title uses compact 1.35 line height; `page/body/compact`, navigation, and label styles use the matching 1.35, 1.7, and 1.5 line-height primitives.
+
+CSS utility classes mirror the Figma page text-style names, replacing `/` with `-` (for example, `page/body/default` becomes `.page-body-default`, and `page/action/button` becomes `.page-action-button`). Keep page typography on these classes so semantic elements can use the same style independently.
 
 Colours (shared, unprefixed):
 
@@ -52,8 +57,14 @@ Colours (shared, unprefixed):
 | `foreground/regular` | `--foreground-regular` | `#414141` |
 | `foreground/light` | `--foreground-light` | `#656565` |
 | `foreground/inverse` | `--foreground-inverse` | `#fdfdfd` |
+| `foreground/bold` | `--foreground-bold` | `#191929` |
+| `foreground/stage01`–`04` | `--foreground-stage01`–`04` | `#303859`, `#e23131`, `#186daa`, `#478a14` |
+| card fill (What I Do) | `--background-card` | `#fafafa` |
+| effect `card` | `--shadow-card` | inset 0 1px 0 `#fff` |
 
-Radius: `--radius-4` = 4px.
+Radius: `--radius-4` = 4px, `--radius-8` = 8px (cards).
+
+What I Do (`134:3728`): card body copy is hardcoded `#303859` (`--foreground-ink`, same value as stage01). The card fill is bound to the wrong variable (`--foreground-strong`) in Figma; code uses its rendered `#fafafa`. The "Devider" instances on this page are spacers only (stroke hidden): 98px desktop, 48px mobile. The mobile stage accent bar sits at `left: -32px` with 24px padding, which clips it out of view; code pins the bar to the card edge instead.
 
 ## Components
 Existing (on page "Blog", used on "Claude – Blog"): `title-blog` (date + H1), `h2-title-blog`, `Paragraph`, `IMG` (image slot, figcaption, label badge), `Devider` (2px rule, 64px padding above/below). `IMG-2-Columns` is still a frame (gap 32) – to be converted to a component manually.

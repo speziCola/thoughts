@@ -10,11 +10,13 @@ cover: ./assets/hero.png
 
 # ChatGPT: A new level of chatbot (#10)
 
-![](<./assets/hero.png>)
+![The OpenAI logo centered on a white panel against a dark teal background.](<./assets/hero.png> "ChatGPT: OpenAI’s chatbot changed how I look for answers and ideas.")
 
 ## Motivation
 
 Google, articles, and books were my go-to sources for information whenever I had an idea, a problem, or a question. However, it took me some time to read everything in order to find a solution or answer to my problem. This has changed since I first used ChatGPT in December 2022. It has therefore significantly altered my style of working.
+
+---
 
 ## Challenge
 
@@ -26,44 +28,69 @@ Of course, this might seem too good to be true. As with any emerging technology,
 
 Ultimately, it’s your choice how to use this new technology. Personally, I employ it almost daily as a starting point in my work.
 
-###### Examples
+### Examples
 
 Random things I asked ChatGPT:
 
 - **What is the difference between discovery and research?**
-  - **Discovery** typically involves exploring the problem space and clarifying objectives. It’s about understanding user needs, defining project boundaries, and setting the stage for future work.
-  - **Research** systematically gathers and analyzes data to inform decisions. It includes methodologies like interviews, surveys, or usability tests to validate assumptions and shape solutions.<br><br>
+  > “**Discovery** typically involves exploring the problem space and clarifying objectives. It’s about understanding user needs, defining project boundaries, and setting the stage for future work.”
+  
+  > “**Research** systematically gathers and analyzes data to inform decisions. It includes methodologies like interviews, surveys, or usability tests to validate assumptions and shape solutions.”
+
+---
+
 - **Act as a UX researcher. Come up with follow-up questions when a user says they want the application on a tablet.**
-  - **Could you tell me why a tablet is your preferred device?**<br>*This helps understand user context and motivations.*
-  - **Which tablet features or capabilities are you hoping to leverage?**<br>*This clarifies whether screen size, portability, or something else is the main draw.*
-  - **What primary tasks do you plan to accomplish on the tablet?**<br>*This identifies core use cases.*
-  - **Do you envision holding the tablet in portrait or landscape orientation most of the time?**<br>*Orientation preferences can affect design layout.*
-  - **Will you be using the tablet mostly online or offline?**<br>*This provides insight into connectivity and data-sync needs.*
+  > Could you tell me why a tablet is your preferred device?
+
+  This helps understand user context and motivations.
+  
+  > Which tablet features or capabilities are you hoping to leverage?
+  
+  This clarifies whether screen size, portability, or something else is the main draw.
+  
+  > What primary tasks do you plan to accomplish on the tablet?
+  
+  This identifies core use cases.
+  > Do you envision holding the tablet in portrait or landscape orientation most of the time?
+  
+  Orientation preferences can affect design layout.
+  > Will you be using the tablet mostly online or offline?
+  
+  This provides insight into connectivity and data-sync needs.
+
+---
+  
 - **A clear tone of voice defines how you speak to your audience at every moment in their journey, helping them get wherever they want to go. Provide different examples with the same message. Always include a short explanation.**
 
-- **Friendly and Encouraging**
+  Friendly and Encouraging
   > “Give it a try—you’ll be surprised at how quickly you can get results!”
-  - *Explains benefits in a warm, supportive manner.*
-- **Professional and Direct**
+  
+  Explains benefits in a warm, supportive manner.
+  Professional and Direct
   > “Please proceed with the next step to ensure timely delivery.”
-  - *Gives a concise directive without extra fluff.*
-- **Enthusiastic and Inspirational**
+  
+  Gives a concise directive without extra fluff.
+  Enthusiastic and Inspirational
   > “You’re on the right track—keep going! Success is closer than you think.”
-  - *Pumps the audience up and emphasizes progress.*
-- **Reassuring and Empathetic**
+  
+  Pumps the audience up and emphasizes progress.
+  Reassuring and Empathetic
   > “We understand this can be challenging. We’re here to guide you every step of the way.”
-  - *Aims to build trust and comfort by addressing concerns.*
-
-- …
+  
+  Aims to build trust and comfort by addressing concerns.
 
 Every answer was good enough to work with. If you are not certain about the quality of the answer, have it validated or evaluated by another professional.
 
-![chatgpt answer](<./assets/image-02.png>)
+![A screenshot of a ChatGPT conversation showing a detailed answer to a user’s question.](<./assets/image-02.png> "ChatGPT response: An example answer that is useful as a starting point, but still needs review.")
+
+---
 
 ## Conclusion
 
 AI is here to stay and it’s only the beginnig. I can only encourage everyone to try it out cause it has the potential to revolutionize the way we live and work. It can help us make better decisions, save time, and increase efficiency. However, it is important to remember that AI is not infallible and it is important to always verify the information it provides. By using AI responsibly and in conjunction with human oversight, we can harness its full potential while minimizing the risk of errors. So, let’s embrace the power of AI and use it to our advantage, but always be vigilant in verifying the information it provides. Remember that AI is an incredible tool, but it should always be used with caution and in conjunction with human oversight.
 
-###### Resources
+---
+
+### Resources
 
 - [Join us in shaping the future of technology. ChatGPT](<https://openai.com/blog/chatgpt/>)

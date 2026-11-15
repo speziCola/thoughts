@@ -11,7 +11,7 @@ cover: ./assets/hero.png
 
 # AI Prototyping: More output doesn't mean more value (#16)
 
-![An AI-generated interface prototype](./assets/hero.png "Low fidelity: Focus on details and realistic interactions.")
+![A hand-drawn investment-app wireframe beside a polished AI-generated investment interface.](./assets/hero.png "Prototype comparison: A rough idea can quickly become a polished interface with AI.")
 
 ## Motivation
 
@@ -60,7 +60,7 @@ The next experiment went a little further. We had conducted a workshop exploring
 
 Instead of manually translating everything into requirements and wireframes, I used the board itself as context for AI.
 
-![A prototype created from workshop context](./assets/hero.png "Low fidelity: Focus on details and realistic interactions.")
+![A FigJam workshop session.](./assets/image-3.png "Workshop prototype: AI turns workshop context into an interface the team can discuss.")
 
 Proposed illustration: A repeatable workflow that keeps collaboration and problem understanding ahead of prototype generation. Within a short time, AI produced several interactive concepts exploring different questions.
 

@@ -10,7 +10,37 @@ function isElement(node, tagName) {
   return node?.type === "element" && node.tagName === tagName;
 }
 
-function toFigure(image, imageIndex) {
+function isNoteParagraph(node) {
+  if (!isElement(node, "p")) {
+    return false;
+  }
+
+  const content = (node.children ?? []).filter(
+    (child) => child.type !== "text" || child.value.trim() !== "",
+  );
+  return content.length === 1 && isElement(content[0], "em");
+}
+
+function getLinkedImage(node) {
+  if (isElement(node, "img")) {
+    return { image: node };
+  }
+
+  if (!isElement(node, "a")) {
+    return undefined;
+  }
+
+  const content = (node.children ?? []).filter(
+    (child) => child.type !== "text" || child.value.trim() !== "",
+  );
+  if (content.length !== 1 || !isElement(content[0], "img")) {
+    return undefined;
+  }
+
+  return { image: content[0], linkProperties: node.properties ?? {} };
+}
+
+function toFigure(image, imageIndex, linkProperties) {
   const properties = image.properties ?? {};
   const title = typeof properties.title === "string" ? properties.title : "";
   const separator = title.indexOf(": ");
@@ -39,12 +69,20 @@ function toFigure(image, imageIndex) {
     });
   }
 
+  const imageContent = linkProperties
+    ? {
+        type: "element",
+        tagName: "a",
+        properties: linkProperties,
+        children: [image],
+      }
+    : image;
   const children = [
     {
       type: "element",
       tagName: "div",
       properties: { className: ["blog-figure__media"] },
-      children: [image],
+      children: [imageContent],
     },
   ];
 
@@ -76,11 +114,11 @@ function transformImages(parent, imageState) {
       const visibleChildren = child.children.filter(
         (node) => node.type !== "text" || node.value.trim() !== "",
       );
-      const images = visibleChildren.filter((node) => isElement(node, "img"));
+      const images = visibleChildren.map(getLinkedImage);
 
-      if (images.length > 0 && images.length === visibleChildren.length) {
+      if (images.length > 0 && images.every(Boolean)) {
         const figures = images.map((image) =>
-          toFigure(image, imageState.count++),
+          toFigure(image.image, imageState.count++, image.linkProperties),
         );
 
         children.push(
@@ -110,6 +148,19 @@ export default function rehypeBlogRegistry() {
     visit(tree, (node) => {
       if (isElement(node, "h1")) {
         titleCount += 1;
+      }
+
+      if (isNoteParagraph(node)) {
+        const classNames = node.properties?.className;
+        node.properties ??= {};
+        node.properties.className = [
+          ...(Array.isArray(classNames)
+            ? classNames
+            : classNames
+              ? [classNames]
+              : []),
+          "blog-note",
+        ];
       }
     });
 

@@ -1,0 +1,40 @@
+---
+/**
+ * Page/section title with the short underline bar (Figma: "Title H1").
+ * The visual style is always page/heading/level-1; `as` sets the semantic level.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"h1"> & {
+  as?: "h1" | "h2";
+};
+
+const { as: Tag = "h2", class: className, ...attrs } = Astro.props;
+---
+
+<Tag class:list={["section-title", "page-heading-level-1", className]} {...attrs}>
+  <slot />
+</Tag>
+
+<style>
+  .section-title {
+    margin: 0 0 16px;
+    color: var(--foreground-bold);
+  }
+
+  .section-title::after {
+    width: 56px;
+    height: 5px;
+    margin-top: 4px;
+    display: block;
+    border-radius: 999px;
+    background: currentColor;
+    content: "";
+  }
+
+  @media (max-width: 900px) {
+    .section-title::after {
+      width: 48px;
+    }
+  }
+</style>

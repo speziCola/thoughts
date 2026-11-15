@@ -15,7 +15,7 @@ Agreed 2026-11-01 in a design interview. Change only with Christopher's explicit
 ## Content model
 | Topic | Decision |
 |---|---|
-| Scope | Blog only. English only. |
+| Scope | Blog plus static About and What I Do pages at `/thoughts/about/` and `/thoughts/what-i-do/`. English only. |
 | Structure | `src/content/thoughts/<slug>/index.md` + local images. URL `/thoughts/<slug>/`. No dates/IDs in URLs. |
 | Frontmatter | Required: `date`, `description`. Optional: `updated`, `draft`, `aliases`, `tags`, `cover`. **No `title`.** Validate with a content-collection schema; errors must name file + field. |
 | Title | The single `#` heading in the body. Feeds `<title>`, OG, RSS, lists. Zero or multiple `#` → build error. |
@@ -31,6 +31,7 @@ Agreed 2026-11-01 in a design interview. Change only with Christopher's explicit
 | `## Section` | `<h2>` | `h2-title-blog` | `blog/title/md` |
 | `### Sub` | `<h3>` (real subsections only) | `h3-title-blog` (provisional) | `blog/title/sm` |
 | paragraph | `<p>` | `Paragraph` | `blog/body/md` |
+| standalone italic paragraph (`*Note text*`) | `<p class="blog-note">` | `Note` (provisional) | `blog/utility/xs/italic`, matching image caption text |
 | `---` | `<hr>` | `Devider` | — (author always types it; never auto-inserted) |
 | `![alt](src "Label: caption")` | `<figure>` + `<img>` + `<figcaption>` + label span | `IMG` | caption `blog/utility/xs/italic`, label `blog/utility/xs` on dark badge |
 | two images on consecutive lines | two-column row, breaks out to 1280, stacks via container query | `IMG-2-Columns` | — |

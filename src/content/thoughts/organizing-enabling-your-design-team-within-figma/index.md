@@ -10,17 +10,18 @@ cover: ./assets/hero.png
 
 # Organizing & enabling your design team within Figma (#4)
 
-![](<./assets/hero.png>)
+![A Figma library map groups design-system resources into foundations, components, and product-specific libraries.](<./assets/hero.png> "Figma libraries: Organizing shared foundations and local product systems supports team autonomy.")
 
 ## Motivation
 
 Enabling teams to deliver quickly. Implementing a Design System can present challenges. Should you pursue a centralized or decentralized design system? How about a hybrid? Depending on how you manage your libraries, achieving scalability is doable. Just recently Nathan A Curtis started a small survey how people manage their Figma libraries: [Survey](<https://twitter.com/nathanacurtis/status/1504860325505650688>)
 
-![Nathan a Curtis Survey about Figma libraries](<./assets/image-02.png>)
+![A screenshot of Nathan A. Curtis asking how people manage Figma styles, components, and other assets across libraries.](<./assets/image-02.png> "Figma library survey: Nathan Curtis asks how teams organize styles, components, and assets.")
 
-#### Repeating challenges and pains
-
+### Repeating challenges and pains
 If you want to keep teams as autonomous as possible, then a decentralized design system might be the better choice. However, this brings new challenges if you are aiming for a uniform experience through all products. While a centralized design system can more easily ensure a consistent visual experience, it’s more likely to hinder teams’ autonomy and may slow down delivery.
+
+---
 
 ## Challenge
 
@@ -28,23 +29,23 @@ If you want to keep teams as autonomous as possible, then a decentralized design
 
 I came across a great talk by Shaunt Bent: **Reimagining Design Systems at Spotify.** Where he summarizes the advantages and disadvantages of a central and decentral design system. And how they came up with a framework which enables teams to not only build products with it but also contribute to it. Defiantly worth a watch: [Link](<https://www.youtube.com/watch?v=Xww-x7DgiDw>)
 
-![Talk about the encore design system](<./assets/image-03.png>)
+![A Spotify presentation slide introduces Encore Creator Web and its design system for creator-facing public apps.](<./assets/image-03.png> "Spotify Encore: A talk presents the design system behind creator-facing products.")
 
-#### The Framework
+### The Framework
 
 It consists of various parts and works as an organizational layer. The framework documents everything such as: Branding, shared terminologies, patterns, positioning, shared tooling, plugins and more.
 
-![Design System structure](<./assets/image-04.png>)
+![A layered framework diagram connects foundations, web and app components, and product-specific systems.](<./assets/image-04.png> "Design-system framework: Product components build on shared platform components and foundations.")
 
-###### 1. Foundation
+#### 1. Foundation
 
 The core serves as the core and heart of all products. It houses various tokens such as Color, Typography, Spacing, Shadow, and Motion as well as guidelines for writing and accessibility.
 
-###### 2. Web/App Components
+### 2. Web/App Components
 
 All basic components, such as buttons, forms, and dialogs, are built atop tokens, adhering to the guidelines and patterns established in the foundation. Sharing components across technical platforms poses challenges, thus in this scenario, a distinction is made between web and app components.
 
-###### 3. Product
+### 3. Product
 
 The third layer comprises the product or local design system, where components specific to it are stored. This segregation is crucial to avoid mixing, for instance, consumer and enterprise navigation patterns in the same library. Despite this, all specific product components are built atop the web components and foundation.
 
@@ -52,8 +53,10 @@ This methodology can also be embraced by your design team within Figma. If your 
 
 In the following illustrated example, the foundation is divided into separate 'design token' libraries: Color, Typography, Grid, among others. This division isn't mandatory; it largely hinges on the diversity of your products and the size of your company.
 
-![Design System](<./assets/image-05.png>)
+![A Figma library organization diagram separates foundation libraries from product-specific components and templates.](<./assets/image-05.png> "Figma library structure: Shared design-token libraries support product-specific systems.")
+
+---
 
 ## Conclusion
 
-Providing a local Design Systems for each product helps your team to be as autonomous as possible. At the same time, the local library files build on top of the existing framework, which in turn helps the product to appear consistent without having to sacrifice velocity in the process. Especially the design department should have the possibility to quickly and easily build new components without bloating the existing design system.
+Providing a local design system for each product helps your teams to be as autonomous as possible. At the same time, the local library files build on top of the existing framework, which in turn helps the products to appear consistent without having to sacrifice velocity in the process. Especially the design department should have the possibility to quickly and easily build new components without bloating the existing design system.
