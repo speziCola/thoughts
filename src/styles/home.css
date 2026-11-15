@@ -129,7 +129,7 @@
 
 /* Two columns: text (heading, body, links) | portrait. */
 .intro {
-  padding: 48px 0 64px; /* 64px links → divider */
+  padding: 128px 0;
   display: flex;
   align-items: flex-start;
   gap: 32px;
@@ -150,6 +150,18 @@
   font-size: clamp(24px, calc(20.3077px + 1.0256vw), 40px);
   font-weight: 700;
   line-height: 1.5;
+  text-wrap: balance;
+}
+
+/* Each subtitle line balances on its own. */
+.intro__subtitle span {
+  display: block;
+  text-wrap: balance;
+}
+
+/* The name always stays on one line: it moves down whole or not at all. */
+.intro__name {
+  white-space: nowrap;
 }
 
 .intro__subtitle {
@@ -158,11 +170,13 @@
   font-family: var(--page-font-title);
   font-size: clamp(18px, calc(16.6154px + 0.3846vw), 24px);
   line-height: 1.5;
+  text-wrap: balance;
 }
 
 .intro__portrait {
   flex: none;
-  width: clamp(160px, 16vw, 256px);
+  width: 320px;
+  max-width: 40%; /* narrow laptop/tablet columns keep room for the text */
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
@@ -171,6 +185,7 @@
 
 .intro__body {
   max-width: 720px;
+  text-wrap: pretty;
   display: flex;
   flex-direction: column;
 }
@@ -511,6 +526,7 @@
 
   .intro__portrait {
     width: 128px;
+    max-width: none;
     height: 128px;
   }
 

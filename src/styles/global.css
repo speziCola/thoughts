@@ -691,11 +691,12 @@ a:focus-visible {
 }
 
 @media (max-width: 900px) {
+  /* Mobile: no art panel; the footer is the same card as on every other page. */
   .split-page {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "main"
-      "art";
+      "footer";
     grid-template-rows: auto auto;
     padding: 24px 16px 16px;
   }
@@ -704,18 +705,8 @@ a:focus-visible {
     padding: 0 0 48px;
   }
 
-  /* Mobile: the art panel becomes the backdrop of the footer card. */
   .split-page__aside {
-    grid-area: art;
-    align-self: end;
-    height: calc(100% - 64px);
-  }
-
-  .split-page > .site-footer {
-    grid-area: art;
-    position: relative;
-    z-index: 1;
-    margin: 0 16px 64px;
+    display: none;
   }
 }
 
