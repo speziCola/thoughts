@@ -1,0 +1,81 @@
+---
+/**
+ * Light card surface used for every block on the start page.
+ * `layout="split"` puts direct children side by side and stacks them
+ * when the card itself gets narrow (container query, not viewport).
+ */
+interface Props {
+  layout?: "stack" | "split";
+  /** Column gap in split layout. */
+  gap?: 16 | 48 | 64;
+  /** Put the last child first when stacked (e.g. images above the text). */
+  mediaFirst?: boolean;
+  /** Desktop padding. Mobile is always 24px (or --home-card-padding-mobile). */
+  padding?: 48 | 64;
+  labelledby?: string;
+  tag?: "article" | "div";
+}
+
+const {
+  layout = "stack",
+  gap = 16,
+  mediaFirst = false,
+  padding = 64,
+  labelledby,
+  tag: Tag = "article",
+} = Astro.props;
+---
+
+<Tag
+  class:list={[
+    "home-card",
+    `home-card--${layout}`,
+    { "home-card--media-first": mediaFirst },
+  ]}
+  style={`--home-card-gap: ${gap}px; --home-card-padding: ${padding}px`}
+  aria-labelledby={labelledby}
+>
+  <div class="home-card__body">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .home-card {
+    container-type: inline-size;
+    padding: var(--home-card-padding, 48px);
+    border-radius: 8px;
+    background: #fafafa;
+    box-shadow: inset 0 1px 0 #fff;
+  }
+
+  .home-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .home-card--split .home-card__body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--home-card-gap);
+    align-items: start;
+  }
+
+  @container (max-width: 640px) {
+    .home-card--split .home-card__body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .home-card--media-first .home-card__body > :global(:last-child) {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .home-card {
+      padding: var(--home-card-padding-mobile, 24px);
+    }
+  }
+</style>

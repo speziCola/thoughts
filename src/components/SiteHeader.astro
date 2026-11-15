@@ -1,19 +1,17 @@
 ---
 import FloatingMenu from "./FloatingMenu.astro";
 
+/** One menu for every page of the site. */
 const base = import.meta.env.BASE_URL;
-const homeHref = `${base.replace(/\/$/, "")}/`;
-const whatIDoHref = `${base}what-i-do/`;
-const aboutHref = `${base}about/`;
-const isOverview = Astro.url.pathname === homeHref;
-const isWhatIDo = Astro.url.pathname === whatIDoHref;
-const isAbout = Astro.url.pathname === aboutHref;
+const homeHref = `${base}home/`;
+const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { label: "What I Do", href: whatIDoHref, current: isWhatIDo },
-  { label: "Sharing Thoughts", href: homeHref, current: isOverview },
-  { label: "About", href: aboutHref, current: isAbout },
-];
+  { label: "What I Do", href: `${base}what-i-do/` },
+  { label: "Sharing Thoughts", href: `${base.replace(/\/$/, "")}/` },
+  { label: "Timeline", href: `${base}timeline/` },
+  { label: "About", href: `${base}about/` },
+].map((item) => ({ ...item, current: item.href === currentPath }));
 ---
 
 <header class="site-header">
@@ -21,8 +19,9 @@ const navItems = [
     <div class="site-header__inner">
       <a
         class="site-brand"
-        href="https://chriskuhrt.de"
-        aria-label="Christopher Kuhrt"
+        href={homeHref}
+        aria-label="Christopher Kuhrt – start page"
+        aria-current={currentPath === homeHref ? "page" : undefined}
       >
         <span class="site-brand__mark" aria-hidden="true"></span>
         <img
@@ -32,15 +31,13 @@ const navItems = [
         />
       </a>
       <nav class="site-nav" aria-label="Main navigation">
-        <a href={whatIDoHref} aria-current={isWhatIDo ? "page" : undefined}>
-          What I Do
-        </a>
-        <a href={homeHref} aria-current={isOverview ? "page" : undefined}>
-          Sharing Thoughts
-        </a>
-        <a href={aboutHref} aria-current={isAbout ? "page" : undefined}>
-          About
-        </a>
+        {
+          navItems.map((item) => (
+            <a href={item.href} aria-current={item.current ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
       </nav>
     </div>
   </div>
@@ -49,7 +46,11 @@ const navItems = [
 <!-- Mobile (≤900px): the header links move into a floating "Menu" pill. -->
 <FloatingMenu label="Menu" navLabel="Main navigation" panelWidth="318px">
   <ul>
-    <li><a href="https://chriskuhrt.de"><span class="floating-menu__text">Home</span></a></li>
+    <li>
+      <a href={homeHref} aria-current={currentPath === homeHref ? "page" : undefined}>
+        <span class="floating-menu__text">Home</span>
+      </a>
+    </li>
     {
       navItems.map((item) => (
         <li>

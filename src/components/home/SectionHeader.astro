@@ -1,0 +1,66 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  id: string;
+  title: string;
+  icon: ImageMetadata;
+}
+
+const { id, title, icon } = Astro.props;
+---
+
+<div class="section-header">
+  <span class="section-header__icon" aria-hidden="true">
+    <Image src={icon} alt="" width={32} height={32} />
+  </span>
+  <h2 class="section-header__title" id={id}>{title}</h2>
+</div>
+
+<style>
+  .section-header {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .section-header__icon {
+    display: flex;
+    flex: none;
+    padding: 4px;
+    border-radius: var(--radius-4);
+    background: var(--background-inverse);
+  }
+
+  .section-header__icon img {
+    display: block;
+    width: 32px;
+    height: 32px;
+  }
+
+  .section-header__title {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding-bottom: 7px;
+    align-self: center;
+    color: #000;
+    font-family: var(--home-font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  /* 48×3 accent line under the title (Figma "line"). */
+  .section-header__title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 48px;
+    height: 3px;
+    background: #000;
+  }
+</style>
