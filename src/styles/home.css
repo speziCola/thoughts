@@ -185,7 +185,7 @@
 /* ---------- Areas ---------- */
 
 .areas {
-  margin-top: 40px;
+  margin-top: 64px; /* divider → "4 areas" */
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -301,6 +301,11 @@
   flex-direction: column;
   gap: 16px;
   scroll-margin-top: 96px;
+}
+
+/* Reference logos → first section header */
+.references + .home-section {
+  margin-top: 80px;
 }
 
 .home-section > .section-header {
