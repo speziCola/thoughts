@@ -212,10 +212,10 @@
   scroll-margin-top: 96px; /* clears the sticky header on mobile */
 }
 
-/* Desktop: area links land 64px below the top of the art panel. */
+/* Desktop: area links land 48px below the top of the art panel. */
 @media (min-width: 901px) {
   .home-section {
-    scroll-margin-top: 160px;
+    scroll-margin-top: 144px;
   }
 }
 
