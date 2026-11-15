@@ -13,13 +13,20 @@ const socialColumns = [
   ],
 ];
 
+interface Props {
+  /** "full" = edge-to-edge band (blog). "card" = rounded card that sits in a layout column (start page). */
+  variant?: "full" | "card";
+}
+
+const { variant = "full" } = Astro.props;
+
 const projects = [
   { label: "UX Freiburg", href: "https://uxfreiburg.de/" },
   { label: "Pixelbricks", href: "https://pixelbricks.de/" },
 ];
 ---
 
-<footer class="site-footer">
+<footer class:list={["site-footer", `site-footer--${variant}`]}>
   <div class="site-footer__stack">
     <div class="site-footer__sections">
       <section class="site-footer__section" aria-labelledby="footer-social-title">
@@ -67,6 +74,11 @@ const projects = [
     padding: 128px 48px;
     color: var(--foreground-inverse);
     background: #000;
+  }
+
+  .site-footer--card {
+    padding: 48px;
+    border-radius: 16px;
   }
 
   .site-footer__stack {
@@ -158,6 +170,10 @@ const projects = [
   @media (max-width: 900px) {
     .site-footer {
       padding: 80px 16px 32px;
+    }
+
+    .site-footer--card {
+      padding: 48px 32px 32px;
     }
 
     .site-footer__sections {

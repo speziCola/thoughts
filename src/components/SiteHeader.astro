@@ -1,7 +1,18 @@
 ---
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  /** Main navigation. Defaults to the blog's single "Sharing Thoughts" link. */
+  nav?: NavItem[];
+}
+
 const base = import.meta.env.BASE_URL;
 const homeHref = `${base.replace(/\/$/, "")}/`;
-const isOverview = Astro.url.pathname === homeHref;
+const { nav = [{ label: "Sharing Thoughts", href: homeHref }] } = Astro.props;
+const currentPath = Astro.url.pathname;
 ---
 
 <header class="site-header">
@@ -20,9 +31,16 @@ const isOverview = Astro.url.pathname === homeHref;
         />
       </a>
       <nav class="site-nav" aria-label="Main navigation">
-        <a href={homeHref} aria-current={isOverview ? "page" : undefined}>
-          Sharing Thoughts
-        </a>
+        {
+          nav.map(({ label, href }) => (
+            <a
+              href={href}
+              aria-current={href === currentPath ? "page" : undefined}
+            >
+              {label}
+            </a>
+          ))
+        }
       </nav>
     </div>
   </div>

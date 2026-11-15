@@ -1,17 +1,31 @@
 ---
 import "../styles/global.css";
 import SiteFooter from "../components/SiteFooter.astro";
-import SiteHeader from "../components/SiteHeader.astro";
+import SiteHeader, { type NavItem } from "../components/SiteHeader.astro";
 import firaSansSemibold from "../assets/fonts/fira-sans-semibold.woff2?url";
 
 interface Props {
   title: string;
   description: string;
   canonical: string;
+  /** Full document title. Defaults to "<title> — Thoughts by Christopher Kuhrt". */
+  fullTitle?: string;
+  nav?: NavItem[];
+  /**
+   * "shell" = centred 1280px column (blog pages).
+   * "split" = sticky `aside` slot on the left, content + footer card on the right (start page).
+   */
+  layout?: "shell" | "split";
 }
 
-const { title, description, canonical } = Astro.props;
-const fullTitle = `${title} — Thoughts by Christopher Kuhrt`;
+const {
+  title,
+  description,
+  canonical,
+  fullTitle = `${title} — Thoughts by Christopher Kuhrt`,
+  nav,
+  layout = "shell",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -32,12 +46,28 @@ const fullTitle = `${title} — Thoughts by Christopher Kuhrt`;
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader />
-    <main id="main" class="main-content">
-      <div class="site-shell">
-        <slot />
-      </div>
-    </main>
-    <SiteFooter />
+    <SiteHeader nav={nav} />
+    {
+      layout === "split" ? (
+        <div class="split-page">
+          <div class="split-page__aside">
+            <slot name="aside" />
+          </div>
+          <main id="main" class="split-page__main">
+            <slot />
+          </main>
+          <SiteFooter variant="card" />
+        </div>
+      ) : (
+        <>
+          <main id="main" class="main-content">
+            <div class="site-shell">
+              <slot />
+            </div>
+          </main>
+          <SiteFooter />
+        </>
+      )
+    }
   </body>
 </html>

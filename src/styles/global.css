@@ -54,6 +54,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Fira Mono";
+  src: url("../assets/fonts/fira-mono-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   /* Viewport ranges: mobile 0-900px; laptop 901-1400px; desktop 1401px+. */
@@ -81,6 +89,7 @@
   --blog-utility-sm-line-height: 20.4px;
   --blog-utility-xs-size: clamp(11px, calc(10.7692px + 0.0641vw), 12px);
   --blog-utility-xs-line-height: clamp(18.7px, calc(18.3077px + 0.109vw), 20.4px);
+  --home-font-mono: "Fira Mono", ui-monospace, monospace;
   --page-font-title: var(--blog-font-title);
   --page-font-body: var(--blog-font-body);
   --page-weight-regular: 400;
@@ -151,6 +160,18 @@ a:focus-visible {
   outline-offset: 4px;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .skip-link {
   position: absolute;
   z-index: 20;
@@ -219,6 +240,7 @@ a:focus-visible {
   width: 480px;
   display: flex;
   justify-content: flex-end;
+  gap: 48px;
   font-family: var(--blog-font-body);
   font-size: 16px;
   font-weight: 700;
@@ -603,6 +625,70 @@ a:focus-visible {
     margin-inline: 0;
     grid-template-columns: 1fr;
     gap: 0;
+  }
+}
+
+/* Split page (start page): sticky art panel left, content + footer card right.
+   Desktop grid = Figma 1920 frame: 16px page padding/gap, 3fr / 5fr = 37.5% aside. */
+.split-page {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+  grid-template-areas:
+    "aside main"
+    "aside footer";
+  grid-template-rows: 1fr auto;
+  column-gap: 16px;
+  padding: 16px;
+}
+
+.split-page__aside {
+  grid-area: aside;
+}
+
+/* Laptop/tablet frames (950–1600) keep the art panel narrow (171–380px in Figma). */
+@media (min-width: 901px) and (max-width: 1600px) {
+  .split-page {
+    grid-template-columns: clamp(171px, 24vw, 380px) minmax(0, 1fr);
+  }
+}
+
+.split-page__main {
+  grid-area: main;
+  min-width: 0;
+  padding: 0 48px 48px;
+}
+
+.split-page > .site-footer {
+  grid-area: footer;
+}
+
+@media (max-width: 900px) {
+  .split-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "main"
+      "art";
+    grid-template-rows: auto auto;
+    padding: 24px 16px 16px;
+  }
+
+  .split-page__main {
+    padding: 0 0 48px;
+  }
+
+  /* Mobile: the art panel becomes the backdrop of the footer card. */
+  .split-page__aside {
+    grid-area: art;
+    align-self: end;
+    height: calc(100% - 64px);
+  }
+
+  .split-page > .site-footer {
+    grid-area: art;
+    position: relative;
+    z-index: 1;
+    margin: 0 16px 64px;
   }
 }
 

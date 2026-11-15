@@ -1,0 +1,356 @@
+---
+/**
+ * Start page – Figma "CK_Portfolio-v03" › Homepage (8156:5985).
+ * Desktop reference: "desktop < 1920" (8156:4854). Mobile: "mobile > 320" (8043:3353).
+ * Entrance motion mirrors the live Framer site (chriskuhrt.de), see home.css.
+ *
+ * Images in src/assets/home/ are PLACEHOLDERS – replace the files, keep the names
+ * (see src/assets/home/README.md).
+ */
+import { Image } from "astro:assets";
+import BlogLayout from "../layouts/BlogLayout.astro";
+import SectionHeader from "../components/home/SectionHeader.astro";
+import HomeCard from "../components/home/HomeCard.astro";
+import ArticleTeaser from "../components/home/ArticleTeaser.astro";
+import "../styles/home.css";
+
+import heroArt from "../assets/home/hero-art.png";
+import portrait from "../assets/home/portrait.png";
+import iconTeam from "../assets/home/icon-team.svg";
+import iconDesignSystem from "../assets/home/icon-designsystem.svg";
+import iconFinance from "../assets/home/icon-finance.svg";
+import iconEcom from "../assets/home/icon-ecom.svg";
+import sectionTeam from "../assets/home/section-team.svg";
+import sectionDesignSystem from "../assets/home/section-designsystem.svg";
+import sectionFinance from "../assets/home/section-finance.svg";
+import sectionEcom from "../assets/home/section-ecom.svg";
+import socialLinkedin from "../assets/home/social-linkedin.svg";
+import socialTwitter from "../assets/home/social-twitter.svg";
+import channelLinkedin from "../assets/home/channel-linkedin.svg";
+import channelMeetup from "../assets/home/channel-meetup.svg";
+import channelDiscord from "../assets/home/channel-discord.svg";
+import refChrono24 from "../assets/home/ref-chrono24.png";
+import refDfb from "../assets/home/ref-dfb.png";
+import refSwisscom from "../assets/home/ref-swisscom.png";
+import refScFreiburg from "../assets/home/ref-scfreiburg.png";
+import refReservix from "../assets/home/ref-reservix.png";
+import uxfRooftop from "../assets/home/uxf-rooftop.png";
+import uxfSpeaker from "../assets/home/uxf-speaker.png";
+import uxfChallenges from "../assets/home/uxf-challenges.png";
+import uxfAgenda from "../assets/home/uxf-agenda.png";
+import abundantia from "../assets/home/abundantia.png";
+import logoEtops from "../assets/home/logo-etops.png";
+import logoPatronas from "../assets/home/logo-patronas.png";
+import logoChrono24 from "../assets/home/logo-chrono24.png";
+import logoReservix from "../assets/home/logo-reservix.png";
+// Teaser images are the real article covers already in the repo.
+import processCover from "../content/thoughts/process-optimization-to-deliver-a-better-user-experience/assets/hero.png";
+import sessionsCover from "../content/thoughts/doing-sessions-instead-of-meetings/assets/hero.png";
+
+const base = import.meta.env.BASE_URL;
+const site = "https://chriskuhrt.de";
+
+const nav = [
+  { label: "Work & Projects", href: `${site}/work-projects` },
+  { label: "What I do", href: `${site}/what-i-do` },
+  { label: "Timeline", href: `${site}/timeline` },
+  { label: "About", href: `${site}/about` },
+];
+
+const areas = [
+  { label: "Enabling People", href: "#enabling-people", icon: iconTeam },
+  { label: "Design Systems", href: "#design-system", icon: iconDesignSystem },
+  { label: "Finance", href: "#finance", icon: iconFinance },
+  { label: "E-Commerce", href: "#e-commerce", icon: iconEcom },
+];
+
+const references = [
+  { name: "Chrono24", logo: refChrono24 },
+  { name: "Deutscher Fußball-Bund", logo: refDfb },
+  { name: "Swisscom", logo: refSwisscom },
+  { name: "SC Freiburg", logo: refScFreiburg },
+  { name: "Reservix", logo: refReservix },
+];
+
+const channels = [
+  { name: "LinkedIn", members: 219, icon: channelLinkedin },
+  { name: "Meetup", members: 364, icon: channelMeetup },
+  { name: "Discord", members: 87, icon: channelDiscord },
+];
+---
+
+<BlogLayout
+  title="Chris Kuhrt"
+  fullTitle="Chris Kuhrt — UX Strategy, DesignOps, Design Systems"
+  description="Christopher Kuhrt builds the systems behind strong products: UX strategy, DesignOps and design systems for finance, marketplaces and digital platforms."
+  canonical={`${site}${base}home/`}
+  nav={nav}
+  layout="split"
+>
+  <div slot="aside" class="art-panel">
+    <Image
+      class="art-panel__image"
+      src={heroArt}
+      alt=""
+      widths={[480, 720, 1080, 1440]}
+      sizes="(max-width: 900px) 100vw, 37.5vw"
+      loading="eager"
+    />
+    <ul class="art-panel__links" aria-label="Social profiles">
+      <li>
+        <a href="https://linkedin.chriskuhrt.de/">
+          <Image src={socialLinkedin} alt="" width={20} height={20} />
+          LinkedIn
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.chriskuhrt.de/">
+          <Image src={socialTwitter} alt="" width={20} height={20} />
+          Twitter
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <section class="intro" aria-labelledby="intro-title">
+    <div class="intro__head">
+      <div class="intro__heading">
+        <h1 class="intro__title enter" id="intro-title">
+          Hi, my name is Chris Kuhrt,
+        </h1>
+        <p class="intro__subtitle enter">
+          I build the systems behind strong products.<br />
+          UX Strategy, DesignOps, Design Systems
+        </p>
+      </div>
+      <Image
+        class="intro__portrait enter"
+        src={portrait}
+        alt="Portrait of Chris Kuhrt"
+        widths={[128, 256, 512]}
+        sizes="(max-width: 900px) 128px, 256px"
+        loading="eager"
+      />
+    </div>
+
+    <div class="intro__body enter">
+      <p class="home-text">
+        For over 10 years, I’ve shaped digital products across finance,
+        marketplaces and digital platforms.
+      </p>
+      <p class="home-text">
+        Today, I focus on building the systems behind great design: aligning
+        product, design and engineering through shared standards, clear
+        workflows and scalable infrastructure. I help teams collaborate better,
+        navigate complexity and make UX a shared capability, not just a role.
+      </p>
+      <nav class="intro__links" aria-label="More about Chris">
+        <a class="home-action" href={`${site}/work-projects`}>Work &amp; Projects</a>
+        <a class="home-action" href={`${site}/about`}>About</a>
+      </nav>
+    </div>
+  </section>
+
+  <hr class="home-divider" />
+
+  <section class="areas" aria-labelledby="areas-title">
+    <h2 class="areas__label enter" id="areas-title">4 areas I can help you</h2>
+    <ul class="areas__list">
+      {
+        areas.map(({ label, href, icon }) => (
+          <li class="enter">
+            <a class="area-card" href={href}>
+              <span class="area-card__label">{label}</span>
+              <span class="area-card__icon" aria-hidden="true">
+                <Image src={icon} alt="" width={28} height={28} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="references" aria-label="Companies I worked with">
+    <ul class="references__list">
+      {
+        references.map(({ name, logo }) => (
+          <li>
+            <Image src={logo} alt={name} widths={[158, 315]} sizes="158px" />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="home-section" id="enabling-people" aria-labelledby="enabling-people-title">
+    <SectionHeader id="enabling-people-title" title="Enabling People" icon={sectionTeam} />
+
+    <HomeCard layout="split" mediaFirst labelledby="uxf-title">
+      <div>
+        <h3 class="home-card-title" id="uxf-title">
+          <a href="https://uxfreiburg.de/">
+            UX Meetup &amp; German UPA regional group Freiburg
+          </a>
+        </h3>
+        <p class="home-text">
+          I co-founded UX Freiburg, the official German UPA regional group for
+          Freiburg, to strengthen the local UX, Product and Tech community. We
+          organize regular meetups, create opportunities for knowledge sharing,
+          and connect designers, researchers, product managers and engineers
+          across companies and industries.
+        </p>
+        <p class="home-text">
+          Today, the community reaches 600+ professionals, hosts regular events,
+          and brings together members from companies such as Haufe, Lexware,
+          JobRad, SICK and many others.
+        </p>
+        <a class="home-action uxf__visit" href="https://uxfreiburg.de/">
+          Visit UX Freiburg.de
+        </a>
+        <ul class="channels" aria-label="Community members per channel">
+          {
+            channels.map(({ name, members, icon }) => (
+              <li class="channels__item">
+                <Image src={icon} alt="" width={20} height={20} />
+                <span>
+                  <span class="channels__name">{name}</span>
+                  <span class="channels__count">{members}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="uxf-gallery">
+        <div class="uxf-gallery__row uxf-gallery__row--a">
+          <Image src={uxfRooftop} alt="UX Freiburg members chatting over food on a rooftop terrace" widths={[200, 400]} sizes="(max-width: 900px) 35vw, 12vw" />
+          <Image src={uxfSpeaker} alt="A speaker addressing the audience at a UX Freiburg meetup" widths={[360, 720]} sizes="(max-width: 900px) 60vw, 20vw" />
+        </div>
+        <div class="uxf-gallery__row uxf-gallery__row--b">
+          <Image src={uxfChallenges} alt="A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”" widths={[200, 400]} sizes="(max-width: 900px) 30vw, 10vw" />
+          <Image src={uxfAgenda} alt="An audience watching a talk with an agenda slide at a UX Freiburg event" widths={[460, 920]} sizes="(max-width: 900px) 70vw, 24vw" />
+        </div>
+      </div>
+    </HomeCard>
+
+    <div class="teasers">
+      <ArticleTeaser
+        id="teaser-process"
+        title="Process optimization to deliver a better user experience"
+        text="The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects."
+        href={`${base}process-optimization-to-deliver-a-better-user-experience/`}
+        image={processCover}
+        imageAlt="A mind map of UX design activities such as research, personas and user testing"
+      />
+      <ArticleTeaser
+        id="teaser-sessions"
+        title="Doing effective Sessions & Meetings"
+        text="I use visualization tools like Miro, Mural, and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion."
+        href={`${base}doing-sessions-instead-of-meetings/`}
+        image={sessionsCover}
+        imageAlt="Cover of the article “Conducting Effective Sessions Instead of Meetings”"
+      />
+    </div>
+  </section>
+
+  <section class="home-section" id="design-system" aria-labelledby="design-system-title">
+    <SectionHeader id="design-system-title" title="Design System" icon={sectionDesignSystem} />
+
+    <HomeCard layout="split" gap={48} labelledby="abundantia-title">
+      <div>
+        <h3 class="home-card-title" id="abundantia-title">Abundantia</h3>
+        <p class="home-text">
+          Building a design system that enables teams to deliver consistent
+          product experiences at scale. As Lead of Abundantia, a financial design
+          system, I oversee its development, focusing on user experience,
+          standardization, and functionality. My role is to ensure the project
+          delivers an inclusive, efficient, and user-friendly system.
+        </p>
+      </div>
+      <div class="framed-image">
+        <Image src={abundantia} alt="Abundantia Design System logo" widths={[480, 960]} sizes="(max-width: 900px) 90vw, 30vw" />
+      </div>
+    </HomeCard>
+  </section>
+
+  <section class="home-section" id="finance" aria-labelledby="finance-title">
+    <SectionHeader id="finance-title" title="Finance" icon={sectionFinance} />
+
+    <HomeCard layout="split" labelledby="finance-card-title">
+      <div class="experience__intro">
+        <div>
+          <h3 class="home-card-title" id="finance-card-title">
+            Designing complex financial products at scale
+          </h3>
+          <p class="home-text">
+            Over the past years, I've worked with fintech companies to simplify
+            complex software for wealth and asset management.
+          </p>
+          <p class="home-text">
+            My focus has been on bringing Product, Engineering, and Design
+            together, from establishing UX in engineering-driven organizations to
+            leading design across acquired products and building scalable
+            foundations for consistent product experiences.
+          </p>
+        </div>
+        <ul class="company-logos">
+          <li><a href="https://www.etops.com/"><Image src={logoEtops} alt="etops" widths={[111, 222]} sizes="111px" /></a></li>
+          <li><a href="https://patronas.de/"><Image src={logoPatronas} alt="Patronas" widths={[111, 222]} sizes="111px" /></a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="experience__lead">Throughout this journey, I've worked on:</p>
+        <ul class="home-list">
+          <li>Leading and unifying design across multiple products and teams</li>
+          <li>Harmonizing acquired products into a consistent user experience</li>
+          <li>Establishing UX and transforming complex desktop software into modern web products</li>
+          <li>Building scalable Design Systems, governance, and design operations</li>
+          <li>Improving accessibility, consistency, and usability across complex financial platforms</li>
+        </ul>
+      </div>
+    </HomeCard>
+  </section>
+
+  <section class="home-section" id="e-commerce" aria-labelledby="e-commerce-title">
+    <SectionHeader id="e-commerce-title" title="E-Commerce" icon={sectionEcom} />
+
+    <HomeCard layout="split" labelledby="ecom-card-title">
+      <div class="experience__intro">
+        <div>
+          <h3 class="home-card-title" id="ecom-card-title">
+            From high-volume to high-value e-commerce
+          </h3>
+          <p class="home-text">
+            I've worked across two very different sides of e-commerce:
+            large-scale ticketing at Reservix and the global luxury marketplace
+            Chrono24.
+          </p>
+          <p class="home-text">
+            My work spans consumer and enterprise products, web and mobile, and
+            multiple product teams, from platforms powering thousands of
+            white-label ticket shops to premium experiences for high-value
+            customers.
+          </p>
+        </div>
+        <ul class="company-logos">
+          <li><a href="https://about.chrono24.com/en/company"><Image src={logoChrono24} alt="Chrono24" widths={[111, 222]} sizes="111px" /></a></li>
+          <li><a href="https://www.reservix.net/"><Image src={logoReservix} alt="Reservix" widths={[111, 222]} sizes="111px" /></a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="experience__lead">
+          My experience across these very different markets includes:
+        </p>
+        <ul class="home-list">
+          <li>Leading design for Reservix’s portal platform with 3,000+ white-label ticket shops</li>
+          <li>Designing consumer and enterprise products across web and mobile</li>
+          <li>Leading design of a resale platform for Germany’s 1st Bundesliga</li>
+          <li>Designing premium e-commerce experiences for VIP customers at Chrono24</li>
+          <li>Introducing Figma and modern design workflows across both organizations</li>
+        </ul>
+      </div>
+    </HomeCard>
+  </section>
+</BlogLayout>
