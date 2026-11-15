@@ -361,6 +361,11 @@
   object-position: right top;
 }
 
+/* Audience photo: always crop from the top-left corner. */
+.uxf-gallery .uxf-gallery__agenda {
+  object-position: left top;
+}
+
 /* Design System */
 
 .framed-image {
