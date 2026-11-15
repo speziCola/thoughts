@@ -1,0 +1,46 @@
+/* Text styles shared by the start page and components reused elsewhere (e.g. UxfCard). */
+
+:root {
+  --home-text-strong: #191929;
+  --home-surface-muted: #e6e0dc; /* Figma brown-200 – no shared token yet */
+  --home-link-hover: #00be73; /* Figma foreground/link */
+  --home-body-size: clamp(14px, calc(13.5385px + 0.1282vw), 16px);
+}
+
+/* ---------- Shared text styles ---------- */
+
+.home-text {
+  margin: 0;
+  color: var(--foreground-regular);
+  font-family: var(--page-font-body);
+  font-size: var(--home-body-size);
+  line-height: 1.8;
+}
+
+.home-text + .home-text {
+  margin-top: 1.6em;
+}
+
+.home-card-title {
+  margin: 0;
+  padding-bottom: 8px;
+  color: var(--foreground-strong);
+  font-family: var(--page-font-title);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.home-card-title a:hover,
+.home-action:hover,
+.area-card:hover .area-card__label {
+  color: var(--home-link-hover);
+}
+
+.home-action {
+  color: var(--foreground-strong);
+  font-family: var(--page-font-body);
+  font-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
+  font-weight: 600; /* Supreme Bold is registered as 600 */
+  line-height: 24px;
+}

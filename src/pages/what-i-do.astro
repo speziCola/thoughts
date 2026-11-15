@@ -1,23 +1,15 @@
 ---
-import { Image } from "astro:assets";
 import ArticleTeaser from "../components/ArticleTeaser.astro";
 import Card from "../components/Card.astro";
 import CardGrid from "../components/CardGrid.astro";
 import SectionTitle from "../components/SectionTitle.astro";
+import UxfCard from "../components/home/UxfCard.astro";
 import BlogLayout from "../layouts/BlogLayout.astro";
 import articleProcess from "../assets/images/article-process.png";
 import articleSessions from "../assets/images/article-sessions.png";
-import communityDinner from "../assets/images/community-1.png";
-import communityTalk from "../assets/images/community-2.png";
-import communityRoundtable from "../assets/images/community-3.png";
-import communityAudience from "../assets/images/community-4.png";
-import iconDiscord from "../assets/icons/channel-discord.svg?url";
-import iconLinkedin from "../assets/icons/channel-linkedin.svg?url";
-import iconMeetup from "../assets/icons/channel-meetup.svg?url";
 
 const base = import.meta.env.BASE_URL;
 const canonical = "https://chriskuhrt.de/thoughts/what-i-do/";
-const uxFreiburgHref = "https://uxfreiburg.de/";
 
 const services = [
   {
@@ -90,43 +82,6 @@ const stages = [
     ],
     outcome: "Long-term success comes from continuous learning.",
   },
-];
-
-/* Add `href` to turn a stat into a link; the live site has no targets yet. */
-const communityStats: {
-  label: string;
-  count: string;
-  icon: string;
-  iconWidth: number;
-  iconHeight: number;
-  href?: string;
-}[] = [
-  { label: "Linkedin", count: "219", icon: iconLinkedin, iconWidth: 16.0307, iconHeight: 16 },
-  { label: "Meetup", count: "364", icon: iconMeetup, iconWidth: 20, iconHeight: 20 },
-  { label: "Discord", count: "87", icon: iconDiscord, iconWidth: 19.5387, iconHeight: 14.0517 },
-];
-
-const galleryRows = [
-  [
-    {
-      src: communityDinner,
-      alt: "UX Freiburg members chatting over food on a rooftop terrace",
-    },
-    {
-      src: communityTalk,
-      alt: "A speaker addressing the audience at a UX Freiburg meetup",
-    },
-  ],
-  [
-    {
-      src: communityRoundtable,
-      alt: "A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”",
-    },
-    {
-      src: communityAudience,
-      alt: "An audience watching a talk with an agenda slide at a UX Freiburg event",
-    },
-  ],
 ];
 
 const articles = [
@@ -208,74 +163,17 @@ const articles = [
     <section aria-labelledby="enabling-people-title">
       <SectionTitle id="enabling-people-title">Enabling People</SectionTitle>
 
-      <CardGrid columns={2}>
-        <Card width="full" layout="split" class="community">
-          <h3 class="page-card-article-title community__title">
-            <a href={uxFreiburgHref}>UX Meetup &amp; German UPA regional group Freiburg</a>
-          </h3>
-          <div class="community__text page-body-medium">
-            <p>
-              I co-founded <strong>UX Freiburg</strong>, the official German UPA
-              regional group for Freiburg, to strengthen the local UX, Product
-              and Tech community. We organize regular meetups, create
-              opportunities for knowledge sharing, and connect designers,
-              researchers, product managers and engineers across companies and
-              industries.
-            </p>
-            <p>
-              Today, the community reaches <strong>600+ professionals</strong>,
-              hosts regular events, and brings together members from companies
-              such as Haufe, Lexware, JobRad, SICK and many others.
-            </p>
-          </div>
-          <a class="community__visit" href={uxFreiburgHref}>Visit UX Freiburg.de</a>
+      <div class="enabling">
+        <UxfCard headingLevel={3} />
 
-          <ul class="community__stats" aria-label="Community members per channel">
-            {
-              communityStats.map((stat) => {
-                const Tag = stat.href ? "a" : "div";
-                return (
-                  <li>
-                    <Tag class="stat" href={stat.href}>
-                      <span class="stat__icon">
-                        <img src={stat.icon} width={stat.iconWidth} height={stat.iconHeight} alt="" />
-                      </span>
-                      <span class="stat__text">
-                        <span class="stat__label">{stat.label}</span>
-                        <span class="stat__count page-body-small">{stat.count}</span>
-                      </span>
-                    </Tag>
-                  </li>
-                );
-              })
-            }
-          </ul>
-
-          <div class="gallery" slot="media">
-            {
-              galleryRows.map((row, rowIndex) => (
-                <div class={`gallery__row gallery__row--${rowIndex + 1}`}>
-                  {row.map((image) => (
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      widths={[320, 640]}
-                      sizes="(max-width: 900px) 50vw, 300px"
-                      loading="lazy"
-                    />
-                  ))}
-                </div>
-              ))
-            }
-          </div>
-        </Card>
-
-        {
-          articles.map((article) => (
-            <ArticleTeaser {...article} headingLevel={3} />
-          ))
-        }
-      </CardGrid>
+        <CardGrid columns={2}>
+          {
+            articles.map((article) => (
+              <ArticleTeaser {...article} headingLevel={3} />
+            ))
+          }
+        </CardGrid>
+      </div>
     </section>
   </div>
 </BlogLayout>
@@ -354,137 +252,9 @@ const articles = [
     list-style: disc;
   }
 
-  /* Community card */
-  .community__title {
-    padding-bottom: 8px;
-    color: var(--foreground-strong);
-  }
-
-  .community__text {
-    padding-bottom: 24px;
-    color: var(--foreground-regular);
-  }
-
-  .community__text p + p {
-    margin-top: 1.7em;
-  }
-
-  .community__text strong {
-    font-weight: 600;
-  }
-
-  .community__visit {
-    align-self: flex-start;
-    margin-bottom: 16px;
-    color: var(--foreground-strong);
-    font-family: var(--page-font-title);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: var(--page-lineheight-compact);
-  }
-
-  .community a:hover {
-    color: var(--foreground-link-hover);
-  }
-
-  .community__stats {
-    margin: auto 0 0;
-    padding: 24px 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    list-style: none;
-  }
-
-  .stat {
-    min-height: 100%;
-    padding: 16px 24px 16px 16px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    border-radius: var(--radius-4);
-    color: var(--foreground-regular);
-    background: var(--background-page);
-    text-decoration: none;
-  }
-
-  a.stat {
-    transition: background-color 160ms ease;
-  }
-
-  a.stat:hover {
-    background: var(--background-textblock);
-  }
-
-  .stat__icon {
-    width: 20px;
-    height: 20px;
-    flex: none;
+  /* UX Freiburg card above the article teasers, same gap as the grid. */
+  .enabling {
     display: grid;
-    place-items: center;
-  }
-
-  .stat__text {
-    display: flex;
-    flex-direction: column;
-    line-height: var(--page-lineheight-wide);
-    white-space: nowrap;
-  }
-
-  .stat__label {
-    color: var(--foreground-strong);
-    font-family: var(--page-font-body);
-    font-size: 14px;
-  }
-
-  a.stat .stat__label {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
-
-  /* Gallery: two rows whose column ratios and heights follow Figma (548px wide). */
-  .gallery {
-    display: grid;
-    gap: 16px;
-  }
-
-  .gallery__row {
-    display: grid;
-    gap: 16px;
-  }
-
-  .gallery__row--1 {
-    grid-template-columns: 236fr 296fr;
-    aspect-ratio: 548 / 233;
-  }
-
-  .gallery__row--2 {
-    grid-template-columns: 188fr 344fr;
-    aspect-ratio: 548 / 225;
-  }
-
-  .gallery :global(img) {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    display: block;
-    border-radius: var(--radius-4);
-    object-fit: cover;
-  }
-
-  @container page (max-width: 867px) {
-    .community__stats {
-      flex-direction: column;
-    }
-
-    .stat {
-      width: 100%;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    a.stat {
-      transition: none;
-    }
+    gap: 24px;
   }
 </style>

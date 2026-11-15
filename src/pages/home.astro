@@ -12,6 +12,8 @@ import SectionHeader from "../components/home/SectionHeader.astro";
 import HomeCard from "../components/home/HomeCard.astro";
 import ArticleTeaser from "../components/ArticleTeaser.astro";
 import CardGrid from "../components/CardGrid.astro";
+import UxfCard from "../components/home/UxfCard.astro";
+import "../styles/home-shared.css";
 import "../styles/home.css";
 
 import portrait from "../assets/images/about-portrait.jpg";
@@ -19,18 +21,11 @@ import iconTeam from "../assets/icons/category-team.svg";
 import iconDesignSystem from "../assets/icons/category-designsystem.svg";
 import iconFinance from "../assets/icons/category-finance.svg";
 import iconEcom from "../assets/icons/category-ecom.svg";
-import channelLinkedin from "../assets/icons/channel-linkedin.svg";
-import channelMeetup from "../assets/icons/channel-meetup.svg";
-import channelDiscord from "../assets/icons/channel-discord.svg";
 import refChrono24 from "../assets/images/ref-chrono24.png";
 import refDfb from "../assets/images/ref-dfb.png";
 import refSwisscom from "../assets/images/ref-swisscom.png";
 import refScFreiburg from "../assets/images/ref-scfreiburg.png";
 import refReservix from "../assets/images/ref-reservix.png";
-import uxfRooftop from "../assets/images/community-1.png";
-import uxfSpeaker from "../assets/images/community-2.png";
-import uxfChallenges from "../assets/images/community-3.png";
-import uxfAgenda from "../assets/images/community-4.png";
 import abundantia from "../assets/images/abundantia.png";
 import logoEtops from "../assets/images/logo-etops.png";
 import logoPatronas from "../assets/images/logo-patronas.png";
@@ -57,11 +52,6 @@ const references = [
   { name: "Reservix", logo: refReservix },
 ];
 
-const channels = [
-  { name: "LinkedIn", members: 219, icon: channelLinkedin },
-  { name: "Meetup", members: 364, icon: channelMeetup },
-  { name: "Discord", members: 87, icon: channelDiscord },
-];
 ---
 
 <BlogLayout
@@ -145,54 +135,7 @@ const channels = [
   <section class="home-section" id="enabling-people" aria-labelledby="enabling-people-title">
     <SectionHeader id="enabling-people-title" title="Enabling People" icon={iconTeam} />
 
-    <HomeCard layout="split" mediaFirst gap={64} labelledby="uxf-title">
-      <div>
-        <h3 class="home-card-title" id="uxf-title">
-          <a href="https://uxfreiburg.de/">
-            UX Meetup &amp; German UPA regional group Freiburg
-          </a>
-        </h3>
-        <p class="home-text">
-          I co-founded UX Freiburg, the official German UPA regional group for
-          Freiburg, to strengthen the local UX, Product and Tech community. We
-          organize regular meetups, create opportunities for knowledge sharing,
-          and connect designers, researchers, product managers and engineers
-          across companies and industries.
-        </p>
-        <p class="home-text">
-          Today, the community reaches 600+ professionals, hosts regular events,
-          and brings together members from companies such as Haufe, Lexware,
-          JobRad, SICK and many others.
-        </p>
-        <a class="home-action uxf__visit" href="https://uxfreiburg.de/">
-          Visit UX Freiburg.de
-        </a>
-        <ul class="channels" aria-label="Community members per channel">
-          {
-            channels.map(({ name, members, icon }) => (
-              <li class="channels__item">
-                <Image src={icon} alt="" width={20} height={20} />
-                <span>
-                  <span class="channels__name">{name}</span>
-                  <span class="channels__count">{members}</span>
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <div class="uxf-gallery">
-        <div class="uxf-gallery__row uxf-gallery__row--a">
-          <Image src={uxfRooftop} alt="UX Freiburg members chatting over food on a rooftop terrace" widths={[200, 400]} sizes="(max-width: 900px) 35vw, 12vw" />
-          <Image class="uxf-gallery__speaker" src={uxfSpeaker} alt="A speaker addressing the audience at a UX Freiburg meetup" widths={[360, 720]} sizes="(max-width: 900px) 60vw, 20vw" />
-        </div>
-        <div class="uxf-gallery__row uxf-gallery__row--b">
-          <Image src={uxfChallenges} alt="A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”" widths={[200, 400]} sizes="(max-width: 900px) 30vw, 10vw" />
-          <Image class="uxf-gallery__agenda" src={uxfAgenda} alt="An audience watching a talk with an agenda slide at a UX Freiburg event" widths={[460, 920]} sizes="(max-width: 900px) 70vw, 24vw" />
-        </div>
-      </div>
-    </HomeCard>
+    <UxfCard />
 
     <CardGrid columns={2} gap="md">
       <ArticleTeaser

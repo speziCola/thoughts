@@ -1,0 +1,209 @@
+---
+/**
+ * UX Freiburg community card: text, channel stats and photo gallery.
+ * Used on the start page and on What I Do.
+ */
+import { Image } from "astro:assets";
+import HomeCard from "./HomeCard.astro";
+import "../../styles/home-shared.css";
+import uxfRooftop from "../../assets/images/community-1.png";
+import uxfSpeaker from "../../assets/images/community-2.png";
+import uxfChallenges from "../../assets/images/community-3.png";
+import uxfAgenda from "../../assets/images/community-4.png";
+import channelLinkedin from "../../assets/icons/channel-linkedin.svg";
+import channelMeetup from "../../assets/icons/channel-meetup.svg";
+import channelDiscord from "../../assets/icons/channel-discord.svg";
+
+interface Props {
+  /** Heading level of the card title. */
+  headingLevel?: 2 | 3;
+}
+
+const { headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}`;
+const href = "https://uxfreiburg.de/";
+
+/* Icons keep their own proportions inside a 20×20 box (the Discord mark is wider than tall). */
+const channels = [
+  { name: "LinkedIn", members: 219, icon: channelLinkedin },
+  { name: "Meetup", members: 364, icon: channelMeetup },
+  { name: "Discord", members: 87, icon: channelDiscord },
+];
+---
+
+<HomeCard layout="split" mediaFirst gap={64} labelledby="uxf-title">
+  <div>
+    <Heading class="home-card-title" id="uxf-title">
+      <a href={href}>UX Meetup &amp; German UPA regional group Freiburg</a>
+    </Heading>
+    <p class="home-text">
+      I co-founded <strong>UX Freiburg</strong>, the official German UPA regional
+      group for Freiburg, to strengthen the local UX, Product and Tech community.
+      We organize regular meetups, create opportunities for knowledge sharing,
+      and connect designers, researchers, product managers and engineers across
+      companies and industries.
+    </p>
+    <p class="home-text">
+      Today, the community reaches <strong>600+ professionals</strong>, hosts
+      regular events, and brings together members from companies such as Haufe,
+      Lexware, JobRad, SICK and many others.
+    </p>
+    <a class="home-action uxf__visit" href={href}>Visit UX Freiburg.de</a>
+    <ul class="channels" aria-label="Community members per channel">
+      {
+        channels.map(({ name, members, icon }) => (
+          <li class="channels__item">
+            <span class="channels__icon">
+              <img src={icon.src} width={icon.width} height={icon.height} alt="" />
+            </span>
+            <span>
+              <span class="channels__name">{name}</span>
+              <span class="channels__count">{members}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="uxf-gallery">
+    <div class="uxf-gallery__row uxf-gallery__row--a">
+      <Image src={uxfRooftop} alt="UX Freiburg members chatting over food on a rooftop terrace" widths={[200, 400]} sizes="(max-width: 900px) 35vw, 12vw" />
+      <Image class="uxf-gallery__speaker" src={uxfSpeaker} alt="A speaker addressing the audience at a UX Freiburg meetup" widths={[360, 720]} sizes="(max-width: 900px) 60vw, 20vw" />
+    </div>
+    <div class="uxf-gallery__row uxf-gallery__row--b">
+      <Image src={uxfChallenges} alt="A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”" widths={[200, 400]} sizes="(max-width: 900px) 30vw, 10vw" />
+      <Image class="uxf-gallery__agenda" src={uxfAgenda} alt="An audience watching a talk with an agenda slide at a UX Freiburg event" widths={[460, 920]} sizes="(max-width: 900px) 70vw, 24vw" />
+    </div>
+  </div>
+</HomeCard>
+
+<style>
+  .home-text strong {
+    color: var(--foreground-strong);
+    font-weight: 600;
+  }
+
+
+  .uxf__visit {
+    display: inline-block;
+    margin-top: 24px;
+  }
+
+  .channels {
+    margin: 40px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .channels__icon {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    display: grid;
+    place-items: center;
+  }
+
+  .channels__icon img {
+    display: block;
+  }
+
+  .channels__item {
+    padding: 16px 24px 16px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: var(--radius-4);
+    background: var(--background-page);
+  }
+
+  .channels__item > span {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .channels__name {
+    color: var(--foreground-strong);
+    font-family: var(--page-font-body);
+    font-size: 14px;
+    line-height: 23.8px;
+  }
+
+  .channels__count {
+    color: var(--foreground-regular);
+    font-family: var(--page-font-body);
+    font-size: 13px;
+    line-height: 22.4px;
+  }
+
+  .uxf-gallery {
+    --uxf-gap: 16px;
+    display: grid;
+    gap: var(--uxf-gap);
+  }
+
+  .uxf-gallery__row {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 0; /* keep tall images from growing the row past its aspect ratio */
+    gap: var(--uxf-gap);
+  }
+
+  .uxf-gallery__row--a {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr);
+    aspect-ratio: 1302 / 461;
+  }
+
+  .uxf-gallery__row--b {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr);
+    aspect-ratio: 587 / 198;
+  }
+
+  /* Two columns: the gallery takes the height of the text column instead of
+     its own aspect ratio, so the card is no taller than the text needs. */
+  @container (min-width: 641px) {
+    .uxf-gallery {
+      contain: size; /* don't let the images' intrinsic height grow the row */
+      align-self: stretch;
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .uxf-gallery__row--a,
+    .uxf-gallery__row--b {
+      aspect-ratio: auto;
+      min-height: 0;
+    }
+  }
+
+  .uxf-gallery img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+    border-radius: var(--radius-4);
+  }
+
+  /* Speaker photo: always crop from the top-right corner. */
+  .uxf-gallery .uxf-gallery__speaker {
+    object-position: right top;
+  }
+
+  /* Audience photo: always crop from the top-left corner. */
+  .uxf-gallery .uxf-gallery__agenda {
+    object-position: left top;
+  }
+
+  @media (max-width: 900px) {
+    .channels {
+      flex-direction: column;
+    }
+
+    .uxf-gallery {
+      --uxf-gap: 8px;
+    }
+  }
+</style>

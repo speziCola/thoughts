@@ -1,50 +1,7 @@
 /* Start page – Figma "CK_Portfolio-v03" › Homepage.
    Spacing and type follow the 1920 / 360 frames; type is fluid via clamp() in between. */
 
-:root {
-  --home-text-strong: #191929;
-  --home-surface-muted: #e6e0dc; /* Figma brown-200 – no shared token yet */
-  --home-link-hover: #00be73; /* Figma foreground/link */
-  --home-body-size: clamp(14px, calc(13.5385px + 0.1282vw), 16px);
-}
-
-/* ---------- Shared text styles ---------- */
-
-.home-text {
-  margin: 0;
-  color: var(--foreground-regular);
-  font-family: var(--page-font-body);
-  font-size: var(--home-body-size);
-  line-height: 1.8;
-}
-
-.home-text + .home-text {
-  margin-top: 1.6em;
-}
-
-.home-card-title {
-  margin: 0;
-  padding-bottom: 8px;
-  color: var(--foreground-strong);
-  font-family: var(--page-font-title);
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.home-card-title a:hover,
-.home-action:hover,
-.area-card:hover .area-card__label {
-  color: var(--home-link-hover);
-}
-
-.home-action {
-  color: var(--foreground-strong);
-  font-family: var(--page-font-body);
-  font-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
-  font-weight: 600; /* Supreme Bold is registered as 600 */
-  line-height: 24px;
-}
+/* Shared start-page text styles live in home-shared.css (also used by UxfCard). */
 
 .home-list {
   margin: 0;
@@ -264,108 +221,6 @@
   margin-bottom: -8px; /* 8px header → card, 16px card → card */
 }
 
-/* UX Freiburg */
-
-.uxf__visit {
-  display: inline-block;
-  margin-top: 24px;
-}
-
-.channels {
-  margin: 40px 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-}
-
-.channels__item {
-  padding: 16px 24px 16px 16px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  border-radius: var(--radius-4);
-  background: var(--background-page);
-}
-
-.channels__item > span {
-  display: flex;
-  flex-direction: column;
-}
-
-.channels__name {
-  color: var(--foreground-strong);
-  font-family: var(--page-font-body);
-  font-size: 14px;
-  line-height: 23.8px;
-}
-
-.channels__count {
-  color: var(--foreground-regular);
-  font-family: var(--page-font-body);
-  font-size: 13px;
-  line-height: 22.4px;
-}
-
-.uxf-gallery {
-  --uxf-gap: 16px;
-  display: grid;
-  gap: var(--uxf-gap);
-}
-
-.uxf-gallery__row {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr);
-  min-height: 0; /* keep tall images from growing the row past its aspect ratio */
-  gap: var(--uxf-gap);
-}
-
-.uxf-gallery__row--a {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr);
-  aspect-ratio: 1302 / 461;
-}
-
-.uxf-gallery__row--b {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr);
-  aspect-ratio: 587 / 198;
-}
-
-/* Two columns: the gallery takes the height of the text column instead of
-   its own aspect ratio, so the card is no taller than the text needs. */
-@container (min-width: 641px) {
-  .uxf-gallery {
-    contain: size; /* don't let the images' intrinsic height grow the row */
-    align-self: stretch;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .uxf-gallery__row--a,
-  .uxf-gallery__row--b {
-    aspect-ratio: auto;
-    min-height: 0;
-  }
-}
-
-.uxf-gallery img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  object-fit: cover;
-  border-radius: var(--radius-4);
-}
-
-/* Speaker photo: always crop from the top-right corner. */
-.uxf-gallery .uxf-gallery__speaker {
-  object-position: right top;
-}
-
-/* Audience photo: always crop from the top-left corner. */
-.uxf-gallery .uxf-gallery__agenda {
-  object-position: left top;
-}
-
 /* Design System */
 
 .framed-image {
@@ -500,13 +355,6 @@
     height: 37px;
   }
 
-  .channels {
-    flex-direction: column;
-  }
-
-  .uxf-gallery {
-    --uxf-gap: 8px;
-  }
 }
 
 /* ---------- Entrance motion (from the live Framer start page) ----------
