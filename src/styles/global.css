@@ -391,6 +391,11 @@ a:focus-visible {
   padding-bottom: 128px;
 }
 
+/* Full-width footer card on regular pages: same 16px gutter as the header. */
+.site-footer-frame {
+  padding: 0 16px 16px;
+}
+
 .site-shell {
   --site-shell-width: min(1280px, calc(100vw - 32px));
   width: min(1280px, calc(100% - 32px));

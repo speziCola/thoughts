@@ -54,7 +54,7 @@ const {
           <main id="main" class="split-page__main">
             <slot />
           </main>
-          <SiteFooter variant="card" />
+          <SiteFooter />
         </div>
       ) : (
         <>
@@ -63,7 +63,9 @@ const {
               <slot />
             </div>
           </main>
-          <SiteFooter />
+          <div class="site-footer-frame">
+            <SiteFooter />
+          </div>
         </>
       )
     }
