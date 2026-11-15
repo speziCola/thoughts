@@ -105,9 +105,9 @@
   margin: 0;
   color: #202430;
   font-family: var(--page-font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 24px;
 }
 
 .areas__list {
@@ -209,7 +209,14 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  scroll-margin-top: 96px;
+  scroll-margin-top: 96px; /* clears the sticky header on mobile */
+}
+
+/* Desktop: area links land 64px below the top of the art panel. */
+@media (min-width: 901px) {
+  .home-section {
+    scroll-margin-top: 160px;
+  }
 }
 
 /* Reference logos → first section header */
@@ -325,11 +332,6 @@
 
   .intro__links {
     margin-top: 24px;
-  }
-
-  .areas__label {
-    font-size: 16px;
-    line-height: 24px;
   }
 
   .area-card {
