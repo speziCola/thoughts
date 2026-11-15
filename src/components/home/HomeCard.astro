@@ -10,6 +10,8 @@ interface Props {
   gap?: 16 | 48;
   /** Put the last child first when stacked (e.g. images above the text). */
   mediaFirst?: boolean;
+  /** Desktop padding. Mobile is always 24px (or --home-card-padding-mobile). */
+  padding?: 48 | 64;
   labelledby?: string;
   tag?: "article" | "div";
 }
@@ -18,6 +20,7 @@ const {
   layout = "stack",
   gap = 16,
   mediaFirst = false,
+  padding = 48,
   labelledby,
   tag: Tag = "article",
 } = Astro.props;
@@ -29,7 +32,7 @@ const {
     `home-card--${layout}`,
     { "home-card--media-first": mediaFirst },
   ]}
-  style={`--home-card-gap: ${gap}px`}
+  style={`--home-card-gap: ${gap}px; --home-card-padding: ${padding}px`}
   aria-labelledby={labelledby}
 >
   <div class="home-card__body">

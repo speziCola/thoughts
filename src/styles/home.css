@@ -363,13 +363,14 @@
 }
 
 .uxf-gallery {
+  --uxf-gap: 16px;
   display: grid;
-  gap: 8px;
+  gap: var(--uxf-gap);
 }
 
 .uxf-gallery__row {
   display: grid;
-  gap: 8px;
+  gap: var(--uxf-gap);
 }
 
 .uxf-gallery__row--a {
@@ -523,6 +524,10 @@
 
   .channels {
     flex-direction: column;
+  }
+
+  .uxf-gallery {
+    --uxf-gap: 8px;
   }
 }
 
