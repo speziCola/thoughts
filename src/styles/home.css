@@ -416,6 +416,13 @@
   gap: 16px;
 }
 
+/* Two columns: start the right column level with the first paragraph, not the headline. */
+@container (min-width: 641px) {
+  .experience__details {
+    padding-top: 35px;
+  }
+}
+
 .experience__lead {
   margin: 0;
   padding-bottom: 8px;
