@@ -21,11 +21,13 @@ import iconTeam from "../assets/icons/category-team.svg";
 import iconDesignSystem from "../assets/icons/category-designsystem.svg";
 import iconFinance from "../assets/icons/category-finance.svg";
 import iconEcom from "../assets/icons/category-ecom.svg";
-import refChrono24 from "../assets/images/ref-chrono24.png";
-import refDfb from "../assets/images/ref-dfb.png";
-import refSwisscom from "../assets/images/ref-swisscom.png";
-import refScFreiburg from "../assets/images/ref-scfreiburg.png";
-import refReservix from "../assets/images/ref-reservix.png";
+import refEtops from "../assets/icons/ck-r-etops.svg";
+import refPatronas from "../assets/icons/ck-r-patronas.svg";
+import refChrono24 from "../assets/icons/ck-r-chrono24.svg";
+import refDfb from "../assets/icons/ck-r-dfb.svg";
+import refSwisscom from "../assets/icons/ck-r-swisscom.svg";
+import refScFreiburg from "../assets/icons/ck-r-scfreiburg.svg";
+import refReservix from "../assets/icons/ck-r-reservix.svg";
 import abundantia from "../assets/images/abundantia.png";
 import logoEtops from "../assets/images/logo-etops.png";
 import logoPatronas from "../assets/images/logo-patronas.png";
@@ -45,6 +47,8 @@ const areas = [
 ];
 
 const references = [
+  { name: "etops", logo: refEtops },
+  { name: "Patronas", logo: refPatronas },
   { name: "Chrono24", logo: refChrono24 },
   { name: "Deutscher Fußball-Bund", logo: refDfb },
   { name: "Swisscom", logo: refSwisscom },
@@ -125,7 +129,7 @@ const references = [
       {
         references.map(({ name, logo }) => (
           <li>
-            <Image src={logo} alt={name} widths={[158, 315]} sizes="158px" />
+            <Image src={logo} alt={name} />
           </li>
         ))
       }
