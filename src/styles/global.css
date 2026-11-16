@@ -121,7 +121,7 @@
   --page-heading-level-6-size: clamp(13px, calc(12.7692px + 0.0641vw), 14px);
   --page-heading-level-6-line-height: var(--page-lineheight-compact);
   --page-card-article-title-size: 18px;
-  --page-card-article-title-line-height: 1.6;
+  --page-card-article-title-line-height: 1.5;
   --page-body-default-size: clamp(15px, calc(14.3333px + 0.1852vw), 16px);
   --page-body-default-line-height: clamp(26.25px, calc(24.55px + 0.4722vw), 28.8px);
   --page-body-medium-size: clamp(15px, calc(14.3333px + 0.1852vw), 16px);
