@@ -94,8 +94,8 @@
   --blog-title-md-line-height: clamp(27.2px, calc(26.4154px + 0.2179vw), 30.6px);
   --blog-title-sm-size: 14px;
   --blog-title-sm-line-height: 23.8px;
-  --blog-body-md-size: clamp(14px, calc(13.5385px + 0.1282vw), 16px);
-  --blog-body-md-line-height: clamp(23.8px, calc(23.0154px + 0.2179vw), 27.2px);
+  --blog-body-md-size: clamp(14px, calc(12.6667px + 0.3704vw), 16px);
+  --blog-body-md-line-height: clamp(23.8px, calc(21.5333px + 0.6296vw), 27.2px);
   --blog-utility-sm-size: 13px;
   --blog-utility-sm-line-height: 20.4px;
   --home-font-mono: "Fira Mono", ui-monospace, monospace;
@@ -122,13 +122,17 @@
   --page-heading-level-6-line-height: var(--page-lineheight-compact);
   --page-card-article-title-size: 18px;
   --page-card-article-title-line-height: var(--page-lineheight-compact);
-  --page-body-default-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
-  --page-body-default-line-height: clamp(26.25px, calc(25.6615px + 0.1635vw), 28.8px);
-  --page-body-medium-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
+  --page-body-default-size: clamp(15px, calc(14.3333px + 0.1852vw), 16px);
+  --page-body-default-line-height: clamp(26.25px, calc(24.55px + 0.4722vw), 28.8px);
+  --page-body-medium-size: clamp(15px, calc(14.3333px + 0.1852vw), 16px);
   --page-body-medium-line-height: var(--page-lineheight-wide);
-  --page-body-small-size: clamp(13px, calc(12.7692px + 0.0641vw), 14px);
+  /* Body copy is fluid only between 360 and 900px, then fixed at its max
+     (16px; small 14px). Card body: start-page cards, UXF card, article teasers. */
+  --page-body-card-size: clamp(14px, calc(12.6667px + 0.3704vw), 16px);
+  --page-body-card-line-height: 1.8;
+  --page-body-small-size: clamp(13px, calc(12.3333px + 0.1852vw), 14px);
   --page-body-small-line-height: var(--page-lineheight-wide);
-  --page-body-compact-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
+  --page-body-compact-size: clamp(15px, calc(14.3333px + 0.1852vw), 16px);
   --page-body-compact-line-height: var(--page-lineheight-compact);
   --page-action-button-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
   --page-action-button-line-height: 1.5;
@@ -221,6 +225,11 @@
 .page-body-medium {
   font-size: var(--page-body-medium-size);
   line-height: var(--page-body-medium-line-height);
+}
+
+.page-body-card {
+  font-size: var(--page-body-card-size);
+  line-height: var(--page-body-card-line-height);
 }
 
 .page-body-small {

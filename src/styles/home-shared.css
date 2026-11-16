@@ -4,7 +4,6 @@
   --home-text-strong: #191929;
   --home-surface-muted: #e6e0dc; /* Figma brown-200 – no shared token yet */
   --home-link-hover: #00be73; /* Figma foreground/link */
-  --home-body-size: clamp(14px, calc(13.5385px + 0.1282vw), 16px);
 }
 
 /* ---------- Shared text styles ---------- */
@@ -13,8 +12,8 @@
   margin: 0;
   color: var(--foreground-regular);
   font-family: var(--page-font-body);
-  font-size: var(--home-body-size);
-  line-height: 1.8;
+  font-size: var(--page-body-card-size);
+  line-height: var(--page-body-card-line-height);
 }
 
 .home-text + .home-text {

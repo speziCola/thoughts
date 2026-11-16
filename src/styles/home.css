@@ -8,8 +8,8 @@
   padding-left: 24px;
   color: var(--foreground-regular);
   font-family: var(--page-font-body);
-  font-size: var(--home-body-size);
-  line-height: 1.8;
+  font-size: var(--page-body-card-size);
+  line-height: var(--page-body-card-line-height);
 }
 
 .home-divider {
