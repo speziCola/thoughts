@@ -15,5 +15,5 @@ To swap an image, replace the file and keep its name. If you change the format
 |---|---|---|
 | `images/abundantia.png` | Start page Design System card | 2:1 |
 
-Real already: `icons/ck.svg`, `icons/ck-r-*.svg` (start page reference strip at 157.5×60 / 96×37 mobile, and Finance / E-Commerce cards at 111×56 contain), `icons/channel-*.svg`, `icons/category-*.svg` (area cards + section headers), `images/hero-art.png`, `images/about-portrait.jpg`,
+Real already: `icons/ck.svg`, `icons/ck-r-*.svg` (start page reference strip at 157.5×60 / 96×37 mobile, and Finance / E-Commerce cards at 157.5×60 / 120×46 mobile), `icons/channel-*.svg`, `icons/category-*.svg` (area cards + section headers), `images/hero-art.png`, `images/about-portrait.jpg`,
 `images/community-1…4.png`, `images/article-process.png`, `images/article-sessions.png`.
