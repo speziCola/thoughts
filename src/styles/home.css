@@ -198,7 +198,6 @@
   display: block;
   width: auto; /* logo SVGs are trimmed to the mark, 80px tall: same height, own width */
   height: 60px;
-  filter: grayscale(1);
   mix-blend-mode: luminosity;
 }
 
