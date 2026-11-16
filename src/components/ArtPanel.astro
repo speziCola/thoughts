@@ -5,6 +5,21 @@
  */
 import { Image } from "astro:assets";
 import heroArt from "../assets/images/hero-art.png";
+
+/*
+ * The panel crops the art to fill its height (object-fit: cover), so the image
+ * must be at least as wide as the panel AND as wide as (panel height × aspect).
+ * On tall screens (e.g. a portrait monitor) the height wins by far.
+ * Widths mirror .split-page in global.css; panel height is 100dvh - 112px.
+ * Below 900px the panel is hidden, so the smallest file is enough.
+ */
+const aspect = (heroArt.width / heroArt.height).toFixed(4);
+const byHeight = `calc((100vh - 112px) * ${aspect})`;
+const sizes = [
+  "(max-width: 900px) 1px",
+  `(max-width: 1600px) max(clamp(171px, 24vw, 380px), ${byHeight})`,
+  `max(calc(37.5vw - 18px), ${byHeight})`,
+].join(", ");
 ---
 
 <div class="art-panel">
@@ -12,8 +27,8 @@ import heroArt from "../assets/images/hero-art.png";
     class="art-panel__image"
     src={heroArt}
     alt=""
-    widths={[480, 720, 1080, 1440]}
-    sizes="(max-width: 900px) 100vw, 37.5vw"
+    widths={[480, 720, 1080, 1440, heroArt.width]}
+    sizes={sizes}
     loading="eager"
   />
   <ul class="art-panel__links" aria-label="Social profiles">

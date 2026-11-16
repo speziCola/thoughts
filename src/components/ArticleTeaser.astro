@@ -43,9 +43,23 @@ const {
 
 const Heading = `h${headingLevel}` as "h2" | "h3";
 const isSplit = layout === "split";
-const imageWidths = isSplit ? [480, 800, 1200] : [360, 720];
+const imageWidths = isSplit
+  ? [480, 800, 1200, 1440, image?.width ?? 1440].filter((w, i, all) => all.indexOf(w) === i)
+  : [360, 720];
+/*
+ * Split teasers sit next to the art panel (see .split-page / Card.astro):
+ * - ≤900px: full card width (page gutter 16 + card padding 24 per side)
+ * - 901–1330px: card stacks, cover = content column - card padding
+ * - 1331–1600px: two columns, cover ≈ 360–450px
+ * - >1600px: two columns next to a 37.5vw panel
+ */
 const imageSizes = isSplit
-  ? "(max-width: 900px) calc(100vw - 80px), 560px"
+  ? [
+      "(max-width: 900px) calc(100vw - 80px)",
+      "(max-width: 1330px) calc(76vw - 240px)",
+      "(max-width: 1600px) 450px",
+      "calc(31.25vw - 155px)",
+    ].join(", ")
   : "(max-width: 400px) calc(100vw - 80px), 360px";
 ---
 
