@@ -1,6 +1,6 @@
 # Thoughts – agent instructions
 
-Markdown-first static blog for Christopher Kuhrt, published at **https://chriskuhrt.de/thoughts/**.
+Markdown-first static site for Christopher Kuhrt (start page, What I Do, Timeline, About and the blog). Blog index at **https://chriskuhrt.de/thoughts/**.
 Write Markdown, get pages built from the blog design system. No CMS, no database, no client framework.
 
 Read before working:
@@ -23,7 +23,7 @@ Read before working:
 - Accessibility target WCAG 2.2 AA: landmarks, skip link, visible focus, reduced motion, no skipped heading levels.
 
 ## Key conventions (details in docs/decisions.md)
-- Base path `/thoughts`; canonical URLs on `https://chriskuhrt.de/thoughts/…`; internal links always end with `/`.
+- No base path: pages at the root (`/home/`, `/what-i-do/`, `/timeline/`, `/about/`), blog index `/thoughts/`, articles `/thoughts/<slug>/`, `/` redirects to `/home/`. Canonicals on `https://chriskuhrt.de/…`; internal links always end with `/`.
 - Posts: `src/content/thoughts/<slug>/index.md` with images next to it → `/thoughts/<slug>/`.
 - Exactly one `#` per post = H1 = page title (no `title` frontmatter). 0 or >1 → build error.
 - `---` = divider, only where the author writes it.

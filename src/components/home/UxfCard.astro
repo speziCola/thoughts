@@ -10,9 +10,10 @@ import uxfRooftop from "../../assets/images/community-1.png";
 import uxfSpeaker from "../../assets/images/community-2.png";
 import uxfChallenges from "../../assets/images/community-3.png";
 import uxfAgenda from "../../assets/images/community-4.png";
-import channelLinkedin from "../../assets/icons/channel-linkedin.svg";
-import channelMeetup from "../../assets/icons/channel-meetup.svg";
-import channelDiscord from "../../assets/icons/channel-discord.svg";
+// Raw SVG, inlined so the icons can take currentColor (green on hover).
+import channelLinkedin from "../../assets/icons/channel-linkedin.svg?raw";
+import channelMeetup from "../../assets/icons/channel-meetup.svg?raw";
+import channelDiscord from "../../assets/icons/channel-discord.svg?raw";
 
 interface Props {
   /** Heading level of the card title. */
@@ -20,14 +21,27 @@ interface Props {
 }
 
 const { headingLevel = 3 } = Astro.props;
-const Heading = `h${headingLevel}`;
+const Heading = `h${headingLevel}` as "h2" | "h3";
 const href = "https://uxfreiburg.de/";
 
-/* Icons keep their own proportions inside a 20×20 box (the Discord mark is wider than tall). */
-const channels = [
-  { name: "LinkedIn", members: 219, icon: channelLinkedin },
-  { name: "Meetup", members: 364, icon: channelMeetup },
-  { name: "Discord", members: 87, icon: channelDiscord },
+/* Icons are centred in a 32×32 box. Sizes are set by eye so the three marks
+   carry the same visual weight: Meetup 24×24 as the reference, LinkedIn smaller
+   because its solid letters look heavier, Discord a little wider than Meetup
+   so its flat shape matches it in mass (height follows its proportions). */
+/** Inline SVG at the given width; height follows the viewBox, colour follows currentColor. */
+const icon = (svg: string, width: number) => {
+  const [, , vbWidth, vbHeight] = svg.match(/viewBox="([^"]+)"/)![1].split(/\s+/).map(Number);
+  const height = Math.round((vbHeight / vbWidth) * width);
+  return svg
+    .replace(/<svg[^>]*?(viewBox="[^"]+")[^>]*>/, `<svg width="${width}" height="${height}" $1 fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">`)
+    .replace(/fill="#656565"/g, 'fill="currentColor"');
+};
+
+/* Community channel links. */
+const channels: { name: string; members: number; icon: string; href?: string }[] = [
+  { name: "Meetup", members: 364, icon: icon(channelMeetup, 24), href: "https://www.meetup.com/ux-meetup-freiburg/" },
+  { name: "LinkedIn", members: 219, icon: icon(channelLinkedin, 20), href: "https://www.linkedin.com/groups/12851280/" },
+  { name: "Discord", members: 87, icon: icon(channelDiscord, 26), href: "https://join.uxfreiburg.de/" },
 ];
 ---
 
@@ -37,31 +51,34 @@ const channels = [
       <a href={href}>UX Meetup &amp; German UPA regional group Freiburg</a>
     </Heading>
     <p class="home-text">
-      I co-founded <strong>UX Freiburg</strong>, the official German UPA regional
-      group for Freiburg, to strengthen the local UX, Product and Tech community.
-      We organize regular meetups, create opportunities for knowledge sharing,
-      and connect designers, researchers, product managers and engineers across
+      <strong>UX Freiburg</strong> is the official German UPA regional group
+      for Freiburg, co-founded to strengthen the local UX, Product and Tech
+      community. Regular meetups create room for knowledge sharing and bring
+      together designers, researchers, product managers and engineers across
       companies and industries.
     </p>
     <p class="home-text">
-      Today, the community reaches <strong>600+ professionals</strong>, hosts
-      regular events, and brings together members from companies such as Haufe,
-      Lexware, JobRad, SICK and many others.
+      Today, the community reaches <strong>600+ professionals</strong>, with
+      members from companies such as Haufe, Lexware, JobRad, SICK and many
+      others.
     </p>
     <a class="home-action uxf__visit" href={href}>Visit UX Freiburg.de</a>
     <ul class="channels" aria-label="Community members per channel">
       {
-        channels.map(({ name, members, icon }) => (
-          <li class="channels__item">
-            <span class="channels__icon">
-              <img src={icon.src} width={icon.width} height={icon.height} alt="" />
-            </span>
-            <span>
-              <span class="channels__name">{name}</span>
-              <span class="channels__count">{members}</span>
-            </span>
-          </li>
-        ))
+        channels.map(({ name, members, icon, href }) => {
+          const Tag = href ? "a" : "div";
+          return (
+            <li>
+              <Tag class="channels__item" href={href}>
+                <span class="channels__icon" aria-hidden="true" set:html={icon} />
+                <span class="channels__text">
+                  <span class="channels__name">{name}</span>
+                  <span class="channels__count">{members}</span>
+                </span>
+              </Tag>
+            </li>
+          );
+        })
       }
     </ul>
   </div>
@@ -100,15 +117,19 @@ const channels = [
   }
 
   .channels__icon {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     flex: none;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .channels__icon img {
+  .channels__icon :global(svg) {
     display: block;
+    flex: none;
+    color: #656565;
+    transition: color 0.2s ease;
   }
 
   .channels__item {
@@ -120,13 +141,28 @@ const channels = [
     background: var(--background-page);
   }
 
-  .channels__item > span {
+  .channels__text {
     display: flex;
     flex-direction: column;
   }
 
+  a.channels__item {
+    text-decoration: none;
+  }
+
+  /* Hover/focus: icon and name turn green, the member count stays as it is. */
+  a.channels__item:hover .channels__icon :global(svg),
+  a.channels__item:focus-visible .channels__icon :global(svg),
+  a.channels__item:hover .channels__name,
+  a.channels__item:focus-visible .channels__name {
+    color: var(--home-link-hover);
+  }
+
   .channels__name {
     color: var(--foreground-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    transition: color 0.2s ease;
     font-family: var(--page-font-body);
     font-size: 14px;
     line-height: 23.8px;

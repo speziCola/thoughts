@@ -160,21 +160,22 @@
   transition: background-color 0.2s ease;
 }
 
-.area-card__icon img {
+.area-card__icon svg {
   width: 40px;
   height: 40px;
-  transition: filter 0.2s ease;
+  color: #000;
+  transition: color 0.2s ease;
 }
 
-/* Hover/focus = the highlighted "Finance" card in Figma (green label, black icon tile). */
+/* Hover/focus: green label, black icon tile, green icon. */
 .area-card:hover .area-card__icon,
 .area-card:focus-visible .area-card__icon {
   background: #000;
 }
 
-.area-card:hover .area-card__icon img,
-.area-card:focus-visible .area-card__icon img {
-  filter: invert(1);
+.area-card:hover .area-card__icon svg,
+.area-card:focus-visible .area-card__icon svg {
+  color: var(--home-link-hover);
 }
 
 /* ---------- References ---------- */
@@ -244,13 +245,23 @@
 .experience__intro {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
 }
 
-/* Two columns: start the right column level with the first paragraph, not the headline. */
-@container (min-width: 641px) {
-  .experience__details {
-    padding-top: 35px;
+/* Finance / E-Commerce: title spans the card, two columns below it.
+   Both columns start on the same line whatever the title wraps to.
+   The card (.home-card) is the container; below 641px the right column drops under the left. */
+.experience__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+  align-items: start;
+}
+
+@container (max-width: 640px) {
+  .experience__columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
   }
 }
 
@@ -270,7 +281,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 40px;
+  gap: 64px;
   list-style: none;
 }
 
@@ -288,7 +299,7 @@
 .company-logos img {
   display: block;
   width: auto; /* trimmed logo SVGs: same height as the reference strip, own width */
-  height: 60px;
+  height: 64px;
 }
 
 @media (max-width: 900px) {

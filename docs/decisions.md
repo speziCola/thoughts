@@ -54,3 +54,7 @@ Image rules: alt = accessible description (never shown as caption). No colon in 
 
 ## Prototype scope (next step, needs approval before step 3)
 One real article ("Asking the right follow-up questions", text from Figma, placeholder images) at `/thoughts/<slug>/` covering: H1–H3, paragraphs, links, lists, single + two-column images with labels, `---`, header/footer, tokens, fluid type, self-hosted fonts, and the GitHub Pages deploy action.
+
+## URL structure (2026-11-17)
+
+Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the root (`/home/`, `/what-i-do/`, `/timeline/`, `/about/`), the blog index is `/thoughts/`, articles are `/thoughts/<slug>/`, and `/` redirects to `/home/`. Canonicals are `https://chriskuhrt.de/<path>/`. `trailingSlash: "ignore"`, links always written with `/`. Open: hosting. The GitHub Pages project URL (`spezicola.github.io/thoughts/`) no longer works as a mirror, because assets are root-relative. The site needs a domain at its root (custom domain on Pages, or AWS routing all of these paths).

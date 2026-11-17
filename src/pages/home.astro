@@ -21,6 +21,16 @@ import iconTeam from "../assets/icons/category-team.svg";
 import iconDesignSystem from "../assets/icons/category-designsystem.svg";
 import iconFinance from "../assets/icons/category-finance.svg";
 import iconEcom from "../assets/icons/category-ecom.svg";
+// Raw SVG for the area cards, inlined so the icon can take currentColor (green on hover).
+import iconTeamRaw from "../assets/icons/category-team.svg?raw";
+import iconDesignSystemRaw from "../assets/icons/category-designsystem.svg?raw";
+import iconFinanceRaw from "../assets/icons/category-finance.svg?raw";
+import iconEcomRaw from "../assets/icons/category-ecom.svg?raw";
+
+const tintable = (svg: string) =>
+  svg
+    .replace(/(fill|stroke)="black"/g, '$1="currentColor"')
+    .replace(/width="48" height="48"/, 'width="40" height="40"');
 import logoEtops from "../assets/icons/ck-r-etops.svg";
 import logoPatronas from "../assets/icons/ck-r-patronas.svg";
 import logoChrono24 from "../assets/icons/ck-r-chrono24.svg";
@@ -28,18 +38,17 @@ import logoDfb from "../assets/icons/ck-r-dfb.svg";
 import logoSwisscom from "../assets/icons/ck-r-swisscom.svg";
 import logoScFreiburg from "../assets/icons/ck-r-scfreiburg.svg";
 import logoReservix from "../assets/icons/ck-r-reservix.svg";
-import abundantia from "../assets/images/abundantia.png";
+import abundantia from "../assets/images/designsystem.abundantia.png";
 import processCover from "../assets/images/article-process.png";
 import sessionsCover from "../assets/images/article-sessions.png";
 
-const base = import.meta.env.BASE_URL;
 const site = "https://chriskuhrt.de";
 
 const areas = [
-  { label: "Enabling People", href: "#enabling-people", icon: iconTeam },
-  { label: "Design Systems", href: "#design-system", icon: iconDesignSystem },
-  { label: "Finance", href: "#finance", icon: iconFinance },
-  { label: "E-Commerce", href: "#e-commerce", icon: iconEcom },
+  { label: "Enabling People", href: "#enabling-people", icon: tintable(iconTeamRaw) },
+  { label: "Design Systems", href: "#design-system", icon: tintable(iconDesignSystemRaw) },
+  { label: "Finance", href: "#finance", icon: tintable(iconFinanceRaw) },
+  { label: "E-Commerce", href: "#e-commerce", icon: tintable(iconEcomRaw) },
 ];
 
 const references = [
@@ -56,9 +65,9 @@ const references = [
 
 <BlogLayout
   title="Chris Kuhrt"
-  fullTitle="Chris Kuhrt — UX Strategy, DesignOps, Design Systems"
-  description="Christopher Kuhrt builds the systems behind strong products: UX strategy, DesignOps and design systems for finance, marketplaces and digital platforms."
-  canonical={`${site}${base}home/`}
+  fullTitle="Chris Kuhrt: Design Leadership, Product Strategy, Design Systems"
+  description="Building the systems behind strong products: design leadership, product strategy and design systems for finance, marketplaces and digital platforms."
+  canonical={`${site}/home/`}
   layout="split"
 >
 
@@ -66,11 +75,11 @@ const references = [
     <div class="intro__text">
       <div class="intro__heading">
         <h1 class="intro__title enter" id="intro-title">
-          Hi, my name is <span class="intro__name">Chris Kuhrt,</span>
+          Hi, my name is <span class="intro__name">Chris Kuhrt</span>
         </h1>
         <p class="intro__subtitle enter">
           <span>I build the systems behind strong products.</span>
-          <span>UX Strategy, DesignOps, Design Systems</span>
+          <span>Design Leadership · Product Strategy · Design Systems</span>
         </p>
       </div>
 
@@ -80,12 +89,12 @@ const references = [
           marketplaces and digital platforms. Today, I focus on building the
           systems behind great design: aligning product, design and engineering
           through shared standards, clear workflows and scalable infrastructure.
-          I help teams collaborate better, navigate complexity and make UX a
-          shared capability, not just a role.
+          I help teams collaborate better, navigate complexity and turn UX into
+          an organizational capability.
         </p>
         <nav class="intro__links" aria-label="More about Chris">
-          <a class="home-action" href={`${base}what-i-do/`}>What I do</a>
-          <a class="home-action" href={`${base}about/`}>About</a>
+          <a class="home-action" href="/what-i-do/">What I do</a>
+          <a class="home-action" href="/about/">About</a>
         </nav>
       </div>
     </div>
@@ -110,9 +119,7 @@ const references = [
           <li class="enter">
             <a class="area-card" href={href}>
               <span class="area-card__label">{label}</span>
-              <span class="area-card__icon" aria-hidden="true">
-                <Image src={icon} alt="" width={40} height={40} />
-              </span>
+              <span class="area-card__icon" aria-hidden="true" set:html={icon} />
             </a>
           </li>
         ))
@@ -139,26 +146,26 @@ const references = [
 
     <CardGrid columns={2} gap="md">
       <ArticleTeaser
-        title="Process optimization to deliver a better user experience"
-        description="The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects."
-        href={`${base}process-optimization-to-deliver-a-better-user-experience/`}
-        image={processCover}
-        alt="A mind map of UX design activities such as research, personas and user testing"
+        title="Conducting Effective Sessions Instead of Meetings"
+        description="I use visualization tools like Miro, Mural and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion."
+        href={`/thoughts/doing-sessions-instead-of-meetings/`}
+        image={sessionsCover}
+        alt="A digital whiteboard with clustered sticky notes from a mapping session"
         headingLevel={3}
       />
       <ArticleTeaser
-        title="Doing effective Sessions & Meetings"
-        description="I use visualization tools like Miro, Mural, and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion."
-        href={`${base}doing-sessions-instead-of-meetings/`}
-        image={sessionsCover}
-        alt="Sketch of three people who only seem to agree until their ideas are drawn out"
+        title="Process optimization to deliver a better user experience"
+        description="The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects."
+        href={`/thoughts/process-optimization-to-deliver-a-better-user-experience/`}
+        image={processCover}
+        alt="A mind map of UX design activities such as research, personas and user testing"
         headingLevel={3}
       />
     </CardGrid>
   </section>
 
   <section class="home-section" id="design-system" aria-labelledby="design-system-title">
-    <SectionHeader id="design-system-title" title="Design System" icon={iconDesignSystem} />
+    <SectionHeader id="design-system-title" title="Design Systems" icon={iconDesignSystem} />
 
     <HomeCard layout="split" gap={64} labelledby="abundantia-title">
       <div>
@@ -167,12 +174,12 @@ const references = [
           Building a design system that enables teams to deliver consistent
           product experiences at scale. As Lead of Abundantia, a financial design
           system, I oversee its development, focusing on user experience,
-          standardization, and functionality. My role is to ensure the project
-          delivers an inclusive, efficient, and user-friendly system.
+          standardization and functionality. My role is to ensure the project
+          delivers an inclusive, efficient and user-friendly system.
         </p>
       </div>
       <div class="framed-image">
-        <Image src={abundantia} alt="Abundantia Design System logo" widths={[480, 960]} sizes="(max-width: 900px) 90vw, 30vw" />
+        <Image src={abundantia} alt="Abundantia Design System logo" widths={[480, 960, 1440]} sizes="(max-width: 900px) 90vw, 30vw" />
       </div>
     </HomeCard>
   </section>
@@ -180,37 +187,41 @@ const references = [
   <section class="home-section" id="finance" aria-labelledby="finance-title">
     <SectionHeader id="finance-title" title="Finance" icon={iconFinance} />
 
-    <HomeCard layout="split" gap={64} labelledby="finance-card-title">
-      <div class="experience__intro">
-        <div>
-          <h3 class="home-card-title" id="finance-card-title">
-            Designing complex financial products at scale
-          </h3>
-          <p class="home-text">
-            Over the past years, I've worked with fintech companies to simplify
-            complex software for wealth and asset management.
-          </p>
-          <p class="home-text">
-            My focus has been on bringing Product, Engineering, and Design
-            together, from establishing UX in engineering-driven organizations to
-            leading design across acquired products and building scalable
-            foundations for consistent product experiences.
-          </p>
+    <HomeCard labelledby="finance-card-title">
+      <div class="experience">
+        <h3 class="home-card-title" id="finance-card-title">
+          Designing complex financial products at scale
+        </h3>
+        <div class="experience__columns">
+          <div class="experience__intro">
+            <div>
+              <p class="home-text">
+                Over the past years, I’ve worked with fintech companies to simplify
+                complex software for wealth and asset management.
+              </p>
+              <p class="home-text">
+                My focus has been on bringing product, engineering and design
+                together, from establishing UX in engineering-driven organizations to
+                leading design across acquired products and building scalable
+                foundations for consistent product experiences.
+              </p>
+            </div>
+            <ul class="company-logos">
+              <li><a href="https://www.etops.com/"><Image src={logoEtops} alt="Etops" /></a></li>
+              <li><a href="https://patronas.de/"><Image src={logoPatronas} alt="PATRONAS" /></a></li>
+            </ul>
+          </div>
+          <div class="experience__details">
+            <p class="experience__lead">Throughout this journey, I’ve worked on:</p>
+            <ul class="home-list">
+              <li>Leading and unifying design across multiple products and teams</li>
+              <li>Harmonizing acquired products into a consistent user experience</li>
+              <li>Establishing UX and transforming complex desktop software into modern web products</li>
+              <li>Building scalable design systems, governance and design operations</li>
+              <li>Improving accessibility, consistency and usability across complex financial platforms</li>
+            </ul>
+          </div>
         </div>
-        <ul class="company-logos">
-          <li><a href="https://www.etops.com/"><Image src={logoEtops} alt="etops" /></a></li>
-          <li><a href="https://patronas.de/"><Image src={logoPatronas} alt="Patronas" /></a></li>
-        </ul>
-      </div>
-      <div class="experience__details">
-        <p class="experience__lead">Throughout this journey, I've worked on:</p>
-        <ul class="home-list">
-          <li>Leading and unifying design across multiple products and teams</li>
-          <li>Harmonizing acquired products into a consistent user experience</li>
-          <li>Establishing UX and transforming complex desktop software into modern web products</li>
-          <li>Building scalable Design Systems, governance, and design operations</li>
-          <li>Improving accessibility, consistency, and usability across complex financial platforms</li>
-        </ul>
       </div>
     </HomeCard>
   </section>
@@ -218,40 +229,44 @@ const references = [
   <section class="home-section" id="e-commerce" aria-labelledby="e-commerce-title">
     <SectionHeader id="e-commerce-title" title="E-Commerce" icon={iconEcom} />
 
-    <HomeCard layout="split" gap={64} labelledby="ecom-card-title">
-      <div class="experience__intro">
-        <div>
-          <h3 class="home-card-title" id="ecom-card-title">
-            From high-volume to high-value e-commerce
-          </h3>
-          <p class="home-text">
-            I've worked across two very different sides of e-commerce:
-            large-scale ticketing at Reservix and the global luxury marketplace
-            Chrono24.
-          </p>
-          <p class="home-text">
-            My work spans consumer and enterprise products, web and mobile, and
-            multiple product teams, from platforms powering thousands of
-            white-label ticket shops to premium experiences for high-value
-            customers.
-          </p>
+    <HomeCard labelledby="ecom-card-title">
+      <div class="experience">
+        <h3 class="home-card-title" id="ecom-card-title">
+          From high-volume to high-value e-commerce
+        </h3>
+        <div class="experience__columns">
+          <div class="experience__intro">
+            <div>
+              <p class="home-text">
+                I’ve worked across two very different sides of e-commerce:
+                large-scale ticketing at Reservix and the global luxury marketplace
+                Chrono24.
+              </p>
+              <p class="home-text">
+                My work spans consumer and enterprise products, web and mobile, and
+                multiple product teams, from platforms powering thousands of
+                white-label ticket shops to premium experiences for high-value
+                customers.
+              </p>
+            </div>
+            <ul class="company-logos">
+              <li><a href="https://about.chrono24.com/en/company"><Image src={logoChrono24} alt="Chrono24" /></a></li>
+              <li><a href="https://www.reservix.net/"><Image src={logoReservix} alt="Reservix" /></a></li>
+            </ul>
+          </div>
+          <div class="experience__details">
+            <p class="experience__lead">
+              My experience across these very different markets includes:
+            </p>
+            <ul class="home-list">
+              <li>Leading design for Reservix’s portal platform with 3,000+ white-label ticket shops</li>
+              <li>Designing consumer and enterprise products across web and mobile</li>
+              <li>Leading design of a resale platform for Germany’s 1st Bundesliga</li>
+              <li>Designing premium e-commerce experiences for VIP customers at Chrono24</li>
+              <li>Introducing Figma and modern design workflows across both organizations</li>
+            </ul>
+          </div>
         </div>
-        <ul class="company-logos">
-          <li><a href="https://about.chrono24.com/en/company"><Image src={logoChrono24} alt="Chrono24" /></a></li>
-          <li><a href="https://www.reservix.net/"><Image src={logoReservix} alt="Reservix" /></a></li>
-        </ul>
-      </div>
-      <div class="experience__details">
-        <p class="experience__lead">
-          My experience across these very different markets includes:
-        </p>
-        <ul class="home-list">
-          <li>Leading design for Reservix’s portal platform with 3,000+ white-label ticket shops</li>
-          <li>Designing consumer and enterprise products across web and mobile</li>
-          <li>Leading design of a resale platform for Germany’s 1st Bundesliga</li>
-          <li>Designing premium e-commerce experiences for VIP customers at Chrono24</li>
-          <li>Introducing Figma and modern design workflows across both organizations</li>
-        </ul>
       </div>
     </HomeCard>
   </section>

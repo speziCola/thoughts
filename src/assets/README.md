@@ -13,7 +13,7 @@ To swap an image, replace the file and keep its name. If you change the format
 
 | File | Used on | Shown at |
 |---|---|---|
-| `images/abundantia.png` | Start page Design System card | 2:1 |
+| `images/designsystem.abundantia.png` | Start page Design System card | 2:1 |
 
 Real already: `icons/ck.svg`, `icons/ck-r-*.svg` (trimmed to the logo, 80px tall; strip 48px desktop / 37px mobile, cards 60px desktop / 46px mobile, width auto), `icons/channel-*.svg`, `icons/category-*.svg` (area cards + section headers), `images/hero-art.png`, `images/about-portrait.jpg`,
 `images/community-1…4.png`, `images/article-process.png`, `images/article-sessions.png`.

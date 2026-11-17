@@ -1,6 +1,6 @@
 # Architecture
 
-The blog is a static Astro site at `https://chriskuhrt.de/thoughts/`. Astro builds the pages and styles at publish time; there is no CMS, runtime server, or client framework.
+The site is a static Astro site at the root of `https://chriskuhrt.de/` (blog under `/thoughts/`). Astro builds the pages and styles at publish time; there is no CMS, runtime server, or client framework.
 
 ## Content
 
@@ -28,4 +28,4 @@ The selected Figma article is the first prototype article. The blog root forward
 
 ## Build and publishing
 
-`npm run check` validates Astro and content. `npm run build` generates static HTML under `dist/`. The GitHub Actions workflow runs both checks and publishes that directory to GitHub Pages. Astro's `/thoughts` base path and always-trailing-slash URLs match the repository and public route.
+`npm run check` validates Astro and content. `npm run build` generates static HTML under `dist/`. The GitHub Actions workflow runs both checks and publishes that directory to GitHub Pages. There is no base path; pages sit at the root, the blog under `/thoughts/`. Links are written with a trailing slash; `trailingSlash: "ignore"` lets slash-less URLs work too.

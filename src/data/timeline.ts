@@ -2,6 +2,8 @@
  * Timeline content, mirrored from chriskuhrt.de/timeline.
  *
  * - `href` turns the organisation into a link.
+ * - `logo` shows a 32×32 company logo beside the entry (key of the logo map in timeline.astro).
+ * - `description` may contain inline links written as Markdown: [text](url).
  * - `highlights` render as a bullet list after the description; an optional
  *   `label` is set in bold before the text ("Label: text").
  */
@@ -12,6 +14,7 @@ export type TimelineEntry = {
   date: string;
   organisation: string;
   href?: string;
+  logo?: "etops" | "patronas" | "chrono24" | "reservix";
   role: string;
   description: string;
   highlights?: TimelineHighlight[];
@@ -19,7 +22,6 @@ export type TimelineEntry = {
 
 export type TimelineSection = {
   id: string;
-  icon: string;
   title: string;
   entries: TimelineEntry[];
 };
@@ -27,27 +29,74 @@ export type TimelineSection = {
 export const timelineSections: TimelineSection[] = [
   {
     id: "work-experience",
-    icon: "💼",
-    title: "Work experience",
+    title: "Work Experience",
     entries: [
       {
-        date: "03/2025",
+        date: "03/2025 – Present",
         organisation: "Etops",
+        logo: "etops",
         href: "https://www.etops.com/",
         role: "Head of Research & Design",
         description:
-          "Leading our newly unified design team, shaping it from the ground up while harmonizing design standards across our growing portfolio. With a particular focus on integrating products from recent acquisitions, I work closely with product owners and management to steer our projects toward a cohesive and innovative user experience.",
+          "Leading a cross-functional design team of 3–5 designers, driving UX strategy and product harmonization across a growing portfolio of financial software acquired through multiple mergers. My focus is on transforming independently developed applications into a cohesive product ecosystem, establishing scalable design standards and aligning user experience with business and product strategy. Key responsibilities and initiatives:",
+        highlights: [
+          {
+            label: "Driving post-merger UX harmonization",
+            text: "Defining shared interaction patterns, navigation principles and visual standards across previously independent applications.",
+          },
+          {
+            label: "Creating a unified product experience",
+            text: "Initiating and leading the design of a shared app shell and app switcher, enabling users to navigate more seamlessly between products within a connected software ecosystem.",
+          },
+          {
+            label: "Scaling the Abundantia Design System",
+            text: "Evolving our design system into a shared foundation for multiple products, including reusable components, semantic tokens, theming and governance.",
+          },
+          {
+            label: "Leading design across teams",
+            text: "Coordinating a team of 3–5 designers, setting design direction and collaborating with product management, engineering and senior leadership.",
+          },
+          {
+            label: "Introducing AI-assisted UX evaluations",
+            text: "Developing portfolio-wide product health checks to identify usability issues, inconsistent patterns and opportunities for strategic improvement.",
+          },
+        ],
       },
       {
         date: "02/2022 – 03/2025",
-        organisation: "Patronas",
-        role: "Product Designer",
+        organisation: "PATRONAS / niiio finance group",
+        logo: "patronas",
+        href: "https://patronas.de/",
+        role: "Product Designer → Design System Lead",
         description:
-          "Establishing UX within the company and transferring a rich client platform to the web. Also introducing new tools and workflows to enable and work more cooperatively with our colleagues.",
+          "Joined PATRONAS to help modernize its financial software, focusing on transforming a complex desktop-based RCP application into a modern web experience. As collaboration between PATRONAS and other companies within the niiio finance group expanded, my responsibilities evolved beyond individual product design toward establishing shared UX foundations across the organization. Key responsibilities and achievements:",
+        highlights: [
+          {
+            label: "Modernizing enterprise financial software",
+            text: "Contributing to the transition from a desktop-based RCP client to a modern, web-based platform.",
+          },
+          {
+            label: "Founding the Abundantia Design System",
+            text: "Identifying the need for a shared design language, developing the initial strategy and advocating for its establishment across the group.",
+          },
+          {
+            label: "Establishing scalable UX foundations",
+            text: "Defining reusable components, visual standards and interaction patterns to support consistency across different financial software products.",
+          },
+          {
+            label: "Improving design and development workflows",
+            text: "Introducing shared tools, processes and closer collaboration between design, product and engineering.",
+          },
+          {
+            label: "Supporting organizational integration",
+            text: "Helping bridge previously independent product teams through common UX principles and design practices.",
+          },
+        ],
       },
       {
         date: "11/2020 – 01/2022",
         organisation: "Chrono24",
+        logo: "chrono24",
         href: "https://about.chrono24.com/en/company",
         role: "UX/UI Designer",
         description:
@@ -74,20 +123,35 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "06/2015 – 08/2020",
         organisation: "Reservix",
+        logo: "reservix",
         href: "https://www.reservix.net/",
         role: "UX/UI Designer",
         description:
-          "I was responsible for UX/UI in the portal team that managed over 3000 white label web shops and supported various teams across web, app, B2C, B2B and products. My primary responsibilities and outcomes were:",
+          "I was responsible for UX/UI in the portal team that managed over 3,000 white-label web shops and supported various teams across web, app, B2C, B2B and products. Key responsibilities and achievements:",
         highlights: [
-          { text: "Gathering requirements and creating prototypes." },
-          { text: "Creating the foundations for a design system." },
           {
-            text: "Replacing the previously implemented software stack (Sketch, Adobe XD, Zeplin and Abstract) with Figma.",
+            label: "Shaping product requirements",
+            text: "Gathering requirements with stakeholders and turning them into prototypes.",
           },
-          { text: "Designing the ticket resale process for the 1st Bundesliga." },
-          { text: "Increasing ticket insurance sales by up to 7%." },
           {
-            text: "Improving the seating plan to ensure modularity and flexibility according to the needs of the organiser.",
+            label: "Laying the design system foundations",
+            text: "Creating the first shared foundations for a design system across the portal products.",
+          },
+          {
+            label: "Introducing Figma",
+            text: "Replacing the previous tool stack of Sketch, Adobe XD, Zeplin and Abstract with Figma.",
+          },
+          {
+            label: "Designing ticket resale for the 1st Bundesliga",
+            text: "Designing the ticket resale process for clubs of Germany’s top football league.",
+          },
+          {
+            label: "Increasing ticket insurance sales",
+            text: "Improving the purchase flow, raising ticket insurance sales by up to 7%.",
+          },
+          {
+            label: "Rethinking the seating plan",
+            text: "Making the seating plan modular and flexible to fit the needs of each organizer.",
           },
         ],
       },
@@ -102,7 +166,6 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "passion-projects",
-    icon: "❤️",
     title: "Passion & Projects",
     entries: [
       {
@@ -111,7 +174,7 @@ export const timelineSections: TimelineSection[] = [
         href: "https://pixelbricks.de/",
         role: "Product Design",
         description:
-          "Pixelbricks is a Figma plugin that allows you to transform your pixel art into Lego and order them via BrickLink. I always find it exciting to combine digital and analogue. I aimed to manage the entire process, from start to finish. This included overseeing the plugin, Figma files, homepage, FAQs, and Instagram – every part that makes a good product complete. Thanks to Marius for the coding.",
+          "Pixelbricks is a Figma plugin that allows you to transform your pixel art into Lego and order them via BrickLink. I always find it exciting to combine digital and analogue. I aimed to manage the entire process, from start to finish. This included overseeing the plugin, Figma files, homepage, FAQs and Instagram – every part that makes a good product complete. Thanks to Marius for the coding.",
       },
       {
         date: "03/2021",
@@ -119,14 +182,14 @@ export const timelineSections: TimelineSection[] = [
         href: "https://germanupa.de/regionalgruppen/regionalgruppe-freiburg",
         role: "Co-founder",
         description:
-          "Our initial mission was straightforward: share UX insights with like-minded peers. This endeavor eventually led to the founding of the German UPA regional group in Freiburg. Since then, we've launched an official website, wiki, and Discord server, creating a vibrant community where members collaborate, exchange insights, and provide mutual support in the realm of UX. A significant portion of the credit for our Discord server's notable growth goes to my dedicated co-founders, Laura and Miriam.",
+          "Our initial mission was straightforward: share UX insights with like-minded peers. This endeavor eventually led to the founding of the German UPA regional group in Freiburg. Since then, we've launched an official website, wiki and Discord server, creating a vibrant community where members collaborate, exchange insights and provide mutual support in the realm of UX. A significant portion of the credit for our Discord server's notable growth goes to my dedicated co-founders, Laura and Miriam.",
       },
       {
         date: "01/2020 – 11/2020",
         organisation: "Hammertime",
         role: "Product Design",
         description:
-          "Redesigned our website, elevated the standards, and presented our product compellingly, leading our efforts in customer acquisition. Our success against the competition earned us a wildcard from Baden-Campus, a start-up accelerator. This allowed us to attend the valuable workshops they offer.",
+          "Redesigned our website, elevated the standards and presented our product compellingly, leading our efforts in customer acquisition. Our success against the competition earned us a wildcard from Baden-Campus, a start-up accelerator. This allowed us to attend the valuable workshops they offer.",
       },
       {
         date: "03/2015 – 04/2021",
@@ -134,7 +197,7 @@ export const timelineSections: TimelineSection[] = [
         href: "https://www.youtube.com/watch?v=_iG_hdReJvo",
         role: "Cinematography",
         description:
-          "Producing, shooting, and editing wedding films, I also lent a hand with technical aspects when needed. The role demands meticulous and swift workmanship. There's absolutely no room for error at any stage.",
+          "Producing, shooting and editing wedding films, I also lent a hand with technical aspects when needed. The role demands meticulous and swift workmanship. There's absolutely no room for error at any stage.",
       },
       {
         date: "05/2012",
@@ -148,7 +211,6 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "freelancer",
-    icon: "💻",
     title: "Freelancer",
     entries: [
       {
@@ -169,7 +231,7 @@ export const timelineSections: TimelineSection[] = [
         date: "02/2015 – 05/2015",
         organisation: "Herlyn-konsens",
         href: "http://www.herlyn-konsens.de/",
-        role: "Webdesign",
+        role: "Web Design",
         description:
           "While designing the homepage, I also customized a WordPress theme tailored to my client's branding and specific requirements.",
       },
@@ -179,7 +241,7 @@ export const timelineSections: TimelineSection[] = [
         href: "http://physiologikum.de/",
         role: "Product Design",
         description:
-          "Along with designing and implementing the homepage, I also designed the company's stationery, which included letterheads, appointment reminder cards, and marketing brochures.",
+          "Along with designing and implementing the homepage, I also designed the company's stationery, which included letterheads, appointment reminder cards and marketing brochures.",
       },
       {
         date: "05/2012 – 07/2012",
@@ -192,7 +254,7 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "03/2011 – 05/2011",
         organisation: "Torsten Ulrich Galts",
-        role: "Webdesign",
+        role: "Web Design",
         description:
           "Creating a portfolio showcasing fashion design photographs for a renowned European photographer.",
       },
@@ -201,7 +263,7 @@ export const timelineSections: TimelineSection[] = [
         organisation: "Kunstlicht",
         role: "Cinematography",
         description:
-          "Alongside a colleague, I directed, shot, and edited a corporate video for Kunstlicht, a premium interior lighting design firm. We collaborated on this project, managing it independently and delivering it ahead of the scheduled timeline.",
+          "Alongside a colleague, I directed, shot and edited a corporate video for Kunstlicht, a premium interior lighting design firm. We collaborated on this project, managing it independently and delivering it ahead of the scheduled timeline.",
       },
       {
         date: "03/2010",
@@ -214,8 +276,7 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "further-education",
-    icon: "🎓",
-    title: "Further education",
+    title: "Further Education",
     entries: [
       {
         date: "07/2023",
@@ -247,13 +308,13 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "12/2019",
         organisation: "Udemy",
-        role: "Online-Learning",
+        role: "Online Learning",
         description: "JavaScript, jQuery, node.js",
       },
       {
         date: "09/2019",
         organisation: "Design Sprint Masterclass",
-        role: "Online-Learning",
+        role: "Online Learning",
         description:
           "Masterclass with Jake Knapp and Jonathan Courtney: Steering Teams to Conceptualize and Validate New Products in only 4 Days.",
       },
@@ -273,7 +334,7 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "12/2018",
         organisation: "Udacity",
-        role: "Online-Learning",
+        role: "Online Learning",
         description:
           "Product Design: Ideation & Validation, UX/UI, Design Sprint, Key Metrics.",
       },
@@ -300,7 +361,7 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "12/2017",
         organisation: "CodeSchool",
-        role: "Online-Learning",
+        role: "Online Learning",
         description: "HTML & CSS – Master Status.",
       },
       {
@@ -319,7 +380,7 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "05/2017",
         organisation: "Google",
-        role: "Online-Learning",
+        role: "Online Learning",
         description: "The Digital Garage: Online Marketing",
       },
       {
@@ -345,7 +406,7 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "05/2016",
         organisation: "re-lounge",
-        role: "Meet-up",
+        role: "Meetup",
         description:
           "How to use online marketing to not only reach your customers, but also understand them. – Freiburg",
       },
@@ -353,8 +414,7 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "volunteer-work",
-    icon: "🏅",
-    title: "Volunteer work",
+    title: "Volunteer Work",
     entries: [
       {
         date: "03/2017",
@@ -383,7 +443,6 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "backer",
-    icon: "💰",
     title: "Backer",
     entries: [
       {
@@ -421,20 +480,27 @@ export const timelineSections: TimelineSection[] = [
   },
   {
     id: "gaming",
-    icon: "🕹️",
     title: "Gaming",
     entries: [
       {
+        date: "11/2018",
+        organisation: "Half-Life Docker",
+        href: "https://github.com/spezifanta/hldm-docker",
+        role: "Visuals, Video",
+        description:
+          "For Half-Life’s 20th anniversary, my brother packaged an old-school Half-Life Deathmatch server as a Docker image that starts with a single command. I created the visuals for the project and produced the YouTube video presenting it.",
+      },
+      {
         date: "08/2004",
         organisation: "ThW Mapping Contest",
-        role: "Co-Organiser",
+        role: "Co-Organizer",
         description:
           "Organized a Half-Life deathmatch remake mapping contest for the thewall.de community, which was the leading German Half-Life mapping community of its time.",
       },
       {
         date: "07/2004",
         organisation: "Killbox Mod",
-        href: "https://killbox.spike-fx.net/home.html",
+        href: "https://web.archive.org/web/20241221074401/https://killbox.spike-fx.net/home.html",
         role: "Level Design",
         description:
           "During a LAN-Party, we developed v1.0 in 17 hours. Additionally, a mapping contest was held where my map was awarded the second place.",
@@ -442,18 +508,18 @@ export const timelineSections: TimelineSection[] = [
       {
         date: "09/2002",
         organisation: "PC Action Counter-Strike Special-Edition",
-        href: "https://www.17buddies.rocks/17b2/View/Map/60930/he_metzel.html",
+        href: "https://web.archive.org/web/20030104001635/http://clan00.de/mapping/mappacks/pca_exc.php",
         role: "Level Design",
         description:
-          "Winning a mapping contest for an exclusive Counter-Strike map pack. The exclusive pack, also known as the “best of German-speaking mappers” pack, was organized by the Clan00 map forum in collaboration with the PC Action magazine. The pack contained 12 premium maps.",
+          "Winning a mapping contest for an exclusive Counter-Strike map pack. The exclusive pack, also known as the “best of German-speaking mappers” pack, was organized by the Clan00 map forum in collaboration with the PC Action magazine. The pack contained 12 premium maps. My contest map he_metzel is still available as a [download](https://www.17buddies.rocks/17b2/View/Map/60930/he_metzel.html).",
       },
       {
         date: "06/2001",
         organisation: "spezi-clan",
         href: "https://spezi-clan.com/",
-        role: "Co-Clanleader, Webdesign",
+        role: "Co-Clan Leader, Web Design",
         description:
-          "As a co-clan leader, I organized clan wars, spearheaded training sessions, and supervised our gaming server. Also tested self-made aim maps on our gaming server.",
+          "As a co-clan leader, I organized clan wars, spearheaded training sessions and supervised our gaming server. Also tested self-made aim maps on our gaming server.",
       },
     ],
   },

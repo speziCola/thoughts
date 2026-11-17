@@ -3,9 +3,69 @@ import Card from "../components/Card.astro";
 import FloatingMenu from "../components/FloatingMenu.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import BlogLayout from "../layouts/BlogLayout.astro";
+import { Image } from "astro:assets";
 import { timelineSections } from "../data/timeline";
+import arrowNarrowRight from "../assets/icons/arrow-narrow-right.svg?raw";
+import etopsLogo from "../assets/images/etops-logo.png";
+import patronasLogo from "../assets/images/patronas-logo.png";
+import chrono24Logo from "../assets/images/chrono24-logo.png";
+import reservixLogo from "../assets/images/reservix-logo.png";
 
-const canonical = "https://chriskuhrt.de/thoughts/timeline/";
+const logos = {
+  etops: etopsLogo,
+  patronas: patronasLogo,
+  chrono24: chrono24Logo,
+  reservix: reservixLogo,
+};
+
+const roleArrow = arrowNarrowRight
+  .replace(/stroke="black"/g, 'stroke="currentColor"')
+  .replace(/<svg /, '<svg class="timeline-entry__role-chevron" role="img" aria-label="to" ');
+// Outline icons (24×24, 2px stroke), inlined so they follow the text colour (green on hover).
+import workExperience from "../assets/icons/work-experience.svg?raw";
+import passionProjects from "../assets/icons/passion-projects.svg?raw";
+import freelancer from "../assets/icons/freelancer.svg?raw";
+import furtherEducation from "../assets/icons/further-education.svg?raw";
+import volunteerWork from "../assets/icons/volunteer-work.svg?raw";
+import backer from "../assets/icons/backer.svg?raw";
+import gaming from "../assets/icons/gaming.svg?raw";
+
+const iconSvgs: Record<string, string> = {
+  "work-experience": workExperience,
+  "passion-projects": passionProjects,
+  freelancer,
+  "further-education": furtherEducation,
+  "volunteer-work": volunteerWork,
+  backer,
+  gaming,
+};
+
+/** Split a description into text and [text](url) link parts. */
+const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const descriptionParts = (text: string) => {
+  const parts: { text: string; href?: string }[] = [];
+  let last = 0;
+  for (const match of text.matchAll(linkPattern)) {
+    if (match.index! > last) parts.push({ text: text.slice(last, match.index) });
+    parts.push({ text: match[1], href: match[2] });
+    last = match.index! + match[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  return parts;
+};
+
+const sections = timelineSections.map((section) => {
+  const svg = iconSvgs[section.id];
+  if (!svg) throw new Error(`No timeline icon for section "${section.id}".`);
+  return {
+    ...section,
+    icon: svg
+      .replace(/stroke="black"/g, 'stroke="currentColor"')
+      .replace(/ width="24" height="24"/, ' focusable="false"'),
+  };
+});
+
+const canonical = "https://chriskuhrt.de/timeline/";
 ---
 
 <BlogLayout
@@ -19,8 +79,8 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
       <SectionTitle as="h1">Timeline</SectionTitle>
       <p class="page-body-default timeline__intro">
         I am filled with gratitude for every experience. Each one has helped
-        shape the designer I am today, and I look forward to the next chapter
-        of this ever-evolving journey.
+        shape who I am today as a designer and leader, and I look forward to
+        the next chapter of this ever-evolving journey.
       </p>
     </header>
 
@@ -30,10 +90,10 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
         <Card as="div" padding="sm" class="timeline__nav-card">
           <ul class="timeline__nav-list" data-timeline-nav>
             {
-              timelineSections.map((section) => (
+              sections.map((section) => (
                 <li>
                   <a class="timeline__nav-link" href={`#${section.id}`}>
-                    <span class="timeline__nav-icon" aria-hidden="true">{section.icon}</span>
+                    <span class="timeline__nav-icon" aria-hidden="true" set:html={section.icon} />
                     <span class="timeline__nav-label">{section.title}</span>
                   </a>
                 </li>
@@ -45,29 +105,50 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
 
       <div class="timeline__sections">
         {
-          timelineSections.map((section) => (
+          sections.map((section) => (
             <Card
               as="section"
               padding="lg"
-              class="timeline-section"
+              class:list={["timeline-section", { "timeline-section--logos": section.entries.some((entry) => entry.logo) }]}
               id={section.id}
               aria-labelledby={`${section.id}-title`}
               data-timeline-section
             >
               <h2 class="page-heading-level-2 timeline-section__title" id={`${section.id}-title`}>
-                <span class="timeline-section__icon" aria-hidden="true">{section.icon}</span>
+                <span class="timeline-section__icon" aria-hidden="true" set:html={section.icon} />
                 {section.title}
               </h2>
 
               <ol class="timeline-section__entries">
                 {section.entries.map((entry) => (
                   <li class="timeline-entry">
+                    {entry.logo && (
+                      <Image
+                        class="timeline-entry__logo"
+                        src={logos[entry.logo]}
+                        alt=""
+                        width={32}
+                        height={32}
+                        densities={[1, 2]}
+                      />
+                    )}
                     <p class="timeline-entry__date">{entry.date}</p>
                     <h3 class="page-heading-level-4 timeline-entry__organisation">
                       {entry.href ? <a href={entry.href}>{entry.organisation}</a> : entry.organisation}
                     </h3>
-                    <p class="page-body-small timeline-entry__role">{entry.role}</p>
-                    <p class="page-body-medium timeline-entry__description">{entry.description}</p>
+                    <p class="page-body-small timeline-entry__role">
+                      {entry.role.split(/\s*→\s*/).map((step, i) => (
+                        <>
+                          {i > 0 && <Fragment set:html={roleArrow} />}
+                          {step}
+                        </>
+                      ))}
+                    </p>
+                    <p class="page-body-medium timeline-entry__description">
+                      {descriptionParts(entry.description).map((part) =>
+                        part.href ? <a href={part.href}>{part.text}</a> : part.text,
+                      )}
+                    </p>
                     {entry.highlights && (
                       <ul class="page-body-medium timeline-entry__highlights">
                         {entry.highlights.map((item) => (
@@ -90,10 +171,10 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
     <FloatingMenu label="Timeline" navLabel="Timeline sections" icon="chevron" side="left" stretch>
       <ul data-timeline-nav>
         {
-          timelineSections.map((section) => (
+          sections.map((section) => (
             <li>
               <a href={`#${section.id}`}>
-                <span aria-hidden="true">{section.icon}</span>
+                <span class="timeline__menu-icon" aria-hidden="true" set:html={section.icon} />
                 <span class="floating-menu__text">{section.title}</span>
               </a>
             </li>
@@ -198,10 +279,12 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
     color: var(--foreground-link-hover);
   }
 
-  .timeline__nav-icon {
+  .timeline__nav-icon,
+  .timeline__menu-icon {
     width: 20px;
+    height: 20px;
     flex: none;
-    text-align: center;
+    display: block;
   }
 
   /* Sections */
@@ -226,7 +309,18 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
   }
 
   .timeline-section__icon {
-    font-size: 0.85em;
+    width: 0.9em;
+    height: 0.9em;
+    flex: none;
+    display: block;
+  }
+
+  .timeline__nav-icon :global(svg),
+  .timeline__menu-icon :global(svg),
+  .timeline-section__icon :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .timeline-section__entries {
@@ -238,8 +332,23 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
   }
 
   .timeline-entry {
+    position: relative;
     display: grid;
     gap: 2px;
+  }
+
+  /* Sections with company logos: every entry gets the logo column, so text stays aligned. */
+  :global(.timeline-section--logos) .timeline-entry {
+    padding-left: 48px;
+  }
+
+  .timeline-entry__logo {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-4);
   }
 
   .timeline-entry__date {
@@ -259,8 +368,26 @@ const canonical = "https://chriskuhrt.de/thoughts/timeline/";
     text-underline-offset: 0.15em;
   }
 
+  .timeline-entry__description a {
+    color: var(--foreground-strong);
+    text-underline-offset: 0.15em;
+  }
+
+  .timeline-entry__description a:hover {
+    color: var(--foreground-link-hover);
+  }
+
   .timeline-entry__organisation a:hover {
     color: var(--foreground-link-hover);
+  }
+
+  /* "Product Designer → Design System Lead": the arrow in the data renders as arrow-narrow-right. */
+  .timeline-entry__role :global(.timeline-entry__role-chevron) {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin: 0 0.25em;
+    vertical-align: -0.15em;
   }
 
   .timeline-entry__role {

@@ -8,8 +8,7 @@ import BlogLayout from "../layouts/BlogLayout.astro";
 import articleProcess from "../assets/images/article-process.png";
 import articleSessions from "../assets/images/article-sessions.png";
 
-const base = import.meta.env.BASE_URL;
-const canonical = "https://chriskuhrt.de/thoughts/what-i-do/";
+const canonical = "https://chriskuhrt.de/what-i-do/";
 
 const services = [
   {
@@ -86,33 +85,33 @@ const stages = [
 
 const articles = [
   {
+    title: "Conducting Effective Sessions Instead of Meetings",
+    description:
+      "I use visualization tools like Miro, Mural and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion.",
+    image: articleSessions,
+    alt: "A digital whiteboard with clustered sticky notes from a mapping session",
+    href: `/thoughts/doing-sessions-instead-of-meetings/`,
+  },
+  {
     title: "Process optimization to deliver a better user experience",
     description:
       "The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects.",
     image: articleProcess,
     alt: "A mind map of UX design activities such as research, personas and user testing",
-    href: `${base}process-optimization-to-deliver-a-better-user-experience/`,
-  },
-  {
-    title: "Doing effective Sessions & Meetings",
-    description:
-      "I use visualization tools like Miro, Mural, and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion.",
-    image: articleSessions,
-    alt: "A digital whiteboard with clustered sticky notes from a mapping session",
-    href: `${base}doing-sessions-instead-of-meetings/`,
+    href: `/thoughts/process-optimization-to-deliver-a-better-user-experience/`,
   },
 ];
 ---
 
 <BlogLayout
   title="What I Do"
-  description="How I help product teams align strategy, build design foundations, scale UX, and continuously improve."
+  description="How I help product teams align strategy, build design foundations, scale UX and continuously improve."
   canonical={canonical}
   layout="split"
 >
   <div class="what-i-do">
     <section aria-labelledby="what-i-do-title">
-      <SectionTitle as="h1" id="what-i-do-title">What I do</SectionTitle>
+      <SectionTitle as="h1" id="what-i-do-title">What I Do</SectionTitle>
 
       <CardGrid as="ul" columns={3} gap="sm">
         {
@@ -127,7 +126,7 @@ const articles = [
     </section>
 
     <section aria-labelledby="how-i-work-title">
-      <SectionTitle id="how-i-work-title">How I work</SectionTitle>
+      <SectionTitle id="how-i-work-title">How I Work</SectionTitle>
       <p class="page-body-medium what-i-do__intro">
         Scaling UX requires structure. My work follows four stages that help
         teams move from fragmented execution to aligned delivery.

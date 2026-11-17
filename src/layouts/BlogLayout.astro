@@ -9,7 +9,7 @@ interface Props {
   title: string;
   description: string;
   canonical: string;
-  /** Full document title. Defaults to "<title> — Thoughts by Christopher Kuhrt". */
+  /** Full document title. Defaults to "<title>: Thoughts by Chris Kuhrt". */
   fullTitle?: string;
   /**
    * "shell" = centred 1280px column (blog pages).
@@ -22,7 +22,7 @@ const {
   title,
   description,
   canonical,
-  fullTitle = `${title} — Thoughts by Christopher Kuhrt`,
+  fullTitle = `${title}: Thoughts by Chris Kuhrt`,
   layout = "shell",
 } = Astro.props;
 ---

@@ -3,15 +3,14 @@ import FloatingMenu from "./FloatingMenu.astro";
 import ckWordmark from "../assets/icons/ck.svg";
 
 /** One menu for every page of the site. */
-const base = import.meta.env.BASE_URL;
-const homeHref = `${base}home/`;
-const currentPath = Astro.url.pathname;
+const homeHref = "/home/";
+const currentPath = Astro.url.pathname.replace(/\/?$/, "/");
 
 const navItems = [
-  { label: "What I Do", href: `${base}what-i-do/` },
-  { label: "Sharing Thoughts", href: `${base.replace(/\/$/, "")}/` },
-  { label: "Timeline", href: `${base}timeline/` },
-  { label: "About", href: `${base}about/` },
+  { label: "What I Do", href: "/what-i-do/" },
+  { label: "Sharing Thoughts", href: "/thoughts/" },
+  { label: "Timeline", href: "/timeline/" },
+  { label: "About", href: "/about/" },
 ].map((item) => ({ ...item, current: item.href === currentPath }));
 ---
 
@@ -21,7 +20,7 @@ const navItems = [
       <a
         class="site-brand"
         href={homeHref}
-        aria-label="Christopher Kuhrt – start page"
+        aria-label="Chris Kuhrt – start page"
         aria-current={currentPath === homeHref ? "page" : undefined}
       >
         <span class="site-brand__mark" aria-hidden="true"></span>
