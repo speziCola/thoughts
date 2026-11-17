@@ -35,6 +35,10 @@ jobs:
         run: npm run check
       - name: Build site
         run: npm run build
+        env:
+          # Served at spezicola.github.io/thoughts/ until a custom domain is set up.
+          # Remove this once the domain points here, so the site builds at the root.
+          SITE_BASE: /thoughts
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

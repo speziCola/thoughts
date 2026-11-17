@@ -7,6 +7,7 @@ import UxfCard from "../components/home/UxfCard.astro";
 import BlogLayout from "../layouts/BlogLayout.astro";
 import articleProcess from "../assets/images/article-process.png";
 import articleSessions from "../assets/images/article-sessions.png";
+import { url } from "../lib/url";
 
 const canonical = "https://chriskuhrt.de/what-i-do/";
 
@@ -90,7 +91,7 @@ const articles = [
       "I use visualization tools like Miro, Mural and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion.",
     image: articleSessions,
     alt: "A digital whiteboard with clustered sticky notes from a mapping session",
-    href: `/thoughts/doing-sessions-instead-of-meetings/`,
+    href: url("/thoughts/doing-sessions-instead-of-meetings/"),
   },
   {
     title: "Process optimization to deliver a better user experience",
@@ -98,7 +99,7 @@ const articles = [
       "The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects.",
     image: articleProcess,
     alt: "A mind map of UX design activities such as research, personas and user testing",
-    href: `/thoughts/process-optimization-to-deliver-a-better-user-experience/`,
+    href: url("/thoughts/process-optimization-to-deliver-a-better-user-experience/"),
   },
 ];
 ---

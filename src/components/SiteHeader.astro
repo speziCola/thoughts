@@ -1,16 +1,17 @@
 ---
 import FloatingMenu from "./FloatingMenu.astro";
 import ckWordmark from "../assets/icons/ck.svg";
+import { url } from "../lib/url";
 
 /** One menu for every page of the site. */
-const homeHref = "/home/";
+const homeHref = url("/home/");
 const currentPath = Astro.url.pathname.replace(/\/?$/, "/");
 
 const navItems = [
-  { label: "What I Do", href: "/what-i-do/" },
-  { label: "Sharing Thoughts", href: "/thoughts/" },
-  { label: "Timeline", href: "/timeline/" },
-  { label: "About", href: "/about/" },
+  { label: "What I Do", href: url("/what-i-do/") },
+  { label: "Sharing Thoughts", href: url("/thoughts/") },
+  { label: "Timeline", href: url("/timeline/") },
+  { label: "About", href: url("/about/") },
 ].map((item) => ({ ...item, current: item.href === currentPath }));
 ---
 

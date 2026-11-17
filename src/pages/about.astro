@@ -5,6 +5,7 @@ import SectionTitle from "../components/SectionTitle.astro";
 import BlogLayout from "../layouts/BlogLayout.astro";
 
 import arrowNarrowRightRaw from "../assets/icons/arrow-narrow-right.svg?raw";
+import { url } from "../lib/url";
 
 const canonical = "https://chriskuhrt.de/about/";
 const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke="currentColor"');
@@ -102,7 +103,7 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
               <li>hr</li>
               <li>Die Rheinpfalz</li>
             </ul>
-            <a class="page-body-default about-page__timeline-link" href="/timeline/">
+            <a class="page-body-default about-page__timeline-link" href={url("/timeline/")}>
               <span>
                 You can check out my timeline in detail{" "}
                 <span class="about-page__timeline-here">here</span>.

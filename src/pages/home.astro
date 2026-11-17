@@ -41,6 +41,7 @@ import logoReservix from "../assets/icons/ck-r-reservix.svg";
 import abundantia from "../assets/images/designsystem.abundantia.png";
 import processCover from "../assets/images/article-process.png";
 import sessionsCover from "../assets/images/article-sessions.png";
+import { url } from "../lib/url";
 
 const site = "https://chriskuhrt.de";
 
@@ -93,8 +94,8 @@ const references = [
           an organizational capability.
         </p>
         <nav class="intro__links" aria-label="More about Chris">
-          <a class="home-action" href="/what-i-do/">What I do</a>
-          <a class="home-action" href="/about/">About</a>
+          <a class="home-action" href={url("/what-i-do/")}>What I do</a>
+          <a class="home-action" href={url("/about/")}>About</a>
         </nav>
       </div>
     </div>
@@ -148,7 +149,7 @@ const references = [
       <ArticleTeaser
         title="Conducting Effective Sessions Instead of Meetings"
         description="I use visualization tools like Miro, Mural and FigJam to enhance meeting efficiency. By employing techniques like affinity mapping and user story/flow mapping, I ensure meetings are effective and inclusive, catering to diverse work environments. My priority is optimized communication and inclusion."
-        href={`/thoughts/doing-sessions-instead-of-meetings/`}
+        href={url("/thoughts/doing-sessions-instead-of-meetings/")}
         image={sessionsCover}
         alt="A digital whiteboard with clustered sticky notes from a mapping session"
         headingLevel={3}
@@ -156,7 +157,7 @@ const references = [
       <ArticleTeaser
         title="Process optimization to deliver a better user experience"
         description="The landscape of product development is constantly changing, highlighting the importance of teamwork, version management and the ability to scale effectively to improve the user experience. In response, I have taken the lead in implementing new tools in organizations to address these key aspects."
-        href={`/thoughts/process-optimization-to-deliver-a-better-user-experience/`}
+        href={url("/thoughts/process-optimization-to-deliver-a-better-user-experience/")}
         image={processCover}
         alt="A mind map of UX design activities such as research, personas and user testing"
         headingLevel={3}

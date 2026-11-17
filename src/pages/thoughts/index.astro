@@ -5,6 +5,7 @@ import ArticleTeaser from "../../components/ArticleTeaser.astro";
 import CardGrid from "../../components/CardGrid.astro";
 import SectionTitle from "../../components/SectionTitle.astro";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import { url } from "../../lib/url";
 
 const canonical = "https://chriskuhrt.de/thoughts/";
 const posts = await getCollection(
@@ -75,7 +76,7 @@ const articles = posts
           <ArticleTeaser
             layout="split"
             title={article.title}
-            href={`/thoughts/${article.slug}/`}
+            href={url(`/thoughts/${article.slug}/`)}
             description={article.description}
             date={article.date}
             image={article.coverImage}
