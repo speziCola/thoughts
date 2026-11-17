@@ -17,6 +17,12 @@ export default defineConfig({
   redirects: {
     "/": withBase("/home/"),
   },
+  vite: {
+    // Staging builds (github.io) set SITE_NOINDEX=true → robots noindex on every page.
+    define: {
+      "import.meta.env.SITE_NOINDEX": JSON.stringify(process.env.SITE_NOINDEX ?? "false"),
+    },
+  },
   markdown: {
     processor: unified({
       rehypePlugins: [rehypeBlogRegistry],
