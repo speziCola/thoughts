@@ -84,8 +84,9 @@ const sizes = [
   box-shadow:
     inset 0 1px 0 #fff,
     inset 0 0 0 1px rgb(255 255 255 / 50%);
-  backdrop-filter: blur(4px);
+  /* Prefixed first: the build's CSS minifier keeps only the last of the pair. */
   -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
 
 .art-panel__links a {
