@@ -329,8 +329,9 @@ a:focus-visible {
   z-index: 10;
   top: 0px;
   padding: 16px 16px 0;
-  backdrop-filter: blur(12px);
+  /* Prefixed first: the build's CSS minifier keeps only the last of the pair. */
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .site-header__wrapper {
