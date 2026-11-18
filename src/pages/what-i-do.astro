@@ -84,6 +84,46 @@ const stages = [
   },
 ];
 
+/* Operational view of "How I Work": same four-stage cards, shown via the switcher. */
+const operationalStages = [
+  {
+    name: "Understand the Context",
+    intro: "Before exploring solutions, I build a shared picture of the problem.",
+    steps: [
+      { title: "Understand Business Goals", text: "Clarify objectives and what success looks like." },
+      { title: "Identify Stakeholders", text: "Map perspectives, responsibilities and expectations." },
+      { title: "Assess Existing Knowledge", text: "Review research, data and feedback to find gaps." },
+    ],
+  },
+  {
+    name: "Discover & Define",
+    intro: "I turn assumptions into evidence and define problems worth solving.",
+    steps: [
+      { title: "Research", text: "Explore user needs, behaviours and pain points." },
+      { title: "Synthesize", text: "Find patterns and turn findings into insights." },
+      { title: "Define", text: "Frame clear problems, priorities and success criteria." },
+    ],
+  },
+  {
+    name: "Explore & Validate",
+    intro: "I explore different approaches and validate them before building.",
+    steps: [
+      { title: "Ideate", text: "Compare approaches through workshops and sketches." },
+      { title: "Prototype", text: "Make ideas tangible enough to test." },
+      { title: "Validate", text: "Test with users and refine based on evidence." },
+    ],
+  },
+  {
+    name: "Deliver & Iterate",
+    intro: "Design doesn’t end with a validated concept.",
+    steps: [
+      { title: "Collaborate & Build", text: "Work with engineering to ship production-ready experiences." },
+      { title: "Measure Impact", text: "Track usability, metrics and feedback against goals." },
+      { title: "Iterate & Improve", text: "Use real-world insights to shape the next iteration." },
+    ],
+  },
+];
+
 const articles = [
   {
     title: "Conducting Effective Sessions Instead of Meetings",
@@ -123,22 +163,38 @@ const articles = [
         {
           services.map((service) => (
             <Card as="li" padding="sm" class="service">
-              <h2 class="page-heading-level-6">{service.title}</h2>
-              <p class="page-body-small">{service.description}</p>
+              <h2 class="page-title-sm">{service.title}</h2>
+              <p class="page-body">{service.description}</p>
             </Card>
           ))
         }
       </CardGrid>
     </section>
 
-    <section aria-labelledby="how-i-work-title">
+    <section class="how-i-work" aria-labelledby="how-i-work-title">
       <SectionTitle id="how-i-work-title">How I Work</SectionTitle>
-      <p class="page-body-medium what-i-do__intro">
+      <fieldset class="view-switch">
+        <legend class="visually-hidden">Show stages</legend>
+        <label>
+          <input type="radio" name="how-i-work-view" value="strategic" id="view-strategic" checked />
+          <span>Strategic</span>
+        </label>
+        <label>
+          <input type="radio" name="how-i-work-view" value="operational" id="view-operational" />
+          <span>Operational</span>
+        </label>
+      </fieldset>
+
+      <p class="page-body what-i-do__intro stages--strategic">
         Scaling UX requires structure. My work follows four stages that help
         teams move from fragmented execution to aligned delivery.
       </p>
+      <p class="page-body what-i-do__intro stages--operational">
+        On a single product challenge, I work in four steps: from understanding
+        the context to shipping a solution and improving it.
+      </p>
 
-      <CardGrid as="ol" columns={4} gap="md">
+      <CardGrid as="ol" columns={4} gap="md" class="stages stages--strategic" aria-label="Strategic stages">
         {
           stages.map((stage, index) => (
             <Card
@@ -148,17 +204,42 @@ const articles = [
               accent={`var(--foreground-stage0${index + 1})`}
             >
               <hgroup class="stage__heading">
-                <p class="page-body-small stage__name">{stage.name}</p>
-                <h3 class="page-heading-level-3">Stage {index + 1}</h3>
+                <p class="page-body stage__name">{stage.name}</p>
+                <h3 class="page-title-md">Stage {index + 1}</h3>
               </hgroup>
-              <p class="page-body-small">{stage.intro}</p>
+              <p class="page-body">{stage.intro}</p>
               <div>
-                <h4 class="page-heading-level-6 stage__focus">{stage.focus}</h4>
-                <ul class="page-body-small stage__actions">
+                <h4 class="page-title-sm stage__focus">{stage.focus}</h4>
+                <ul class="page-body stage__actions">
                   {stage.actions.map((action) => <li>{action}</li>)}
                 </ul>
               </div>
-              <p class="page-body-small">{stage.outcome}</p>
+              <p class="page-body">{stage.outcome}</p>
+            </Card>
+          ))
+        }
+      </CardGrid>
+
+      <CardGrid as="ol" columns={4} gap="md" class="stages stages--operational" aria-label="Operational stages">
+        {
+          operationalStages.map((stage, index) => (
+            <Card
+              as="li"
+              padding="md"
+              class="stage"
+              accent={`var(--foreground-stage0${index + 1})`}
+            >
+              <hgroup class="stage__heading">
+                <p class="page-body stage__name">{stage.name}</p>
+                <h3 class="page-title-md">Stage {index + 1}</h3>
+              </hgroup>
+              <p class="page-body">{stage.intro}</p>
+              {stage.steps.map((step) => (
+                <div>
+                  <h4 class="page-title-sm stage__focus">{step.title}</h4>
+                  <p class="page-body">{step.text}</p>
+                </div>
+              ))}
             </Card>
           ))
         }
@@ -196,12 +277,6 @@ const articles = [
   .what-i-do__intro {
     padding-bottom: 16px;
     color: var(--foreground-ink);
-  }
-
-  /* Service + stage card text: flat 16px instead of the 13–14px small styles. */
-  .service :is(h2, p),
-  .stage :is(p, h4, ul) {
-    font-size: 1rem;
   }
 
   /* Service cards */
@@ -255,6 +330,72 @@ const articles = [
     margin: 0;
     padding-left: 21px;
     list-style: disc;
+  }
+
+  /* Strategic / Operational switcher. Radios, so it works without JS;
+     :has() hides the inactive set (without :has support both sets show).
+     provisional – design pending: styled from the mockup with existing tokens. */
+  .view-switch {
+    margin: 0 0 16px;
+    padding: 4px;
+    display: inline-grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 4px;
+    min-width: min(100%, 280px);
+    border: 0;
+    border-radius: var(--radius-8);
+    background: var(--background-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .view-switch label {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .view-switch input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .view-switch span {
+    padding: 4px 16px;
+    display: block;
+    border-radius: var(--radius-4);
+    color: var(--foreground-strong);
+    font-family: var(--page-font-title);
+    font-size: var(--page-small-size);
+    line-height: 1.5;
+    text-align: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .view-switch label:hover span {
+    background: var(--background-page);
+  }
+
+  .view-switch input:checked + span {
+    background: var(--background-textblock);
+  }
+
+  .view-switch input:focus-visible + span {
+    outline: 2px solid #303859;
+    outline-offset: 2px;
+  }
+
+  .how-i-work:has(#view-strategic:checked) .stages--operational,
+  .how-i-work:has(#view-operational:checked) .stages--strategic {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .view-switch span {
+      transition: none;
+    }
   }
 
   /* UX Freiburg card above the article teasers, same gap as the grid. */

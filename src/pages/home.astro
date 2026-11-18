@@ -13,6 +13,7 @@ import HomeCard from "../components/home/HomeCard.astro";
 import ArticleTeaser from "../components/ArticleTeaser.astro";
 import CardGrid from "../components/CardGrid.astro";
 import UxfCard from "../components/home/UxfCard.astro";
+import LatestArticles from "../components/home/LatestArticles.astro";
 import "../styles/home-shared.css";
 import "../styles/home.css";
 
@@ -140,6 +141,11 @@ const references = [
         ))
       }
     </ul>
+  </section>
+
+  <section class="home-section" id="latest-thoughts" aria-labelledby="latest-thoughts-title">
+    <SectionHeader id="latest-thoughts-title" title="Sharing Thoughts" />
+    <LatestArticles />
   </section>
 
   <section class="home-section" id="enabling-people" aria-labelledby="enabling-people-title">

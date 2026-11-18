@@ -47,6 +47,21 @@ Image rules: alt = accessible description (never shown as caption). No colon in 
 - Source of truth: Figma page **"Claude – Blog"** only (see `docs/figma-audit.md`).
 - Blog typography is blog-scoped (`--blog-*`); Figma page typography is separately represented by `--page-*`. Colours and radius are shared foundations.
 - Fluid type & spacing via `clamp()` interpolating 360px → 1920px values. No breakpoints for type.
+- Page type scale (2026-11-18), everything outside `.blog-article`: one token per desktop size, so text that matches on desktop matches on mobile too. Never hardcode a font-size; use these tokens/classes.
+
+  | Token / class | Mobile → desktop | Use |
+  |---|---|---|
+  | `--page-title-display-size` | 24 → 40 | start-page hero |
+  | `--page-title-xl-size` / `.page-title-xl` | 20 → 32 | page H1 (`SectionTitle`) |
+  | `--page-title-section-size` | 20 → 28 | start-page section headers (Fira Mono) |
+  | `--page-title-lg-size` / `.page-title-lg` | 18 → 24 | H2, hero subtitle |
+  | `--page-title-md-size` / `.page-title-md` | 16 → 18 | card/article titles, H3, footer headings |
+  | `.page-title-sm` | 15 → 16 | small headings at body size |
+  | `--page-body-size` / `.page-body` | 15 → 16 (fixed from 900px) | all body copy, lists, nav, buttons, footer links |
+  | `--page-small-size` / `.page-small` | 14 | compact UI: social links, channel names, timeline dates/roles |
+  | `--page-label-size` / `.page-label` | 13 | dates, tags, counts |
+
+  Article bodies keep their own `--blog-*` scale, handled separately.
 - Viewport ranges: mobile 0–900px, laptop 901–1400px, desktop 1401px and wider. Laptop and desktop share the base layout unless a design specifies otherwise.
 - Layout: 720px reading column, 1280px breakout for image rows, 16px mobile gutter (Figma shows 8; deliberately raised).
 - Header: minimal, provisional. Header = name linking to `https://chriskuhrt.de` + skip link. Footer = responsive Figma design with social profiles, project links, copyright, and legal links to the Framer site.

@@ -12,8 +12,8 @@
   margin: 0;
   color: var(--foreground-regular);
   font-family: var(--page-font-body);
-  font-size: var(--page-body-card-size);
-  line-height: var(--page-body-card-line-height);
+  font-size: var(--page-body-size);
+  line-height: var(--page-body-line-height);
 }
 
 .home-text + .home-text {
@@ -25,7 +25,7 @@
   padding-bottom: 8px;
   color: var(--foreground-strong);
   font-family: var(--page-font-title);
-  font-size: 18px;
+  font-size: var(--page-title-md-size);
   font-weight: 700;
   line-height: 1.5;
 }
@@ -39,7 +39,7 @@
 .home-action {
   color: var(--foreground-strong);
   font-family: var(--page-font-body);
-  font-size: clamp(15px, calc(14.7692px + 0.0641vw), 16px);
+  font-size: var(--page-body-size);
   font-weight: 600; /* Supreme Bold is registered as 600 */
   line-height: 24px;
 }

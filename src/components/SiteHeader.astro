@@ -7,10 +7,11 @@ import { url } from "../lib/url";
 const homeHref = url("/home/");
 const currentPath = Astro.url.pathname.replace(/\/?$/, "/");
 
+// Timeline is not in the menu; it is linked from About.
 const navItems = [
+  { label: "Home", href: homeHref },
   { label: "What I Do", href: url("/what-i-do/") },
   { label: "Sharing Thoughts", href: url("/thoughts/") },
-  { label: "Timeline", href: url("/timeline/") },
   { label: "About", href: url("/about/") },
 ].map((item) => ({ ...item, current: item.href === currentPath }));
 ---
@@ -47,11 +48,6 @@ const navItems = [
 <!-- Mobile (≤900px): the header links move into a floating "Menu" pill. -->
 <FloatingMenu label="Menu" navLabel="Main navigation" panelWidth="318px">
   <ul>
-    <li>
-      <a href={homeHref} aria-current={currentPath === homeHref ? "page" : undefined}>
-        <span class="floating-menu__text">Home</span>
-      </a>
-    </li>
     {
       navItems.map((item) => (
         <li>

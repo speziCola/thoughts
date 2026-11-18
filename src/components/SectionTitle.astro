@@ -12,7 +12,7 @@ type Props = HTMLAttributes<"h1"> & {
 const { as: Tag = "h2", class: className, ...attrs } = Astro.props;
 ---
 
-<Tag class:list={["section-title", "page-heading-level-1", className]} {...attrs}>
+<Tag class:list={["section-title", "page-title-xl", className]} {...attrs}>
   <slot />
 </Tag>
 

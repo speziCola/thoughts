@@ -82,7 +82,7 @@ const canonical = "https://chriskuhrt.de/timeline/";
   <div class="timeline">
     <header class="timeline__header">
       <SectionTitle as="h1">Timeline</SectionTitle>
-      <p class="page-body-default timeline__intro">
+      <p class="page-body timeline__intro">
         I am filled with gratitude for every experience. Each one has helped
         shape who I am today as a designer and leader, and I look forward to
         the next chapter of this ever-evolving journey.
@@ -119,7 +119,7 @@ const canonical = "https://chriskuhrt.de/timeline/";
               aria-labelledby={`${section.id}-title`}
               data-timeline-section
             >
-              <h2 class="page-heading-level-2 timeline-section__title" id={`${section.id}-title`}>
+              <h2 class="page-title-lg timeline-section__title" id={`${section.id}-title`}>
                 <span class="timeline-section__icon" aria-hidden="true" set:html={section.icon} />
                 {section.title}
               </h2>
@@ -138,10 +138,10 @@ const canonical = "https://chriskuhrt.de/timeline/";
                       />
                     )}
                     <p class="timeline-entry__date">{entry.date}</p>
-                    <h3 class="page-heading-level-4 timeline-entry__organisation">
+                    <h3 class="page-title-md timeline-entry__organisation">
                       {entry.href ? <a href={entry.href}>{entry.organisation}</a> : entry.organisation}
                     </h3>
-                    <p class="page-body-small timeline-entry__role">
+                    <p class="page-small timeline-entry__role">
                       {entry.role.split(/\s*→\s*/).map((step, i) => (
                         <>
                           {i > 0 && <Fragment set:html={roleArrow} />}
@@ -149,13 +149,13 @@ const canonical = "https://chriskuhrt.de/timeline/";
                         </>
                       ))}
                     </p>
-                    <p class="page-body-medium timeline-entry__description">
+                    <p class="page-body timeline-entry__description">
                       {descriptionParts(entry.description).map((part) =>
                         part.href ? <a href={part.href}>{part.text}</a> : part.text,
                       )}
                     </p>
                     {entry.highlights && (
-                      <ul class="page-body-medium timeline-entry__highlights">
+                      <ul class="page-body timeline-entry__highlights">
                         {entry.highlights.map((item) => (
                           <li>
                             {item.label && <strong>{item.label}:</strong>} {item.text}
@@ -172,8 +172,10 @@ const canonical = "https://chriskuhrt.de/timeline/";
       </div>
     </div>
 
-    <!-- Mobile: floating "Timeline" pill (left) next to the main "Menu" pill. -->
-    <FloatingMenu label="Timeline" navLabel="Timeline sections" icon="chevron" side="left" stretch>
+    <!-- Mobile: floating "Timeline" pill (left) next to the main "Menu" pill.
+         Tablet/small laptop (side nav hidden, >900px): the same pill, 300px wide,
+         sticky at the bottom of the content column. -->
+    <FloatingMenu label="Timeline" navLabel="Timeline sections" icon="chevron" side="left" stretch class="timeline-menu">
       <ul data-timeline-nav>
         {
           sections.map((section) => (
@@ -268,9 +270,9 @@ const canonical = "https://chriskuhrt.de/timeline/";
     border-radius: var(--radius-4);
     color: var(--foreground-strong);
     font-family: var(--page-font-title);
-    font-size: var(--page-navigation-link-size);
+    font-size: var(--page-body-size);
     font-weight: var(--page-weight-semibold);
-    line-height: var(--page-navigation-link-line-height);
+    line-height: var(--page-body-line-height);
     text-decoration: none;
   }
 
@@ -359,9 +361,9 @@ const canonical = "https://chriskuhrt.de/timeline/";
   .timeline-entry__date {
     color: var(--foreground-ink);
     font-family: var(--page-font-title);
-    font-size: var(--page-caption-default-size);
+    font-size: var(--page-small-size);
     font-weight: var(--page-weight-semibold);
-    line-height: var(--page-caption-default-line-height);
+    line-height: var(--page-lineheight-normal);
   }
 
   .timeline-entry__organisation {
@@ -432,6 +434,22 @@ const canonical = "https://chriskuhrt.de/timeline/";
 
     .timeline__aside {
       display: none;
+    }
+  }
+
+  /* Between 900px and the width where the side nav returns there is no main
+     Menu pill, so the Timeline pill shows alone. Sticky (not fixed) keeps it in
+     the content column, next to the art panel, and lets it stop before the footer. */
+  @media (min-width: 901px) {
+    @container page (max-width: 867px) {
+      .timeline :global(.timeline-menu) {
+        position: sticky;
+        z-index: 5; /* above the cards, below the sticky site header (10) */
+        bottom: 24px;
+        width: 300px;
+        margin-top: 40px;
+        display: block;
+      }
     }
   }
 

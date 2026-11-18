@@ -1,6 +1,6 @@
 ---
 /**
- * Floating pill menu for mobile (≤900px), copied from the live site
+ * Floating pill menu for mobile (≤900px; pages may show it wider), copied from the live site
  * (chriskuhrt.de, Framer): a black pill pinned to the bottom of the viewport
  * that opens a white panel wrapping the pill.
  *
@@ -163,6 +163,27 @@ const {
     menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => close(menu)));
   });
 
+  // Invert a pill while it sits over the (black) site footer.
+  const footer = document.querySelector<HTMLElement>(".site-footer");
+  let frame = 0;
+  function updateContrast() {
+    frame = 0;
+    if (!footer) return;
+    const area = footer.getBoundingClientRect();
+    menus.forEach((menu) => {
+      const pill = menu.querySelector("summary")!.getBoundingClientRect();
+      const middle = pill.top + pill.height / 2;
+      const onDark = pill.height > 0 && middle > area.top && middle < area.bottom;
+      menu.classList.toggle("floating-menu--on-dark", onDark);
+    });
+  }
+  const scheduleContrast = () => {
+    if (!frame) frame = requestAnimationFrame(updateContrast);
+  };
+  window.addEventListener("scroll", scheduleContrast, { passive: true });
+  window.addEventListener("resize", scheduleContrast);
+  updateContrast();
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") menus.forEach((menu) => close(menu, true));
   });
@@ -175,6 +196,9 @@ const {
 </script>
 
 <style>
+  /* Hidden by default; shown and pinned to the viewport bottom at ≤900px.
+     A page can show a menu at other widths too (Timeline does, see timeline.astro):
+     the visual styles below apply at every width. */
   .floating-menu {
     /* Spring from the live site's icon animation (~500ms, slight overshoot). */
     --floating-menu-spring: linear(
@@ -213,149 +237,170 @@ const {
     .floating-menu--stretch.floating-menu--right {
       left: calc(16px + 136px + 16px);
     }
+  }
 
-    .floating-menu--stretch .floating-menu__pill {
-      justify-content: space-between;
-    }
+  .floating-menu--stretch .floating-menu__pill {
+    justify-content: space-between;
+  }
 
-    .floating-menu__pill {
-      position: relative;
-      z-index: 1;
-      height: 64px;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      border-radius: 100px;
-      color: #fff;
-      background: #000;
-      font-family: var(--page-font-title);
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 24px;
-      list-style: none;
-      cursor: pointer;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+  .floating-menu__pill {
+    position: relative;
+    z-index: 1;
+    height: 64px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-radius: 100px;
+    color: #fff;
+    background: #000;
+    font-family: var(--page-font-title);
+    font-size: var(--page-body-size);
+    font-weight: 500;
+    line-height: 24px;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    .floating-menu__pill::-webkit-details-marker {
-      display: none;
-    }
+  .floating-menu__pill::-webkit-details-marker {
+    display: none;
+  }
 
-    .floating-menu__pill:focus-visible {
-      outline: 2px solid var(--foreground-strong);
-      outline-offset: 3px;
-    }
+  .floating-menu__pill:focus-visible {
+    outline: 2px solid var(--foreground-strong);
+    outline-offset: 3px;
+  }
 
-    /* Burger → X (outer bars rotate, middle bar collapses to the right). */
-    .floating-menu__burger {
-      position: relative;
-      width: 32px;
-      height: 32px;
-      flex: none;
-    }
+  /* Burger → X (outer bars rotate, middle bar collapses to the right). */
+  .floating-menu__burger {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    flex: none;
+  }
 
-    .floating-menu__burger span {
-      position: absolute;
-      left: 4px;
-      width: 24px;
-      height: 2px;
-      background: #bfbfbf;
-      transition:
-        transform 500ms var(--floating-menu-spring),
-        opacity 300ms ease;
-    }
+  .floating-menu__burger span {
+    position: absolute;
+    left: 4px;
+    width: 24px;
+    height: 2px;
+    background: #bfbfbf;
+    transition:
+      transform 500ms var(--floating-menu-spring),
+      opacity 300ms ease,
+      background-color 200ms ease;
+  }
 
-    .floating-menu__burger span:nth-child(1) {
-      top: 7px;
-    }
+  .floating-menu__burger span:nth-child(1) {
+    top: 7px;
+  }
 
-    .floating-menu__burger span:nth-child(2) {
-      top: 15px;
-    }
+  .floating-menu__burger span:nth-child(2) {
+    top: 15px;
+  }
 
-    .floating-menu__burger span:nth-child(3) {
-      top: 23px;
-    }
+  .floating-menu__burger span:nth-child(3) {
+    top: 23px;
+  }
 
-    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
-    }
+  .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
 
-    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(2) {
-      opacity: 0;
-      transform: translateX(11px) scaleX(0.0833);
-    }
+  .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(11px) scaleX(0.0833);
+  }
 
-    .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
-    }
+  .floating-menu[open]:not(.is-closing) .floating-menu__burger span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
 
-    .floating-menu__chevron {
-      flex: none;
-      transition: transform 500ms var(--floating-menu-spring);
-    }
+  .floating-menu__chevron {
+    flex: none;
+    transition: transform 500ms var(--floating-menu-spring);
+  }
 
-    .floating-menu[open]:not(.is-closing) .floating-menu__chevron {
-      transform: rotate(180deg);
-    }
+  .floating-menu[open]:not(.is-closing) .floating-menu__chevron {
+    transform: rotate(180deg);
+  }
 
-    /* Panel wraps the pill: 8px past its side and bottom edges. Bottom padding
-       = 16px gap + 64px pill + 8px. */
-    .floating-menu__panel {
-      position: absolute;
-      bottom: -8px;
-      width: var(--floating-menu-panel-width, max-content);
-      min-width: calc(100% + 16px);
-      max-width: calc(100vw - 16px);
-      padding: 16px 0 88px;
-      overflow: hidden;
-      border: 1px solid var(--border-subtle);
-      background: #fff;
-    }
+  /* Panel wraps the pill: 8px past its side and bottom edges. Bottom padding
+     = 16px gap + 64px pill + 8px. */
+  .floating-menu__panel {
+    position: absolute;
+    bottom: -8px;
+    width: var(--floating-menu-panel-width, max-content);
+    min-width: calc(100% + 16px);
+    max-width: calc(100vw - 16px);
+    padding: 16px 0 88px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: #fff;
+  }
 
-    .floating-menu--right .floating-menu__panel {
-      right: -8px;
-    }
+  .floating-menu--right .floating-menu__panel {
+    right: -8px;
+  }
 
-    .floating-menu--left .floating-menu__panel {
-      left: -8px;
-    }
+  .floating-menu--left .floating-menu__panel {
+    left: -8px;
+  }
 
-    .floating-menu__panel :global(ul) {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
+  .floating-menu__panel :global(ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-    .floating-menu__panel :global(a) {
-      height: 56px;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #000;
-      font-family: var(--page-font-title);
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 24.5px;
-      text-decoration: none;
-    }
+  .floating-menu__panel :global(a) {
+    height: 56px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #000;
+    font-family: var(--page-font-title);
+    font-size: var(--page-small-size);
+    font-weight: 600;
+    line-height: 24.5px;
+    text-decoration: none;
+  }
 
-    /* Underline the text only, never the emoji/icon beside it. */
-    .floating-menu__panel :global(a .floating-menu__text) {
-      text-decoration: underline;
-      text-underline-offset: 0.15em;
-    }
+  /* Underline the text only, never the emoji/icon beside it. */
+  .floating-menu__panel :global(a .floating-menu__text) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
 
-    .floating-menu__panel :global(a:hover),
-    .floating-menu__panel :global(a[aria-current]) {
-      color: var(--foreground-link-hover);
-    }
+  .floating-menu__panel :global(a:hover),
+  .floating-menu__panel :global(a[aria-current]) {
+    color: var(--foreground-link-hover);
+  }
+
+  /* Over the black footer the pill inverts so it keeps its contrast
+     (class set by the script below). */
+  .floating-menu__pill {
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  .floating-menu--on-dark .floating-menu__pill {
+    color: var(--foreground-strong);
+    background: #fff;
+  }
+
+  .floating-menu--on-dark .floating-menu__burger span {
+    background: var(--foreground-strong);
+  }
+
+  .floating-menu--on-dark .floating-menu__pill:focus-visible {
+    outline-color: #fff;
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .floating-menu__pill,
     .floating-menu__burger span,
     .floating-menu__chevron {
       transition: none;
