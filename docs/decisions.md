@@ -47,6 +47,21 @@ Image rules: alt = accessible description (never shown as caption). No colon in 
 - Source of truth: Figma page **"Claude – Blog"** only (see `docs/figma-audit.md`).
 - Blog typography is blog-scoped (`--blog-*`); Figma page typography is separately represented by `--page-*`. Colours and radius are shared foundations.
 - Fluid type & spacing via `clamp()` interpolating 360px → 1920px values. No breakpoints for type.
+- Page type scale (2026-11-18), everything outside `.blog-article`: one token per desktop size, so text that matches on desktop matches on mobile too. Never hardcode a font-size; use these tokens/classes.
+
+  | Token / class | Mobile → desktop | Use |
+  |---|---|---|
+  | `--page-title-display-size` | 24 → 40 | start-page hero |
+  | `--page-title-xl-size` / `.page-title-xl` | 20 → 32 | page H1 (`SectionTitle`) |
+  | `--page-title-section-size` | 20 → 28 | start-page section headers (Fira Mono) |
+  | `--page-title-lg-size` / `.page-title-lg` | 18 → 24 | H2, hero subtitle |
+  | `--page-title-md-size` / `.page-title-md` | 16 → 18 | card/article titles, H3, footer headings |
+  | `.page-title-sm` | 15 → 16 | small headings at body size |
+  | `--page-body-size` / `.page-body` | 15 → 16 (fixed from 900px) | all body copy, lists, nav, buttons, footer links |
+  | `--page-small-size` / `.page-small` | 14 | compact UI: social links, channel names, timeline dates/roles |
+  | `--page-label-size` / `.page-label` | 13 | dates, tags, counts |
+
+  Article bodies keep their own `--blog-*` scale, handled separately.
 - Viewport ranges: mobile 0–900px, laptop 901–1400px, desktop 1401px and wider. Laptop and desktop share the base layout unless a design specifies otherwise.
 - Layout: 720px reading column, 1280px breakout for image rows, 16px mobile gutter (Figma shows 8; deliberately raised).
 - Header: minimal, provisional. Header = name linking to `https://chriskuhrt.de` + skip link. Footer = responsive Figma design with social profiles, project links, copyright, and legal links to the Framer site.
@@ -58,3 +73,15 @@ One real article ("Asking the right follow-up questions", text from Figma, place
 ## URL structure (2026-11-17)
 
 Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the root (`/home/`, `/what-i-do/`, `/timeline/`, `/about/`), the blog index is `/thoughts/`, articles are `/thoughts/<slug>/`, and `/` redirects to `/home/`. Canonicals are `https://chriskuhrt.de/<path>/`. `trailingSlash: "ignore"`, links always written with `/`. Open: hosting. The GitHub Pages project URL (`spezicola.github.io/thoughts/`) no longer works as a mirror, because assets are root-relative. The site needs a domain at its root (custom domain on Pages, or AWS routing all of these paths).
+
+## SEO (2026-11-17)
+
+| Topic | Decision |
+|---|---|
+| Head | All SEO tags live in `BlogLayout.astro`: title, description, canonical, robots, author, Open Graph, Twitter card, favicons, RSS + sitemap links. Site identity in `src/lib/site.ts`. |
+| Titles | Default `<title>` = `<title> – Chris Kuhrt` (short suffix keeps most titles ≈60 chars). Series markers like `(#6)` are stripped from `<title>`, OG, RSS and JSON-LD; the H1 keeps them. |
+| Share images | 1200px JPEG via `getImage`. Posts use their `cover`; other pages use `src/assets/images/og-default.png` (1200×630). |
+| Structured data | One JSON-LD `@graph` per page: `WebSite` + `Person` (stable `@id`s) + page node (`ProfilePage` for home/about). Articles add `BlogPosting` + `BreadcrumbList`; the blog index adds `Blog`. |
+| Feeds | `/rss.xml` and `/sitemap.xml` are hand-written endpoints (no extra dependencies), always on canonical `https://chriskuhrt.de` URLs. `/robots.txt` points to the sitemap. |
+| Posts | Shared parsing in `src/lib/posts.ts` (title, slug, cover) for index, articles, RSS, sitemap. |
+| Staging | `SITE_NOINDEX=true` (set in deploy.yml next to `SITE_BASE`) → `noindex` on every page, so the github.io copy never competes with chriskuhrt.de. Remove both once the domain points here. |

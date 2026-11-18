@@ -8,8 +8,8 @@
   padding-left: 24px;
   color: var(--foreground-regular);
   font-family: var(--page-font-body);
-  font-size: var(--page-body-card-size);
-  line-height: var(--page-body-card-line-height);
+  font-size: var(--page-body-size);
+  line-height: var(--page-body-line-height);
 }
 
 .home-divider {
@@ -42,7 +42,7 @@
   margin: 0;
   color: var(--home-text-strong);
   font-family: var(--page-font-title); /* Fira Sans */
-  font-size: clamp(24px, calc(20.3077px + 1.0256vw), 40px);
+  font-size: var(--page-title-display-size);
   font-weight: 700;
   line-height: 1.5;
   text-wrap: balance;
@@ -63,7 +63,7 @@
   margin: 0;
   color: var(--foreground-regular);
   font-family: var(--page-font-title);
-  font-size: clamp(18px, calc(16.6154px + 0.3846vw), 24px);
+  font-size: var(--page-title-lg-size);
   line-height: 1.5;
   text-wrap: balance;
 }
@@ -105,7 +105,7 @@
   margin: 0;
   color: #202430;
   font-family: var(--page-font-body);
-  font-size: 16px;
+  font-size: var(--page-body-size);
   font-weight: 600;
   line-height: 24px;
 }
@@ -142,7 +142,7 @@
   flex: 1;
   min-width: 0;
   font-family: var(--page-font-body);
-  font-size: 14px;
+  font-size: var(--page-small-size);
   font-weight: 600; /* Supreme Bold */
   line-height: 24px;
   text-decoration: underline;
@@ -270,7 +270,7 @@
   padding-bottom: 8px;
   color: var(--foreground-regular);
   font-family: var(--page-font-body);
-  font-size: 16px;
+  font-size: var(--page-body-size);
   font-weight: 600;
   line-height: 1.8;
 }
@@ -353,7 +353,7 @@
 
   .area-card__label {
     font-family: var(--page-font-title);
-    font-size: 12px;
+    font-size: var(--page-label-size);
     font-weight: 700;
     line-height: 1.35;
   }

@@ -36,7 +36,10 @@ const sizes = [
       <a href="https://linkedin.chriskuhrt.de/">LinkedIn</a>
     </li>
     <li>
-      <a href="https://twitter.chriskuhrt.de/">Twitter</a>
+      <a href="https://github.chriskuhrt.de/">GitHub</a>
+    </li>
+    <li>
+      <a href="https://twitter.chriskuhrt.de/">Twitter/X</a>
     </li>
   </ul>
 </div>
@@ -77,7 +80,8 @@ const sizes = [
   margin: 0;
   padding: 16px;
   display: flex;
-  gap: 32px;
+  flex-wrap: wrap; /* links drop to the next line when the panel gets narrow; the box grows upward */
+  gap: 8px 32px;
   list-style: none;
   border-radius: 8px;
   background: rgb(255 255 255 / 20%);
@@ -92,7 +96,7 @@ const sizes = [
 .art-panel__links a {
   color: #fff;
   font-family: var(--page-font-body);
-  font-size: 14px;
+  font-size: var(--page-small-size);
   line-height: 24px;
 }
 

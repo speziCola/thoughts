@@ -13,6 +13,13 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
 
 <BlogLayout
   title="About"
+  fullTitle="About Chris Kuhrt – Design Leader & Design Systems Advocate"
+  ogType="profile"
+  pageType="ProfilePage"
+  breadcrumbs={[
+    { name: "Home", url: "https://chriskuhrt.de/home/" },
+    { name: "About", url: canonical },
+  ]}
   description="Design Leader, Product Strategist & Design Systems Advocate. I connect product, design and engineering and build the foundations that let teams deliver great product experiences."
   canonical={canonical}
   layout="split"
@@ -23,25 +30,25 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
     <Card as="div" width="full">
       <section class="about-page__intro" aria-labelledby="about-intro-title">
         <div class="about-page__intro-copy">
-          <h2 class="page-heading-level-3" id="about-intro-title">
+          <h2 class="page-title-md" id="about-intro-title">
             Hi, my name is Chris Kuhrt
           </h2>
-          <p class="about-page__subtitle page-body-default">
+          <p class="about-page__subtitle page-body">
             Design Leader, Product Strategist &amp; Design Systems Advocate.
           </p>
-          <p class="page-body-default">
+          <p class="page-body">
             With over 10 years of experience across finance, marketplaces and
             digital platforms, I’ve evolved from designing individual
             experiences to shaping the teams, systems and strategies behind
             them.
           </p>
-          <p class="page-body-default">
+          <p class="page-body">
             As Head of Research &amp; Design, I focus on connecting product,
             design and engineering to solve complex challenges, align
             fragmented product ecosystems and create meaningful business
             impact.
           </p>
-          <p class="page-body-default">
+          <p class="page-body">
             I believe great design is rarely just a craft problem. It’s usually
             a systems problem. That’s why I care about building scalable design
             foundations, improving how teams collaborate and turning UX into
@@ -64,13 +71,13 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
         class="about-page__section about-page__experience-section"
         aria-labelledby="experience-title"
       >
-        <h2 class="page-heading-level-2" id="experience-title">Experience</h2>
+        <h2 class="page-title-lg" id="experience-title">Experience</h2>
         <div class="about-page__experience">
           <section aria-labelledby="professional-experience-title">
-            <h3 class="page-heading-level-4" id="professional-experience-title">
+            <h3 class="page-title-md" id="professional-experience-title">
               Professional Experience
             </h3>
-            <ul class="page-body-default about-page__professional-list">
+            <ul class="page-body about-page__professional-list">
               <li>Etops</li>
               <li>PATRONAS / niiio finance group</li>
               <li>Chrono24</li>
@@ -80,10 +87,10 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
               class="about-page__advisory"
               aria-labelledby="startup-experience-title"
             >
-              <h3 class="page-heading-level-4" id="startup-experience-title">
+              <h3 class="page-title-md" id="startup-experience-title">
                 Startups &amp; Advisory
               </h3>
-              <ul class="page-body-default">
+              <ul class="page-body">
                 <li>Betterahead</li>
                 <li>Hammertime</li>
                 <li>Biorenewables</li>
@@ -92,10 +99,10 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
             </section>
           </section>
           <section aria-labelledby="client-experience-title">
-            <h3 class="page-heading-level-4" id="client-experience-title">
+            <h3 class="page-title-md" id="client-experience-title">
               Client &amp; Project Experience
             </h3>
-            <ul class="page-body-default">
+            <ul class="page-body">
               <li>DFB</li>
               <li>SC Freiburg</li>
               <li>Disney</li>
@@ -103,7 +110,7 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
               <li>hr</li>
               <li>Die Rheinpfalz</li>
             </ul>
-            <a class="page-body-default about-page__timeline-link" href={url("/timeline/")}>
+            <a class="page-body about-page__timeline-link" href={url("/timeline/")}>
               <span>
                 You can check out my timeline in detail{" "}
                 <span class="about-page__timeline-here">here</span>.
@@ -116,17 +123,17 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
 
       <hr class="about-page__divider" />
 
-      <p class="page-body-default about-page__statement">
+      <p class="page-body about-page__statement">
         From design systems to organizational design. I align teams, tools
         and strategy to ship better products.
       </p>
 
       <div class="about-page__details">
         <section class="about-page__section" aria-labelledby="expertise-title">
-          <h2 class="page-heading-level-2" id="expertise-title">
+          <h2 class="page-title-lg" id="expertise-title">
             Areas of Expertise
           </h2>
-          <ul class="page-body-default about-page__expertise">
+          <ul class="page-body about-page__expertise">
             <li>B2B, B2C, SaaS, etc.</li>
             <li>Human-centered (HCD) and customer-focused (CX) solutions</li>
             <li>Product design</li>
@@ -155,8 +162,8 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
         </section>
 
         <section class="about-page__section" aria-labelledby="industries-title">
-          <h2 class="page-heading-level-2" id="industries-title">Industries</h2>
-          <ul class="page-body-default">
+          <h2 class="page-title-lg" id="industries-title">Industries</h2>
+          <ul class="page-body">
             <li>Finance</li>
             <li>E-Commerce</li>
             <li>Big Data</li>

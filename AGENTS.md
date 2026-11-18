@@ -10,7 +10,8 @@ Read before working:
 ## Status
 1. Figma pass – done (2026-11-01).
 2. **Next:** architecture write-up + one prototype article + GitHub Pages deploy → wait for approval.
-3. Later: RSS, sitemap, Open Graph, alias redirects, link checking, docs.
+3. SEO pass done (2026-11-17): meta/OG/Twitter, JSON-LD, RSS (`/rss.xml`), sitemap (`/sitemap.xml`), robots, favicons. See docs/decisions.md › SEO.
+4. Later: alias redirects, link checking, docs.
 
 ## Hard rules
 - **Astro with `.astro` templates only.** No React/Vue/Svelte/Solid integrations, no hydration, no `client:*` directives.

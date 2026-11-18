@@ -39,6 +39,9 @@ jobs:
           # Served at spezicola.github.io/thoughts/ until a custom domain is set up.
           # Remove this once the domain points here, so the site builds at the root.
           SITE_BASE: /thoughts
+          # Keep the github.io staging copy out of search results (canonicals point to chriskuhrt.de).
+          # Remove together with SITE_BASE once the domain points here.
+          SITE_NOINDEX: "true"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,107 @@
+---
+/**
+ * Start page: the two newest articles in one card ("Sharing Thoughts").
+ * Picked automatically from the blog collection (same source and order as
+ * /thoughts/), so the card updates with every new post. No Figma spec yet.
+ *
+ * Each item: small cover left, title + date right. Items sit side by side
+ * and stack when the card gets narrow (HomeCard split); an item stacks its
+ * cover above the text when the item itself gets narrow (container query).
+ * The cover link repeats the title link, so it is hidden from the tab order
+ * and accessibility tree.
+ */
+import { Image } from "astro:assets";
+import HomeCard from "./HomeCard.astro";
+import { getPosts } from "../../lib/posts";
+import { url } from "../../lib/url";
+
+const latest = (await getPosts()).slice(0, 2);
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+---
+
+{
+  latest.length > 0 && (
+    <HomeCard layout="split" gap={64} tag="div">
+      {latest.map((post) => {
+        const href = url(`/thoughts/${post.slug}/`);
+        return (
+          <article class="latest">
+            <div class="latest__inner">
+              {post.coverImage && (
+                <a class="latest__image" href={href} tabindex="-1" aria-hidden="true">
+                  <Image src={post.coverImage} alt="" widths={[200, 400]} sizes="200px" />
+                </a>
+              )}
+              <div class="latest__text">
+                <h3 class="home-card-title latest__title">
+                  <a href={href}>{post.title}</a>
+                </h3>
+                <time class="latest__date page-label" datetime={post.date.toISOString().slice(0, 10)}>
+                  {formatDate(post.date)}
+                </time>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </HomeCard>
+  )
+}
+
+<style>
+  .latest {
+    container-type: inline-size;
+  }
+
+  .latest__inner {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+  }
+
+  .latest__image {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-4);
+    background: var(--foreground-inverse);
+  }
+
+  .latest__image :global(img) {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 240ms ease;
+  }
+
+  .latest__image:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .latest__title {
+    padding-bottom: 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .latest__date {
+    display: block;
+    color: var(--foreground-light);
+  }
+
+  /* Narrow item (mobile): cover on top, full width. */
+  @container (max-width: 400px) {
+    .latest__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .latest__image :global(img) {
+      transition: none;
+    }
+  }
+</style>

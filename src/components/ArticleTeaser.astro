@@ -67,7 +67,7 @@ const imageSizes = isSplit
   <div class="teaser__heading">
     {
       date && (
-        <time class="teaser__date page-label-regular" datetime={date.toISOString().slice(0, 10)}>
+        <time class="teaser__date page-label" datetime={date.toISOString().slice(0, 10)}>
           {date.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
@@ -77,11 +77,11 @@ const imageSizes = isSplit
         </time>
       )
     }
-    <Heading class="teaser__title page-card-article-title">
+    <Heading class="teaser__title page-title-md">
       <a href={href}>{title}</a>
     </Heading>
   </div>
-  <p class="teaser__description page-body-card">{description}</p>
+  <p class="teaser__description page-body">{description}</p>
   <a class="teaser__link" href={href}>Read article</a>
 
   {
@@ -97,7 +97,7 @@ const imageSizes = isSplit
           />
         </a>
         {tags.length > 0 && (
-          <figcaption class="teaser__tags page-label-regular">
+          <figcaption class="teaser__tags page-label">
             {tags.map((tag) => (
               <span>#{tag}</span>
             ))}
@@ -137,7 +137,7 @@ const imageSizes = isSplit
     align-self: flex-start;
     color: var(--foreground-strong);
     font-family: var(--page-font-title);
-    font-size: 16px;
+    font-size: var(--page-body-size);
     font-weight: 700;
     line-height: var(--page-lineheight-compact);
   }
