@@ -127,7 +127,7 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
         };
         const apply = (theme) => {
           root.dataset.theme = theme;
-          if (meta) meta.content = theme === "dark" ? "#1f1f1f" : "#f4f1ef";
+          if (meta) meta.content = theme === "dark" ? "#1a1a1a" : "#f4f1ef";
         };
         apply(saved() ?? (system.matches ? "dark" : "light"));
         // Follow the system live until the visitor picks a theme themselves.

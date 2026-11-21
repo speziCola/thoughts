@@ -90,9 +90,9 @@
   --foreground-inverse: #fdfdfd;
   --foreground-link-hover: #00be73;
   --foreground-stage01: #303859;
-  --foreground-stage02: #e23131;
+  --foreground-stage02: #d92b2b; /* darkened from #e23131 for 4.5:1 on cards */
   --foreground-stage03: #186daa;
-  --foreground-stage04: #478a14;
+  --foreground-stage04: #427f12; /* darkened from #478a14 for 4.5:1 on cards */
 
   /* Lines, focus, effects */
   --border-subtle: #e6e0dc; /* dividers, fine frames */
@@ -175,20 +175,20 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --background-page: #1f1f1f;
+  --background-page: #1a1a1a;
   --background-card: #292929;
   --background-area-card: #292929;
   --background-surface: #333333;
   --background-header: rgb(41 41 41 / 75%);
   --background-textblock: #1a1a1a;
-  --background-muted: #1a1a1a;
+  --background-muted: #141414;
   --background-code: rgb(254 254 254 / 8%);
   --background-button: #fff;
   --background-inverse: #000;
 
   --foreground-strong: #fefefe;
   --foreground-regular: #bdbdbd;
-  --foreground-light: #878787;
+  --foreground-light: #919191; /* 4.62:1 on cards (WCAG AA) */
   --foreground-inverse: #0a0a0a;
   --foreground-stage01: #8892bf;
   --foreground-stage02: #ea6767;
