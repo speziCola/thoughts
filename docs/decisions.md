@@ -85,4 +85,4 @@ Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the r
 | Structured data | One JSON-LD `@graph` per page: `WebSite` + `Person` (stable `@id`s) + page node (`ProfilePage` for home/about). Articles add `BlogPosting` + `BreadcrumbList`; the blog index adds `Blog`. |
 | Feeds | `/rss.xml` and `/sitemap.xml` are hand-written endpoints (no extra dependencies), always on canonical `https://chriskuhrt.de` URLs. `/robots.txt` points to the sitemap. |
 | Posts | Shared parsing in `src/lib/posts.ts` (title, slug, cover) for index, articles, RSS, sitemap. |
-| Staging | `SITE_NOINDEX=true` (set in deploy.yml next to `SITE_BASE`) → `noindex` on every page, so the github.io copy never competes with chriskuhrt.de. Remove both once the domain points here. |
+| Staging | Since 2026-11-21 the github.io copy is indexable (Christopher's call: full Lighthouse SEO score). `SITE_NOINDEX=true` in deploy.yml still switches `noindex` back on if needed. Canonicals keep pointing to chriskuhrt.de; remove `SITE_BASE` once the domain points here. |
