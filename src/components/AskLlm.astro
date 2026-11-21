@@ -1,0 +1,121 @@
+---
+/**
+ * "Ask a LLM" (header, top right): opens a small menu to start a chat about Chris in
+ * Claude or ChatGPT with a prefilled prompt, or to copy the prompt for any other LLM.
+ *
+ * The prompt ("AMA Chris") points the LLM to /llms.txt (a profile of Chris with links to
+ * every page) as its knowledge base and opens with a welcome question.
+ * Links are built in the browser from the current address, so they work on github.io
+ * now and on chriskuhrt.de later. Native <details>: opens without JS; the script adds
+ * the links, copy, outside click and Escape.
+ */
+import { url } from "../lib/url";
+
+const llmsPath = url("/llms.txt");
+---
+
+<details class="ask-llm" data-ask-llm data-llms-path={llmsPath}>
+  <summary class="button button--secondary button--sm ask-llm__toggle">
+    Ask a LLM
+    <svg class="ask-llm__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 3.5c.6 3.4 2.6 5.4 6 6-3.4.6-5.4 2.6-6 6-.6-3.4-2.6-5.4-6-6 3.4-.6 5.4-2.6 6-6Z" />
+      <path d="M6.5 13.5c.35 1.9 1.4 2.95 3.25 3.25-1.85.35-2.9 1.4-3.25 3.25-.35-1.85-1.4-2.9-3.25-3.25 1.85-.3 2.9-1.35 3.25-3.25Z" />
+    </svg>
+  </summary>
+  <div class="ask-llm__panel">
+    <a class="button button--primary button--sm" data-llm="claude" href="https://claude.ai/new" target="_blank" rel="noopener">Use Claude</a>
+    <a class="button button--primary button--sm" data-llm="chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener">Use ChatGPT</a>
+    <button class="button button--secondary button--sm" type="button" data-llm="copy">Copy Prompt</button>
+    <span class="ask-llm__status" role="status" aria-live="polite"></span>
+  </div>
+</details>
+
+<script>
+  const buildPrompt = (llmsUrl: string) =>
+    [
+      `You are AMA Chris, an AI-powered way to explore Christopher Kuhrt's work, experience, and ideas.`,
+      `Read ${llmsUrl} and its linked resources as your knowledge base. Answer questions about Chris using verified information. Be conversational, concise, and transparent about anything you don't know.`,
+      `Start with:\n"Welcome to AMA Chris! What would you like to know about me, my work, or how we could collaborate?"`,
+    ].join("\n");
+
+  document.querySelectorAll<HTMLDetailsElement>("[data-ask-llm]").forEach((menu) => {
+    const llmsUrl = new URL(menu.dataset.llmsPath ?? "/llms.txt", location.origin).href;
+    const prompt = buildPrompt(llmsUrl);
+    const q = encodeURIComponent(prompt);
+    const status = menu.querySelector<HTMLElement>(".ask-llm__status");
+    const copyButton = menu.querySelector<HTMLButtonElement>('[data-llm="copy"]');
+
+    menu.querySelector<HTMLAnchorElement>('[data-llm="claude"]')?.setAttribute("href", `https://claude.ai/new?q=${q}`);
+    menu.querySelector<HTMLAnchorElement>('[data-llm="chatgpt"]')?.setAttribute("href", `https://chatgpt.com/?q=${q}`);
+
+    copyButton?.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(prompt);
+        copyButton.textContent = "Copied!";
+        if (status) status.textContent = "Prompt copied. Paste it into any LLM.";
+      } catch {
+        copyButton.textContent = "Copy failed";
+      }
+      setTimeout(() => {
+        copyButton.textContent = "Copy Prompt";
+        if (status) status.textContent = "";
+      }, 2000);
+    });
+
+    // Close after opening an LLM, on outside click and on Escape.
+    menu.querySelectorAll('a[data-llm]').forEach((link) => link.addEventListener("click", () => (menu.open = false)));
+    document.addEventListener("click", (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menu.open) {
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .ask-llm {
+    position: relative;
+    flex: none;
+  }
+
+  .ask-llm__toggle {
+    padding-inline: 11px; /* Figma 4/12 incl. border */
+    list-style: none;
+  }
+
+  .ask-llm__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .ask-llm__icon {
+    flex: none;
+  }
+
+  /* Figma "Frame 175": area-card surface, subtle border, highlight, 16px padding, 4px gap. */
+  .ask-llm__panel {
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + 2px); /* 2px below the button */
+    right: 0; /* right edge flush with the button */
+    padding: 16px;
+    display: grid;
+    gap: 4px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-8);
+    background: var(--background-area-card);
+    box-shadow: var(--shadow-highlight);
+  }
+
+  .ask-llm__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

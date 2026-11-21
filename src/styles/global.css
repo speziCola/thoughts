@@ -81,6 +81,10 @@
   --background-muted: #e6e0dc; /* area card icon tiles, image placeholders */
   --background-code: rgb(10 10 10 / 6%);
   --background-button: #000; /* primary button */
+  /* Button hovers, derived from the button colour so they follow light/dark automatically:
+     primary fill shifts slightly towards the page, secondary gets a faint tint. */
+  --background-button-hover: color-mix(in srgb, var(--background-button) 85%, var(--background-page));
+  --background-button-secondary-hover: color-mix(in srgb, var(--background-button) 8%, transparent);
   --background-inverse: #000; /* label badges, section tiles, footer, menu pill */
 
   /* Text */
@@ -89,6 +93,8 @@
   --foreground-light: #656565;
   --foreground-inverse: #fdfdfd;
   --foreground-link-hover: #00be73;
+  --foreground-button-onregular: #fefefe; /* text on primary buttons (Figma foreground/button-Onregular) */
+  --foreground-button-regular: #0a0a0a; /* text on secondary buttons */
   --foreground-stage01: #303859;
   --foreground-stage02: #d92b2b; /* darkened from #e23131 for 4.5:1 on cards */
   --foreground-stage03: #186daa;
@@ -96,6 +102,7 @@
 
   /* Lines, focus, effects */
   --border-subtle: #e6e0dc; /* dividers, fine frames */
+  --border-button: #000; /* secondary button outline */
   --border-title: var(--foreground-strong); /* bar under section titles */
   --border-highlight: #fff;
   --border-highlight-soft: rgb(255 255 255 / 30%);
@@ -199,6 +206,9 @@
   --border-title: #404040;
   --border-highlight: #4c4c4c;
   --border-table: rgb(254 254 254 / 20%);
+  --border-button: #fff;
+  --foreground-button-onregular: #0a0a0a;
+  --foreground-button-regular: #fefefe;
 
   /* Glass bar on the hero art: black glass, only the card-like top highlight. */
   --on-dark-glass: rgb(0 0 0 / 30%);
@@ -375,6 +385,13 @@ a:focus-visible {
   justify-content: space-between;
 }
 
+/* Nav links + "Ask a LLM" (Figma: 48px apart). */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
 .site-brand {
   display: inline-flex;
   align-items: center;
@@ -393,6 +410,69 @@ a:focus-visible {
 
 .site-brand__wordmark {
   display: block;
+}
+
+/* ---------- Buttons (Figma: primary / secondary, default + small) ---------- */
+.button {
+  min-height: 40px;
+  padding: 7px 23px; /* 8/24 incl. the 1px border */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-8);
+  font-family: var(--page-font-title);
+  font-size: var(--page-body-size);
+  font-weight: var(--page-weight-semibold);
+  line-height: 24px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.button--sm {
+  min-height: 32px;
+  padding: 3px 15px; /* 4/16 incl. border */
+  font-size: var(--page-small-size);
+}
+
+.button--primary {
+  border-color: var(--background-button);
+  color: var(--foreground-button-onregular);
+  background: var(--background-button);
+}
+
+.button--secondary {
+  border-color: var(--border-button);
+  color: var(--foreground-button-regular);
+  background: transparent;
+}
+
+/* Hover: primary stays filled, the fill shifts slightly; secondary keeps its outline and
+   gets a faint tint. Provisional – design pending. */
+.button--primary:hover {
+  border-color: var(--background-button-hover);
+  background: var(--background-button-hover);
+}
+
+.button--secondary:hover {
+  background: var(--background-button-secondary-hover);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
 }
 
 .site-nav {

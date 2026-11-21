@@ -1,6 +1,7 @@
 ---
 import FloatingMenu from "./FloatingMenu.astro";
 import ThemeToggle from "./ThemeToggle.astro";
+import AskLlm from "./AskLlm.astro";
 import ckWordmarkRaw from "../assets/icons/ck.svg?raw";
 import { url } from "../lib/url";
 
@@ -33,15 +34,18 @@ const navItems = [
         <span class="site-brand__mark" aria-hidden="true"></span>
         <Fragment set:html={ckWordmark} />
       </a>
-      <nav class="site-nav" aria-label="Main navigation">
-        {
-          navItems.map((item) => (
-            <a href={item.href} aria-current={item.current ? "page" : undefined}>
-              {item.label}
-            </a>
-          ))
-        }
-      </nav>
+      <div class="site-header__actions">
+        <nav class="site-nav" aria-label="Main navigation">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={item.current ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+        <AskLlm />
+      </div>
     </div>
   </div>
 </header>

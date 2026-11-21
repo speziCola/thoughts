@@ -173,7 +173,7 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
 
       <section class="about-page__contact" aria-label="Contact">
         <a
-          class="page-action-button about-page__button"
+          class="button button--primary about-page__button"
           href="mailto:chris+hello@qrt.de"
         >
           Get in touch
@@ -305,30 +305,6 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
     margin-top: clamp(32px, 4vw, 56px);
   }
 
-  .about-page__button {
-    min-height: 48px;
-    padding: 9px 24px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--background-button);
-    border-radius: var(--radius-4);
-    color: var(--foreground-inverse);
-    background: var(--background-button);
-    text-decoration: none;
-    transition:
-      color 160ms ease,
-      background-color 160ms ease;
-  }
-
-  .about-page__button:hover {
-    color: var(--foreground-strong);
-    background: transparent;
-  }
-
-  .about-page__button:focus-visible {
-    outline-offset: 4px;
-  }
 
   @container page (max-width: 667px) {
     .about-page__intro {
@@ -360,11 +336,6 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .about-page__button {
-      transition: none;
-    }
-  }
 
   /* Timeline teaser: the whole grey box is the link. */
   .about-page__timeline-link {

@@ -1,6 +1,6 @@
 ---
 /**
- * Imprint / Impressum: English first, German below, on one page.
+ * Imprint (English).
  * Uses the blog article styles (.blog-article) so it reads like an article.
  */
 import BlogLayout from "../layouts/BlogLayout.astro";
@@ -11,8 +11,7 @@ const canonical = canonicalUrl("/imprint/");
 
 <BlogLayout
   title="Imprint"
-  fullTitle="Imprint / Impressum – Chris Kuhrt"
-  description="Imprint and legal information for chriskuhrt.de: contact, copyright, liability, external links and image credits. In English and German."
+  description="Imprint and legal information for chriskuhrt.de: contact, copyright, liability, external links and image credits."
   canonical={canonical}
   layout="split"
   breadcrumbs={[
@@ -21,13 +20,9 @@ const canonical = canonicalUrl("/imprint/");
   ]}
 >
   <article class="blog-article">
-    <h1>Imprint / Impressum</h1>
-    <p>
-      <a href="#english">English</a> · <a href="#deutsch" hreflang="de">Deutsch</a>
-    </p>
+    <h1>Imprint</h1>
 
-    <section id="english" lang="en" aria-labelledby="imprint-en">
-      <h2 id="imprint-en">Imprint</h2>
+    <section aria-label="Imprint">
       <p>
         Christopher Kuhrt<br />
         Email: christopher(at)qrt.de
@@ -92,75 +87,5 @@ const canonical = canonicalUrl("/imprint/");
       </p>
     </section>
 
-    <hr />
-
-    <section id="deutsch" lang="de" aria-labelledby="imprint-de">
-      <h2 id="imprint-de">Impressum</h2>
-      <p>
-        Christopher Kuhrt<br />
-        E-Mail: christopher(at)qrt.de
-      </p>
-
-      <h2>Urheberrecht</h2>
-      <p>
-        Die auf dieser Website veröffentlichten Inhalte und Werke, insbesondere Texte, Fotografien,
-        Grafiken, Illustrationen und Designs, unterliegen dem deutschen Urheberrecht, soweit sie
-        urheberrechtlich geschützt sind.
-      </p>
-      <p>
-        Jede Verwertung außerhalb der gesetzlichen Schranken des Urheberrechts bedarf der vorherigen
-        Zustimmung der jeweiligen Rechteinhaber. Dies gilt insbesondere für die Vervielfältigung,
-        Bearbeitung, Verbreitung und öffentliche Zugänglichmachung.
-      </p>
-      <p>
-        Soweit Inhalte Dritter verwendet werden, werden die Rechte der jeweiligen Urheber und
-        Rechteinhaber beachtet. Erforderliche Quellen- und Urheberangaben werden entsprechend
-        gekennzeichnet.
-      </p>
-      <p>
-        Solltest du auf dieser Website eine mögliche Urheberrechtsverletzung feststellen, bitte ich um
-        eine entsprechende Mitteilung. Berechtigte Hinweise werde ich prüfen und gegebenenfalls
-        betroffene Inhalte entfernen.
-      </p>
-
-      <h2>Haftung für Inhalte</h2>
-      <p>
-        Die Inhalte dieser Website wurden mit Sorgfalt erstellt und dienen der Darstellung meiner
-        beruflichen Erfahrungen, Projekte und persönlichen Einschätzungen.
-      </p>
-      <p>
-        Ich bemühe mich um die Richtigkeit und Aktualität der bereitgestellten Informationen. Eine
-        Gewähr für deren jederzeitige Vollständigkeit, Richtigkeit und Aktualität kann jedoch nicht
-        übernommen werden.
-      </p>
-      <p>Die gesetzlichen Haftungsregelungen bleiben unberührt.</p>
-
-      <h2>Externe Links</h2>
-      <p>
-        Diese Website enthält gegebenenfalls Verlinkungen zu externen Websites Dritter, auf deren
-        Inhalte und Gestaltung ich keinen Einfluss habe.
-      </p>
-      <p>Für die Inhalte der verlinkten Websites sind die jeweiligen Anbieter oder Betreiber verantwortlich.</p>
-      <p>
-        Sollte ich Kenntnis von rechtswidrigen Inhalten auf einer verlinkten Website erhalten, werde ich
-        den betreffenden Link prüfen und gegebenenfalls entfernen.
-      </p>
-
-      <h2>Datenschutz</h2>
-      <p>
-        Informationen über die Verarbeitung personenbezogener Daten beim Besuch dieser Website findest
-        du in meiner gesonderten Datenschutzerklärung.
-      </p>
-
-      <h2>Bildnachweise</h2>
-      <p>
-        Soweit nicht anders angegeben, stammen die auf dieser Website veröffentlichten Fotografien,
-        Grafiken und Designs von mir oder werden mit entsprechender Nutzungsberechtigung verwendet.
-      </p>
-      <p>
-        Urheber- und Quellenangaben zu Inhalten Dritter erfolgen, soweit erforderlich, unmittelbar beim
-        jeweiligen Inhalt oder an geeigneter Stelle auf der Website.
-      </p>
-    </section>
   </article>
 </BlogLayout>

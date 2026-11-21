@@ -114,6 +114,7 @@ const {
   function animate(menu: HTMLDetailsElement, opening: boolean, done?: () => void) {
     const panel = menu.querySelector<HTMLElement>(".floating-menu__panel")!;
     const inner = menu.querySelector<HTMLElement>(".floating-menu__inner")!;
+    const footer = menu.querySelector<HTMLElement>(".floating-menu__footer");
     running.get(menu)?.cancel();
 
     if (reducedMotion.matches) {
@@ -127,6 +128,8 @@ const {
     const moveFrom = { transform: `translate(${shift.x}px, ${shift.y}px)` };
     const moveTo = { transform: "none" };
     const content = inner.animate(opening ? [moveFrom, moveTo] : [moveTo, moveFrom], options);
+    // The footer (e.g. the theme switch) rides along with the links.
+    const extra = footer?.animate(opening ? [moveFrom, moveTo] : [moveTo, moveFrom], options);
     running.set(menu, box);
 
     box.finished
@@ -134,8 +137,12 @@ const {
         done?.();
         box.cancel();
         content.cancel();
+        extra?.cancel();
       })
-      .catch(() => content.cancel());
+      .catch(() => {
+        content.cancel();
+        extra?.cancel();
+      });
   }
 
   function open(menu: HTMLDetailsElement) {

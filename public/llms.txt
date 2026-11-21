@@ -1,0 +1,34 @@
+# Christopher Kuhrt
+
+> Christopher (Chris) Kuhrt is a design leader, product strategist, and design-systems advocate based in Freiburg im Breisgau, Germany. He is Head of Research & Design at Etops, with direct functional and disciplinary responsibility for a team of 3–5 designers. His work connects design, product, and engineering through UX strategy, product discovery, research, shared design foundations, and organizational alignment.
+
+Christopher has more than ten years of experience with financial software, e-commerce, digital marketplaces, and ticketing. His previous employers include PATRONAS / niiio finance group, Chrono24, and Reservix. He founded the Abundantia financial design-system initiative, co-founded the UX Freiburg community and the German UPA regional group in Freiburg, and writes about design systems, UX maturity, research, teamwork, and AI-assisted product development.
+
+His published career timeline reports up to 12% higher login conversion at Chrono24 and up to 7% higher ticket-insurance sales at Reservix. At Reservix, he worked on a platform supporting more than 3,000 white-label ticket shops. He currently leads cross-product UX and design-system work at Etops.
+
+The linked pages provide detailed employment dates, selected projects, professional writing, and historical results. Client collaborations during his Reservix role are distinct from his employers, freelance engagements, and personal side projects.
+
+## Professional profile
+
+- [Full AI-readable professional profile](https://chriskuhrt.de/llms-full.txt): Detailed career history, experience, projects, expertise, professional views, and FAQs.
+- [About Christopher Kuhrt](https://chriskuhrt.de/about/): Professional biography, focus areas, employers, and selected references.
+- [Career timeline](https://chriskuhrt.de/timeline/): Employment dates, roles, projects, professional development, freelance history, and reported results.
+- [What I Do](https://chriskuhrt.de/what-i-do/): Product strategy, alignment, design systems, and working approach.
+
+## Work, writing, and community
+
+- [Portfolio homepage](https://chriskuhrt.de/home/): Introduction and selected financial software, design-system, and e-commerce work.
+- [Articles and professional writing](https://chriskuhrt.de/thoughts/): Essays on UX, collaboration, Figma, research, design maturity, and AI prototyping.
+- [UX Freiburg](https://uxmf.de/): UX community activity in Freiburg and the Black Forest region.
+- [Pixelbricks](https://pixelbricks.framer.website/): Personal Figma plugin and creative side project.
+
+## Professional profiles
+
+- [LinkedIn](https://www.linkedin.com/in/christopher-kuhrt/): Professional profile and career background.
+- [GitHub](https://github.com/spezicola): Public software, design-tooling, and side-project repositories.
+- [X](https://x.com/chriskuhrt): Public social profile.
+
+## Creative profiles
+
+- [Photography portfolio](https://500px.com/p/chriskuhrt): Selected creative work.
+- [Vimeo](https://vimeo.com/chriskuhrt): Video and cinematography profile.
