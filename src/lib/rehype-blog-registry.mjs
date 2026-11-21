@@ -49,6 +49,8 @@ function toFigure(image, imageIndex, linkProperties) {
 
   delete properties.title;
   properties.loading = imageIndex === 0 ? "eager" : "lazy";
+  // The hero is the page's largest paint (LCP): fetch it first.
+  if (imageIndex === 0) properties.fetchpriority = "high";
   properties.decoding = "async";
 
   const captionChildren = [];

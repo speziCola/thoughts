@@ -40,7 +40,7 @@ const { variant = "on-dark" } = Astro.props;
 
   const setTheme = (theme: "light" | "dark") => {
     root.dataset.theme = theme;
-    if (meta) meta.content = theme === "dark" ? "#1f1f1f" : "#f4f1ef";
+    if (meta) meta.content = theme === "dark" ? "#1a1a1a" : "#f4f1ef";
     try {
       localStorage.setItem("theme", theme);
     } catch {

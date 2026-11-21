@@ -1,4 +1,5 @@
 ---
+import { url } from "../lib/url";
 const socialColumns = [
   [
     { label: "LinkedIn", href: "https://linkedin.chriskuhrt.de/" },
@@ -62,7 +63,7 @@ const projects = [
     <div class="site-footer__bottom">
       <p>© 2008 – {new Date().getFullYear()}</p>
       <nav aria-label="Legal">
-        <a href="https://chriskuhrt.de/impressum/">Imprint</a>
+        <a href={url("/imprint/")}>Imprint</a>
       </nav>
     </div>
   </div>

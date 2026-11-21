@@ -1,0 +1,166 @@
+---
+/**
+ * Imprint / Impressum: English first, German below, on one page.
+ * Uses the blog article styles (.blog-article) so it reads like an article.
+ */
+import BlogLayout from "../layouts/BlogLayout.astro";
+import { canonicalUrl } from "../lib/site";
+
+const canonical = canonicalUrl("/imprint/");
+---
+
+<BlogLayout
+  title="Imprint"
+  fullTitle="Imprint / Impressum – Chris Kuhrt"
+  description="Imprint and legal information for chriskuhrt.de: contact, copyright, liability, external links and image credits. In English and German."
+  canonical={canonical}
+  layout="split"
+  breadcrumbs={[
+    { name: "Home", url: canonicalUrl("/home/") },
+    { name: "Imprint", url: canonical },
+  ]}
+>
+  <article class="blog-article">
+    <h1>Imprint / Impressum</h1>
+    <p>
+      <a href="#english">English</a> · <a href="#deutsch" hreflang="de">Deutsch</a>
+    </p>
+
+    <section id="english" lang="en" aria-labelledby="imprint-en">
+      <h2 id="imprint-en">Imprint</h2>
+      <p>
+        Christopher Kuhrt<br />
+        Email: christopher(at)qrt.de
+      </p>
+
+      <h2>Copyright</h2>
+      <p>
+        The content and works published on this website, in particular texts, photographs, graphics,
+        illustrations and designs, are subject to German copyright law insofar as they are protected
+        by copyright.
+      </p>
+      <p>
+        Any use beyond the statutory limits of copyright law requires the prior consent of the
+        respective rights holder. This applies in particular to reproduction, adaptation, distribution
+        and making content publicly available.
+      </p>
+      <p>
+        Where third-party content is used, the rights of the respective authors and rights holders are
+        respected. Required source and author credits are marked accordingly.
+      </p>
+      <p>
+        If you notice a possible copyright infringement on this website, please let me know. I will
+        review justified notices and remove the content concerned where appropriate.
+      </p>
+
+      <h2>Liability for content</h2>
+      <p>
+        The content of this website has been created with care and presents my professional
+        experience, projects and personal views.
+      </p>
+      <p>
+        I strive to keep the information provided accurate and up to date. However, I cannot guarantee
+        that it is complete, correct and current at all times.
+      </p>
+      <p>Statutory liability provisions remain unaffected.</p>
+
+      <h2>External links</h2>
+      <p>
+        This website may contain links to external third-party websites whose content and design I
+        have no influence over.
+      </p>
+      <p>The respective providers or operators are responsible for the content of linked websites.</p>
+      <p>
+        If I become aware of unlawful content on a linked website, I will review the link and remove
+        it where appropriate.
+      </p>
+
+      <h2>Privacy</h2>
+      <p>
+        Information about how personal data is processed when you visit this website can be found in
+        my separate privacy policy.
+      </p>
+
+      <h2>Image credits</h2>
+      <p>
+        Unless stated otherwise, the photographs, graphics and designs published on this website were
+        created by me or are used with the appropriate permission.
+      </p>
+      <p>
+        Credits for third-party content are given, where required, directly with the content or in
+        another suitable place on the website.
+      </p>
+    </section>
+
+    <hr />
+
+    <section id="deutsch" lang="de" aria-labelledby="imprint-de">
+      <h2 id="imprint-de">Impressum</h2>
+      <p>
+        Christopher Kuhrt<br />
+        E-Mail: christopher(at)qrt.de
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die auf dieser Website veröffentlichten Inhalte und Werke, insbesondere Texte, Fotografien,
+        Grafiken, Illustrationen und Designs, unterliegen dem deutschen Urheberrecht, soweit sie
+        urheberrechtlich geschützt sind.
+      </p>
+      <p>
+        Jede Verwertung außerhalb der gesetzlichen Schranken des Urheberrechts bedarf der vorherigen
+        Zustimmung der jeweiligen Rechteinhaber. Dies gilt insbesondere für die Vervielfältigung,
+        Bearbeitung, Verbreitung und öffentliche Zugänglichmachung.
+      </p>
+      <p>
+        Soweit Inhalte Dritter verwendet werden, werden die Rechte der jeweiligen Urheber und
+        Rechteinhaber beachtet. Erforderliche Quellen- und Urheberangaben werden entsprechend
+        gekennzeichnet.
+      </p>
+      <p>
+        Solltest du auf dieser Website eine mögliche Urheberrechtsverletzung feststellen, bitte ich um
+        eine entsprechende Mitteilung. Berechtigte Hinweise werde ich prüfen und gegebenenfalls
+        betroffene Inhalte entfernen.
+      </p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>
+        Die Inhalte dieser Website wurden mit Sorgfalt erstellt und dienen der Darstellung meiner
+        beruflichen Erfahrungen, Projekte und persönlichen Einschätzungen.
+      </p>
+      <p>
+        Ich bemühe mich um die Richtigkeit und Aktualität der bereitgestellten Informationen. Eine
+        Gewähr für deren jederzeitige Vollständigkeit, Richtigkeit und Aktualität kann jedoch nicht
+        übernommen werden.
+      </p>
+      <p>Die gesetzlichen Haftungsregelungen bleiben unberührt.</p>
+
+      <h2>Externe Links</h2>
+      <p>
+        Diese Website enthält gegebenenfalls Verlinkungen zu externen Websites Dritter, auf deren
+        Inhalte und Gestaltung ich keinen Einfluss habe.
+      </p>
+      <p>Für die Inhalte der verlinkten Websites sind die jeweiligen Anbieter oder Betreiber verantwortlich.</p>
+      <p>
+        Sollte ich Kenntnis von rechtswidrigen Inhalten auf einer verlinkten Website erhalten, werde ich
+        den betreffenden Link prüfen und gegebenenfalls entfernen.
+      </p>
+
+      <h2>Datenschutz</h2>
+      <p>
+        Informationen über die Verarbeitung personenbezogener Daten beim Besuch dieser Website findest
+        du in meiner gesonderten Datenschutzerklärung.
+      </p>
+
+      <h2>Bildnachweise</h2>
+      <p>
+        Soweit nicht anders angegeben, stammen die auf dieser Website veröffentlichten Fotografien,
+        Grafiken und Designs von mir oder werden mit entsprechender Nutzungsberechtigung verwendet.
+      </p>
+      <p>
+        Urheber- und Quellenangaben zu Inhalten Dritter erfolgen, soweit erforderlich, unmittelbar beim
+        jeweiligen Inhalt oder an geeigneter Stelle auf der Website.
+      </p>
+    </section>
+  </article>
+</BlogLayout>

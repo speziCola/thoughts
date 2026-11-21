@@ -14,6 +14,10 @@ export default defineConfig({
   // Site lives at the domain root: /home/, /timeline/, /thoughts/, /thoughts/<slug>/.
   // Links are always written with a trailing slash; "ignore" lets /home work too.
   trailingSlash: "ignore",
+  // Inline the (small) CSS into each page: no render-blocking stylesheet request.
+  build: {
+    inlineStylesheets: "always",
+  },
   redirects: {
     "/": withBase("/home/"),
   },

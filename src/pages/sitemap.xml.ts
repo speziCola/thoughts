@@ -13,6 +13,7 @@ export const GET: APIRoute = async () => {
     { path: "/what-i-do/" },
     { path: "/about/" },
     { path: "/timeline/" },
+    { path: "/imprint/" },
     { path: "/thoughts/", lastmod: latest },
     ...posts.map((p) => ({ path: `/thoughts/${p.slug}/`, lastmod: p.updated ?? p.date })),
   ];

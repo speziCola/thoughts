@@ -94,6 +94,7 @@ const imageSizes = isSplit
             widths={imageWidths}
             sizes={imageSizes}
             loading={eager ? "eager" : "lazy"}
+            fetchpriority={eager ? "high" : undefined}
           />
         </a>
         {tags.length > 0 && (
