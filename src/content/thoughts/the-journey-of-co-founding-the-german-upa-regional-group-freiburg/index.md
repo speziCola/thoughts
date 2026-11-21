@@ -27,7 +27,7 @@ My first attempt at building a UX community was in 2018, using a Discord server.
 
 When I switched jobs, we needed a new communication channel that was independent of the company to keep in touch. A new **Discord server aka UX Freiburg was created.** Furthermore, we have also organized regular meetings in person. Especially in the summertime, when the Covid-19 restrictions were eased. During the Covid-19 pandemic, there was also a notable increase in job transitions in our group. Consequently, we would come across other UX designers and extend an invitation to join the Discord server. As the number of people increased, so did the level of activity, resulting in a feedback loop that attracted even more individuals. What therefore led to the founding of the German UPA regional group Freiburg with a total number of 19 people (28.02.2023). Side note: We used ChatGPT to create the email to request the registration of our UX community.
 
-Besides our [Discord server](<http://join.uxfreiburg.de/>) we have an official [website](<https://uxfreiburg.de/>).
+Besides our [Discord server](<http://join.uxfreiburg.de/>) we have an official [website](<https://uxfreiburg.framer.website/>).
 
 ---
 

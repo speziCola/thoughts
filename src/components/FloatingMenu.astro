@@ -76,6 +76,7 @@ const {
     style={panelWidth ? `--floating-menu-panel-width: ${panelWidth}` : undefined}
   >
     <div class="floating-menu__inner"><slot /></div>
+    {Astro.slots.has("footer") && <div class="floating-menu__footer"><slot name="footer" /></div>}
   </nav>
 </details>
 
@@ -252,8 +253,8 @@ const {
     align-items: center;
     gap: 16px;
     border-radius: 100px;
-    color: #fff;
-    background: #000;
+    color: var(--on-dark-foreground);
+    background: var(--background-inverse);
     font-family: var(--page-font-title);
     font-size: var(--page-body-size);
     font-weight: 500;
@@ -286,7 +287,7 @@ const {
     left: 4px;
     width: 24px;
     height: 2px;
-    background: #bfbfbf;
+    background: var(--on-dark-muted);
     transition:
       transform 500ms var(--floating-menu-spring),
       opacity 300ms ease,
@@ -338,7 +339,24 @@ const {
     padding: 16px 0 88px;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
-    background: #fff;
+    background: var(--background-surface);
+  }
+
+  /* Bottom-left corner of the panel, level with the Menu pill (e.g. the theme switch). */
+  .floating-menu__footer {
+    position: absolute;
+    bottom: 8px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .floating-menu--right .floating-menu__footer {
+    left: 24px;
+  }
+
+  .floating-menu--left .floating-menu__footer {
+    right: 24px;
   }
 
   .floating-menu--right .floating-menu__panel {
@@ -361,7 +379,7 @@ const {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #000;
+    color: var(--foreground-strong);
     font-family: var(--page-font-title);
     font-size: var(--page-small-size);
     font-weight: 600;
@@ -380,23 +398,24 @@ const {
     color: var(--foreground-link-hover);
   }
 
-  /* Over the black footer the pill inverts so it keeps its contrast
-     (class set by the script below). */
+  /* Over the black footer a closed pill inverts so it keeps its contrast
+     (class set by the script below). While open it stays black against the
+     white panel; it turns white again as soon as it starts closing. */
   .floating-menu__pill {
     transition: background-color 200ms ease, color 200ms ease;
   }
 
-  .floating-menu--on-dark .floating-menu__pill {
+  .floating-menu--on-dark:is(:not([open]), .is-closing) .floating-menu__pill {
     color: var(--foreground-strong);
-    background: #fff;
+    background: var(--background-surface);
   }
 
-  .floating-menu--on-dark .floating-menu__burger span {
+  .floating-menu--on-dark:is(:not([open]), .is-closing) .floating-menu__burger span {
     background: var(--foreground-strong);
   }
 
-  .floating-menu--on-dark .floating-menu__pill:focus-visible {
-    outline-color: #fff;
+  .floating-menu--on-dark:is(:not([open]), .is-closing) .floating-menu__pill:focus-visible {
+    outline-color: var(--on-dark-foreground);
   }
 
   @media (prefers-reduced-motion: reduce) {

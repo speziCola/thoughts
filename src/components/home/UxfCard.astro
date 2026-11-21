@@ -22,7 +22,7 @@ interface Props {
 
 const { headingLevel = 3 } = Astro.props;
 const Heading = `h${headingLevel}` as "h2" | "h3";
-const href = "https://uxfreiburg.de/";
+const href = "https://uxfreiburg.framer.website/";
 
 /* Icons are centred in a 32×32 box. Sizes are set by eye so the three marks
    carry the same visual weight: Meetup 24×24 as the reference, LinkedIn smaller
@@ -62,7 +62,7 @@ const channels: { name: string; members: number; icon: string; href?: string }[]
       members from companies such as Haufe, Lexware, JobRad, SICK and many
       others.
     </p>
-    <a class="home-action uxf__visit" href={href}>Visit UX Freiburg.de</a>
+    <a class="home-action uxf__visit" href={href}>Visit UX Freiburg</a>
     <ul class="channels" aria-label="Community members per channel">
       {
         channels.map(({ name, members, icon, href }) => {
@@ -128,7 +128,7 @@ const channels: { name: string; members: number; icon: string; href?: string }[]
   .channels__icon :global(svg) {
     display: block;
     flex: none;
-    color: #656565;
+    color: var(--foreground-light);
     transition: color 0.2s ease;
   }
 
@@ -139,6 +139,7 @@ const channels: { name: string; members: number; icon: string; href?: string }[]
     gap: 12px;
     border-radius: var(--radius-4);
     background: var(--background-page);
+    box-shadow: var(--shadow-highlight);
   }
 
   .channels__text {
@@ -155,7 +156,7 @@ const channels: { name: string; members: number; icon: string; href?: string }[]
   a.channels__item:focus-visible .channels__icon :global(svg),
   a.channels__item:hover .channels__name,
   a.channels__item:focus-visible .channels__name {
-    color: var(--home-link-hover);
+    color: var(--foreground-link-hover);
   }
 
   .channels__name {

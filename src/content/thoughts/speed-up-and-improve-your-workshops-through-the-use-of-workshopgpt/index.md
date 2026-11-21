@@ -39,4 +39,16 @@ Get ChatGPT integrated into FigJam via a plugin, so you can work with the conten
 
 **Next possible steps**<br>The plugin layout takes into account future functions that can be added. What features will follow remains to be seen. Due to the current shortcomings, I will wait for further improvements from the ChatGPT API.
 
+---
+
 **\*Update 31.12.2024**<br>As mentioned at the beginning, a lot has happened and Figma has now also added AI features to FigJam. Nevertheless, it remains interesting to use your own plugin with your own prompts in FigJam and especially how to handle sensitive data. I will follow up once I find time again.
+
+---
+
+**\*Update 20.11.2026**
+
+![Figma introduces its built-in AI agent for FigJam, allowing users to analyze boards, generate diagrams, and work with existing workshop content.](./assets/image-03.png "FigJam AI Agent: Figma's native AI integration brings board analysis and content generation directly into collaborative workshops.")
+
+It's great that we now have an AI agent directly in FigJam. But bad input still leads to bad output. You still need to understand what you're trying to achieve, which questions to ask, and how the AI should work with your content. Especially in workshops, where framing the right problem matters more than just generating something.
+
+That said, AI is now much better integrated into FigJam, and the models have become significantly faster and more capable. So I might finally revisit my WorkshopGPT plugin and finish what I started a few years ago. The original idea was to help teams turn workshop insights into meaningful HMW questions, and I still think there's value in having more control over the prompts and the process.

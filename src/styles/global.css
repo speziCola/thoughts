@@ -65,25 +65,58 @@
 :root {
   color-scheme: light;
   /* Viewport ranges: mobile 0-900px; laptop 901-1400px; desktop 1401px+. */
-  --background-textblock: #e8e5e3;
+  /* ---------- Colour tokens ----------
+     Every colour on the site is defined here and nowhere else.
+     Names match the Figma "Color" collection 1:1 (background/page → --background-page).
+     A dark mode only needs to override this block. */
+
+  /* Surfaces */
   --background-page: #f4f1ef;
-  --background-card: #fafafa;
-  --background-inverse: #000;
   --page-background: var(--background-page);
-  --foreground-bold: #191929;
+  --background-card: #fafafa;
+  --background-area-card: #f9f9f9;
+  --background-surface: #fff; /* menu panel, light menu pill */
+  --background-header: rgb(250 250 250 / 75%); /* blurred sticky header */
+  --background-textblock: #e8e5e3; /* blockquotes */
+  --background-muted: #e6e0dc; /* area card icon tiles, image placeholders */
+  --background-code: rgb(10 10 10 / 6%);
+  --background-button: #000; /* primary button */
+  --background-inverse: #000; /* label badges, section tiles, footer, menu pill */
+
+  /* Text */
   --foreground-strong: #0a0a0a;
   --foreground-regular: #414141;
   --foreground-light: #656565;
   --foreground-inverse: #fdfdfd;
-  /* Card body copy; hardcoded #303859 in Figma, same value as foreground/stage01. */
-  --foreground-ink: #303859;
-  --foreground-stage01: var(--foreground-ink);
+  --foreground-link-hover: #00be73;
+  --foreground-stage01: #303859;
   --foreground-stage02: #e23131;
   --foreground-stage03: #186daa;
   --foreground-stage04: #478a14;
-  --foreground-link-hover: #00be73;
-  --border-subtle: #d9d9d9;
-  --shadow-card: inset 0 1px 0 #fff;
+
+  /* Lines, focus, effects */
+  --border-subtle: #e6e0dc; /* dividers, fine frames */
+  --border-title: var(--foreground-strong); /* bar under section titles */
+  --border-highlight: #fff;
+  --border-highlight-soft: rgb(255 255 255 / 30%);
+  --border-table: rgb(10 10 10 / 20%);
+  --focus-ring: var(--foreground-regular);
+  --shadow-highlight: inset 0 1px 0 var(--border-highlight);
+  --shadow-badge: inset 0 1px 0 var(--border-highlight-soft);
+
+  /* Footer (always black). */
+  --footer-title: #fdfdfd;
+  --footer-link: #bfbfbf;
+  --footer-meta: #bfbfbf;
+
+  /* On dark: black menu pill, art panel over the hero image, footer link hover. */
+  --on-dark-foreground: #fff;
+  --on-dark-muted: #bfbfbf;
+  --on-dark-link: #00ffa3;
+  --on-dark-glass: rgb(255 255 255 / 20%); /* glass bar on the hero art (dark glass in dark mode) */
+  --on-dark-glass-border: rgb(255 255 255 / 20%); /* sides + bottom; the top gets the full white highlight */
+  --on-dark-scrim: rgb(0 0 0 / 40%);
+
   --radius-4: 4px;
   --radius-8: 8px;
   --blog-font-title: "Fira Sans", sans-serif;
@@ -133,6 +166,69 @@
   font-family: var(--blog-font-body);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+}
+
+/* ---------- Dark mode ----------
+   Values from the Figma "Color" collection, Dark mode. Set on <html data-theme="dark">
+   by the inline script in BlogLayout (system preference, or the visitor's saved choice).
+   Tokens not listed here (link-hover, footer, on-dark, highlight-soft) are the same in both modes. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background-page: #1f1f1f;
+  --background-card: #292929;
+  --background-area-card: #292929;
+  --background-surface: #333333;
+  --background-header: rgb(41 41 41 / 75%);
+  --background-textblock: #1a1a1a;
+  --background-muted: #1a1a1a;
+  --background-code: rgb(254 254 254 / 8%);
+  --background-button: #fff;
+  --background-inverse: #000;
+
+  --foreground-strong: #fefefe;
+  --foreground-regular: #bdbdbd;
+  --foreground-light: #878787;
+  --foreground-inverse: #0a0a0a;
+  --foreground-stage01: #8892bf;
+  --foreground-stage02: #ea6767;
+  --foreground-stage03: #2d96e1;
+  --foreground-stage04: #55a518;
+
+  --border-subtle: #404040;
+  --border-title: #404040;
+  --border-highlight: #4c4c4c;
+  --border-table: rgb(254 254 254 / 20%);
+
+  /* Glass bar on the hero art: black glass, only the card-like top highlight. */
+  --on-dark-glass: rgb(0 0 0 / 30%);
+  --on-dark-glass-border: transparent;
+}
+
+/* Theme switch: a curtain wipes the new theme in — left to right into dark,
+   right to left back into light (direction set by the toggle script). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root[data-theme-direction="ltr"]::view-transition-new(root) {
+  animation: theme-curtain-ltr 700ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+:root[data-theme-direction="rtl"]::view-transition-new(root) {
+  animation: theme-curtain-rtl 700ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes theme-curtain-ltr {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes theme-curtain-rtl {
+  from { clip-path: inset(0 0 0 100%); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
 /* Title styles: Fira Sans semibold. */
@@ -220,7 +316,7 @@ a {
 }
 
 a:focus-visible {
-  outline: 2px solid #303859;
+  outline: 2px solid var(--focus-ring);
   outline-offset: 4px;
 }
 
@@ -267,8 +363,8 @@ a:focus-visible {
   display: flex;
   align-items: center;
   border-radius: 8px;
-  background: rgb(250 250 250 / 75%);
-  box-shadow: inset 0 1px 0 #fff;
+  background: var(--background-header);
+  box-shadow: var(--shadow-highlight);
 }
 
 .site-header__inner {
@@ -283,7 +379,7 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #191929;
+  color: var(--foreground-strong);
   text-decoration: none;
 }
 
@@ -309,7 +405,7 @@ a:focus-visible {
   font-size: var(--page-body-size);
   font-weight: 700;
   line-height: 24px;
-  color: #191929;
+  color: var(--foreground-strong);
 }
 
 .site-nav a {
@@ -443,7 +539,7 @@ a:focus-visible {
   margin: 48px 0;
   border: 0;
   border-radius: 999px;
-  background: #d9d9d9;
+  background: var(--border-subtle);
 }
 
 .blog-figure {
@@ -500,11 +596,11 @@ a:focus-visible {
   flex: none;
   padding: 4px 8px;
   border-radius: var(--radius-4);
-  color: var(--foreground-inverse);
-  background: #000;
+  color: var(--on-dark-foreground);
+  background: var(--background-inverse);
   font-style: normal;
   white-space: nowrap;
-  box-shadow: 0 1px 0 0 hsl(0deg 97.9167% 100% / 0.3) inset;
+  box-shadow: var(--shadow-badge);
 }
 
 .blog-image-row {
@@ -558,7 +654,7 @@ a:focus-visible {
 .blog-article :not(pre) > code {
   padding: 2px 4px;
   border-radius: var(--radius-4);
-  background: rgb(10 10 10 / 6%);
+  background: var(--background-code);
   font-size: 0.9em;
 }
 
@@ -567,7 +663,7 @@ a:focus-visible {
   overflow-x: auto;
   padding: 16px;
   border-radius: var(--radius-4);
-  background: rgb(10 10 10 / 6%);
+  background: var(--background-code);
 }
 
 .blog-article pre code {
@@ -587,7 +683,7 @@ a:focus-visible {
 .blog-article th,
 .blog-article td {
   padding: 8px 12px;
-  border: 1px solid rgb(10 10 10 / 20%);
+  border: 1px solid var(--border-table);
   text-align: left;
 }
 

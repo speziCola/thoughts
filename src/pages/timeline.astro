@@ -204,6 +204,26 @@ const canonical = "https://chriskuhrt.de/timeline/";
     });
   };
 
+  // The first section ("Work Experience") starts right under the page intro,
+  // so its links scroll to the very top instead: title and intro stay visible.
+  const firstId = sections[0]?.id;
+  links.forEach((link) => {
+    if (!firstId || link.hash !== `#${firstId}`) return;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({ top: 0 }); // smooth via html { scroll-behavior }, off for reduced motion
+      history.replaceState(null, "", `#${firstId}`);
+      setActive(firstId);
+    });
+  });
+  // Same when the page is opened with that anchor (e.g. a shared link).
+  // Runs after load, once the browser has done its own jump to the anchor.
+  if (firstId && location.hash === `#${firstId}`) {
+    const toTop = () => requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    if (document.readyState === "complete") toTop();
+    else window.addEventListener("load", toTop, { once: true });
+  }
+
   if ("IntersectionObserver" in window && sections.length) {
     const visible = new Map<string, boolean>();
     const observer = new IntersectionObserver(
@@ -233,7 +253,7 @@ const canonical = "https://chriskuhrt.de/timeline/";
 
   .timeline__intro {
     max-width: 640px;
-    color: var(--foreground-ink);
+    color: var(--foreground-regular);
   }
 
   .timeline__layout {
@@ -312,13 +332,14 @@ const canonical = "https://chriskuhrt.de/timeline/";
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--foreground-ink);
+    color: var(--foreground-regular);
   }
 
   .timeline-section__icon {
     width: 0.9em;
     height: 0.9em;
     flex: none;
+    color: var(--foreground-regular); /* same as the section title */
     display: block;
   }
 
@@ -359,7 +380,7 @@ const canonical = "https://chriskuhrt.de/timeline/";
   }
 
   .timeline-entry__date {
-    color: var(--foreground-ink);
+    color: var(--foreground-light);
     font-family: var(--page-font-title);
     font-size: var(--page-small-size);
     font-weight: var(--page-weight-semibold);

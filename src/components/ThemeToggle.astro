@@ -1,0 +1,166 @@
+---
+/**
+ * Light/dark switch: moon in light mode (go dark), sun in dark mode (go light).
+ * Used on the art panel's glass bar (desktop) and in the floating menu panel (mobile).
+ *
+ * The theme itself is set before first paint by the inline script in BlogLayout
+ * (saved choice, otherwise the system setting). This component only switches it,
+ * remembers the choice and plays a curtain transition: left → right into dark,
+ * right → left into light (keyframes in global.css).
+ */
+interface Props {
+  /** "on-dark" = white icon on the glass bar; "panel" = bordered button in the menu panel. */
+  variant?: "on-dark" | "panel";
+}
+
+const { variant = "on-dark" } = Astro.props;
+---
+
+<button class:list={["theme-toggle", `theme-toggle--${variant}`]} type="button" aria-label="Switch to dark mode" data-theme-toggle>
+  <svg class="theme-toggle__moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+  <svg class="theme-toggle__sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
+
+  const current = () => (root.dataset.theme === "dark" ? "dark" : "light");
+
+  const updateLabels = () => {
+    const label = current() === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    buttons.forEach((button) => button.setAttribute("aria-label", label));
+  };
+
+  const setTheme = (theme: "light" | "dark") => {
+    root.dataset.theme = theme;
+    if (meta) meta.content = theme === "dark" ? "#1f1f1f" : "#f4f1ef";
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      /* private mode: the switch still works for this page view */
+    }
+  };
+
+  // Theme-specific images (hero art, logos: [data-theme-image]) load lazily, so only the
+  // visible variant loads first. Once the page is idle, fetch the hidden variants too,
+  // so switching never shows an empty panel.
+  const themeImages = () => [...document.querySelectorAll<HTMLImageElement>("img[data-theme-image]")];
+  const preload = () => themeImages().forEach((img) => (img.loading = "eager"));
+  const whenIdle = (fn: () => void) =>
+    "requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 3000 }) : setTimeout(fn, 1500);
+  if (document.readyState === "complete") whenIdle(preload);
+  else window.addEventListener("load", () => whenIdle(preload), { once: true });
+
+  // Before switching, make sure the images are decoded (max 300ms) so the curtain
+  // reveals the new artwork instead of a blank panel.
+  const ready = () => {
+    preload();
+    const decoded = Promise.all(themeImages().map((img) => img.decode().catch(() => {})));
+    return Promise.race([decoded, new Promise((resolve) => setTimeout(resolve, 300))]);
+  };
+
+  let busy = false; // ignore clicks while a switch is still running
+
+  buttons.forEach((button) => {
+    // A double click would otherwise select nearby text or the artwork.
+    button.addEventListener("mousedown", (event) => {
+      if (event.detail > 1) event.preventDefault();
+    });
+    button.addEventListener("click", async () => {
+      if (busy) return;
+      busy = true;
+      const next = current() === "dark" ? "light" : "dark";
+      await ready();
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!document.startViewTransition || reduceMotion) {
+        setTheme(next);
+        busy = false;
+        return;
+      }
+      root.dataset.themeDirection = next === "dark" ? "ltr" : "rtl";
+      const transition = document.startViewTransition(() => setTheme(next));
+      transition.finished.finally(() => {
+        delete root.dataset.themeDirection;
+        busy = false;
+      });
+    });
+  });
+
+  // Keep the label right when the theme changes another way (system setting).
+  new MutationObserver(updateLabels).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  updateLabels();
+</script>
+
+<style>
+  .theme-toggle {
+    flex: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-8);
+    background: transparent;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  /* Glass bar on the hero art. */
+  .theme-toggle--on-dark {
+    color: var(--on-dark-foreground);
+  }
+
+  /* Dark mode: quieter icon on the dark glass bar (hover still turns it green). */
+  :global(:root[data-theme="dark"]) .theme-toggle--on-dark:not(:hover) {
+    color: var(--foreground-light);
+  }
+
+  .theme-toggle--on-dark:hover {
+    color: var(--on-dark-link);
+    background: var(--on-dark-glass);
+  }
+
+  .theme-toggle--on-dark:focus-visible {
+    outline: 2px solid var(--on-dark-foreground);
+    outline-offset: 2px;
+  }
+
+  /* Menu panel: bordered like the panel itself. */
+  .theme-toggle--panel {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border-subtle);
+    color: var(--foreground-strong);
+    background: var(--background-card);
+  }
+
+  .theme-toggle--panel:hover {
+    color: var(--foreground-link-hover);
+  }
+
+  .theme-toggle--panel:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Moon in light mode, sun in dark mode. */
+  .theme-toggle__sun,
+  :global(:root[data-theme="dark"]) .theme-toggle__moon {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .theme-toggle__sun {
+    display: block;
+  }
+</style>

@@ -36,12 +36,14 @@ The most important product a company ever builds is itself. A brand isn’t deco
 - How you behave (culture)
 - What you deliver (execution)
 
-<br>If those elements aren’t aligned, if your values say one thing, your strategy pursues another, and your teams act on something else entirely, no amount of design or communication can hold it together. Every new project becomes a disconnected campaign instead of part of a continuous story.A real brand functions like an operating system. It defines how ideas move through the organization, how decisions are made, and how feedback from customers loops back into culture and strategy. When it works, it creates alignment, focus, and momentum. Everything starts reinforcing everything else.<br><br>**In short:**
+If those elements aren’t aligned, if your values say one thing, your strategy pursues another, and your teams act on something else entirely, no amount of design or communication can hold it together. Every new project becomes a disconnected campaign instead of part of a continuous story.A real brand functions like an operating system. It defines how ideas move through the organization, how decisions are made, and how feedback from customers loops back into culture and strategy. When it works, it creates alignment, focus, and momentum. Everything starts reinforcing everything else.<br><br>**In short:**
 
 - Brand ≠ logo, tone, or campaign
 - Brand = system of alignment between strategy, culture, and execution
 
-<br>That’s why branding isn’t something that happens at the end of the process. It’s the framework that shapes every process from the inside out.<br><br>
+That’s why branding isn’t something that happens at the end of the process. It’s the framework that shapes every process from the inside out.
+
+---
 
 ### Case study: Chrono24 - A brand built through clarity
 
@@ -53,7 +55,9 @@ When Chrono24 set out to become the world’s leading marketplace for luxury wat
 
 It took several failed attempts, multiple agency collaborations, and years of iteration to get there. Their eventual success didn’t come from a better color scheme. It came from realizing that branding was their most critical internal system, not their marketing output.<br>As founders Tim and Philipp Stracke put it, “We had to steer the brand, not just let it run. It took us years, and several wrong turns, to truly make it ours.”<br><br>
 
-FYI: I worked at Chrono24 later in their journey, once the system was already in motion, and I saw firsthand how that clarity made UX work almost effortless.<br><br>
+FYI: I worked at Chrono24 later in their journey, once the system was already in motion, I saw firsthand how much that clarity helped streamline UX work and made it easier to focus on what really mattered.<br><br>
+
+---
 
 ### Culture is the result, not the ritual
 
@@ -86,7 +90,7 @@ Questions every leader should ask before rebranding
 3. Are we designing visuals, or designing a company that can consistently deliver value?
 4. If our company is a product, what version are we currently shipping, and what needs to be rebuilt?
 
-<br>Because in the end, branding isn’t about looking different. It’s about operating differently, about building an organization capable of creating products that consistently express who it really is.<br><br>
+Because in the end, branding isn’t about looking different. It’s about operating differently, about building an organization capable of creating products that consistently express who it really is.<br><br>
 
 > “Any organization that designs a system will produce a design whose structure mirrors the organization’s communication patterns.”<cite>— Conway’s Law</cite>
 
