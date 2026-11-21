@@ -5,6 +5,11 @@
  */
 import { Image } from "astro:assets";
 import heroArt from "../assets/images/hero-art.png";
+import heroArtDark from "../assets/images/hero-art--dark.png";
+// ~10% versions (157×283, 1–2 KB), inlined as data URLs: shown blurred until the real art has loaded.
+import heroBlur from "../assets/images/hero-art--blur.webp?inline";
+import heroBlurDark from "../assets/images/hero-art--dark--blur.webp?inline";
+import ThemeToggle from "./ThemeToggle.astro";
 
 /*
  * The panel crops the art to fill its height (object-fit: cover), so the image
@@ -23,14 +28,61 @@ const sizes = [
 ---
 
 <div class="art-panel">
+  <div class="art-panel__placeholder art-panel__placeholder--light" style={`background-image: url(${heroBlur})`} aria-hidden="true"></div>
+  <div class="art-panel__placeholder art-panel__placeholder--dark" style={`background-image: url(${heroBlurDark})`} aria-hidden="true"></div>
+  {/* Higher quality than the site default (~80): the fine line art shows WebP artifacts,
+      most of all in the dark version. */}
+  {/* Both start lazy, so only the visible one loads first; ThemeToggle preloads the other once the page has loaded. */}
   <Image
-    class="art-panel__image"
+    class="art-panel__image art-panel__image--light"
+    data-theme-image
     src={heroArt}
     alt=""
     widths={[480, 720, 1080, 1440, heroArt.width]}
     sizes={sizes}
-    loading="eager"
+    quality={90}
+    loading="lazy"
   />
+  <Image
+    class="art-panel__image art-panel__image--dark"
+    data-theme-image
+    src={heroArtDark}
+    alt=""
+    widths={[480, 720, 1080, 1440, heroArtDark.width]}
+    sizes={sizes}
+    quality={95}
+    loading="lazy"
+  />
+  <script is:inline>
+    // Runs while parsing, before first paint.
+    // - Load the art for the current theme now (not lazily) and decode it synchronously,
+    //   so a cached image is there with the first frame.
+    // - The blurred preview always sits underneath. Only if an image takes longer than
+    //   150ms (really loading, not from the cache) is it marked pending, so it fades
+    //   into focus once loaded. Cached images just show: no blur, no fade.
+    (() => {
+      const variant = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+      document.querySelectorAll(".art-panel__image").forEach((img) => {
+        if (img.classList.contains("art-panel__image--" + variant)) {
+          img.loading = "eager";
+          img.fetchPriority = "high";
+          img.decoding = "sync";
+        }
+        if (img.complete && img.naturalWidth > 0) return;
+        const timer = setTimeout(() => img.classList.add("is-pending"), 150);
+        img.addEventListener(
+          "load",
+          () => {
+            clearTimeout(timer);
+            if (!img.classList.contains("is-pending")) return;
+            requestAnimationFrame(() => requestAnimationFrame(() => img.classList.remove("is-pending")));
+          },
+          { once: true },
+        );
+      });
+    })();
+  </script>
+  <div class="art-panel__bar">
   <ul class="art-panel__links" aria-label="Social profiles">
     <li>
       <a href="https://linkedin.chriskuhrt.de/">LinkedIn</a>
@@ -42,16 +94,22 @@ const sizes = [
       <a href="https://twitter.chriskuhrt.de/">Twitter/X</a>
     </li>
   </ul>
+  <ThemeToggle />
+  </div>
 </div>
+
 
 <style>
 .art-panel {
   position: sticky;
+  /* Fast clicks on the theme switch must not select the artwork. */
+  -webkit-user-select: none;
+  user-select: none;
   top: 96px; /* header (16 + 64) + 16 */
   height: calc(100dvh - 112px);
   overflow: hidden;
   border-radius: 16px;
-  background: #1c3432;
+  background: var(--background-muted);
 }
 
 .art-panel__image {
@@ -62,49 +120,110 @@ const sizes = [
   object-position: left bottom; /* crop from the top/right, keep the bottom-left corner */
 }
 
+/* Blurred tiny preview behind the art. Scaled up a little so the blur has no soft edges. */
+.art-panel__placeholder {
+  position: absolute;
+  inset: 0;
+  background-position: left bottom;
+  background-size: cover;
+  filter: blur(24px);
+  transform: scale(1.1);
+}
+
+/* The real art fades into focus over the blurred preview, but only when it was still
+   loading (class "is-pending", set by the inline script after 150ms). Without JS or
+   from the cache it simply shows. */
+.art-panel__image {
+  position: relative;
+  transition:
+    opacity 600ms ease,
+    filter 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.art-panel__image.is-pending {
+  opacity: 0;
+  filter: blur(24px);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-panel__image {
+    transition: none;
+  }
+}
+
+/* Light art in light mode, dark art in dark mode (images and their previews). */
+.art-panel__placeholder--dark,
+:global(:root[data-theme="dark"]) .art-panel__placeholder--light {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .art-panel__placeholder--dark {
+  display: block;
+}
+
+.art-panel__image--dark,
+:global(:root[data-theme="dark"]) .art-panel__image--light {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .art-panel__image--dark {
+  display: block;
+}
+
 /* Bottom gradient (Figma "Overlay"). */
 .art-panel::after {
   content: "";
   position: absolute;
   inset: auto 0 0;
   height: 203px;
-  background: linear-gradient(to top, rgb(0 0 0 / 40%), transparent);
+  background: linear-gradient(to top, var(--on-dark-scrim), transparent);
   pointer-events: none;
 }
 
-/* Glass bar with social links (Figma "img-footer"). */
-.art-panel__links {
+/* Glass bar with social links and the theme switch (Figma "Social links"). */
+.art-panel__bar {
   position: absolute;
   z-index: 1;
   inset: auto 16px 16px;
-  margin: 0;
-  padding: 16px;
+  padding: 10px 10px 10px 16px;
   display: flex;
-  flex-wrap: wrap; /* links drop to the next line when the panel gets narrow; the box grows upward */
-  gap: 8px 32px;
-  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   border-radius: 8px;
-  background: rgb(255 255 255 / 20%);
+  background: var(--on-dark-glass);
+  /* Top highlight like the cards (white in light, #4c4c4c in dark) + glass border. */
   box-shadow:
-    inset 0 1px 0 #fff,
-    inset 0 0 0 1px rgb(255 255 255 / 50%);
+    inset 0 1px 0 var(--border-highlight),
+    inset 0 0 0 1px var(--on-dark-glass-border);
   /* Prefixed first: the build's CSS minifier keeps only the last of the pair. */
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 
+.art-panel__links {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap; /* links drop to the next line when the panel gets narrow; the box grows upward */
+  gap: 8px 32px;
+  list-style: none;
+}
+
+
 .art-panel__links a {
-  color: #fff;
+  color: var(--on-dark-foreground);
   font-family: var(--page-font-body);
   font-size: var(--page-small-size);
   line-height: 24px;
 }
 
 .art-panel__links a:hover {
-  color: #00ffa3; /* brighter green, same as the footer links on dark */
+  color: var(--on-dark-link);
 }
 
 .art-panel__links a:focus-visible {
-  outline-color: #fff;
+  outline-color: var(--on-dark-foreground);
 }
 </style>

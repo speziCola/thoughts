@@ -46,6 +46,7 @@ Image rules: alt = accessible description (never shown as caption). No colon in 
 ## Design system
 - Source of truth: Figma page **"Claude – Blog"** only (see `docs/figma-audit.md`).
 - Blog typography is blog-scoped (`--blog-*`); Figma page typography is separately represented by `--page-*`. Colours and radius are shared foundations.
+- Colour tokens (2026-11-21): every colour lives in the token block at the top of `src/styles/global.css`; no hex values in components. Names mirror the Figma "Color" collection 1:1 (`background/page` → `--background-page`, `on-dark/link` → `--on-dark-link`). Figma `Primitives` hold raw values; `Color` has Light + Dark modes. Logos and brand icons stay unbound on purpose.
 - Fluid type & spacing via `clamp()` interpolating 360px → 1920px values. No breakpoints for type.
 - Page type scale (2026-11-18), everything outside `.blog-article`: one token per desktop size, so text that matches on desktop matches on mobile too. Never hardcode a font-size; use these tokens/classes.
 

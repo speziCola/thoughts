@@ -49,22 +49,11 @@ Page font families are Fira Sans (title) and Supreme (body), with regular 400 an
 
 CSS utility classes mirror the Figma page text-style names, replacing `/` with `-` (for example, `page/body/default` becomes `.page-body-default`, and `page/action/button` becomes `.page-action-button`). Keep page typography on these classes so semantic elements can use the same style independently.
 
-Colours (shared, unprefixed):
-
-| Figma | CSS | Value |
-|---|---|---|
-| `foreground/strong` | `--foreground-strong` | `#0a0a0a` |
-| `foreground/regular` | `--foreground-regular` | `#414141` |
-| `foreground/light` | `--foreground-light` | `#656565` |
-| `foreground/inverse` | `--foreground-inverse` | `#fdfdfd` |
-| `foreground/bold` | `--foreground-bold` | `#191929` |
-| `foreground/stage01`–`04` | `--foreground-stage01`–`04` | `#303859`, `#e23131`, `#186daa`, `#478a14` |
-| card fill (What I Do) | `--background-card` | `#fafafa` |
-| effect `card` | `--shadow-card` | inset 0 1px 0 `#fff` |
+Colours (shared, unprefixed, updated 2026-11-21): the full list lives in the token block at the top of `src/styles/global.css`, and mirrors the Figma "Color" collection 1:1 (`background/page` → `--background-page`). Figma `Primitives` hold raw values; `Color` has Light + Dark modes, and each variable's description names its CSS token. Text colours were consolidated to `foreground/strong`, `regular`, `light`, `inverse`, `link-hover` and `stage01`–`04` (bold, contrast and label merged into strong; ink into regular; subtle into light).
 
 Radius: `--radius-4` = 4px, `--radius-8` = 8px (cards).
 
-What I Do (`134:3728`): card body copy is hardcoded `#303859` (`--foreground-ink`, same value as stage01). The card fill is bound to the wrong variable (`--foreground-strong`) in Figma; code uses its rendered `#fafafa`. The "Devider" instances on this page are spacers only (stroke hidden): 98px desktop, 48px mobile. The mobile stage accent bar sits at `left: -32px` with 24px padding, which clips it out of view; code pins the bar to the card edge instead.
+What I Do (`134:3728`): card body copy uses `foreground/regular` (was `#303859` ink until 2026-11-21). The card fill is bound to the wrong variable (`--foreground-strong`) in Figma; code uses its rendered `#fafafa`. The "Devider" instances on this page are spacers only (stroke hidden): 98px desktop, 48px mobile. The mobile stage accent bar sits at `left: -32px` with 24px padding, which clips it out of view; code pins the bar to the card edge instead.
 
 ## Components
 Existing (on page "Blog", used on "Claude – Blog"): `title-blog` (date + H1), `h2-title-blog`, `Paragraph`, `IMG` (image slot, figcaption, label badge), `Devider` (2px rule, 64px padding above/below). `IMG-2-Columns` is still a frame (gap 32) – to be converted to a component manually.
@@ -74,7 +63,7 @@ Footer (`102:1066`): full-width black background and section padding, with conte
 Provisional (section `55:336`, redesign freely): `h3-title-blog`, `Link` (Default/Hover/Focus), `List` (Unordered/Ordered), `Blockquote`, `code-inline`, `code-block`, `table-cell` (Header/Body), `Table`, `Header`, `Footer`. Their body text uses a Fira Sans stand-in named `@blog/…` – apply the Supreme styles in the desktop app.
 
 ## Known gaps (hardcoded in Figma, no token yet)
-- Divider grey `#d9d9d9`, date colour `#303859`, label badge background `#000`, page background `#F4F1EF`.
+- Colours: resolved 2026-11-21 (all page colours bound to the Color collection; logos and brand icons stay unbound on purpose; a few one-off fills on the Start page remain).
 - No border / surface tokens (provisional components use foreground colours at reduced opacity).
 - `h2-title-blog` text has no text style applied.
 - No spacing or breakpoint tokens.

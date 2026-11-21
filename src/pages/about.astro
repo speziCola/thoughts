@@ -97,6 +97,13 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
                 <li>GeoSpin</li>
               </ul>
             </section>
+            <a class="page-body about-page__timeline-link" href={url("/timeline/")}>
+              <span>
+                You can check out my timeline in detail{" "}
+                <span class="about-page__timeline-here">here</span>.
+              </span>
+              <span class="about-page__timeline-arrow" aria-hidden="true" set:html={arrowNarrowRight} />
+            </a>
           </section>
           <section aria-labelledby="client-experience-title">
             <h3 class="page-title-md" id="client-experience-title">
@@ -110,13 +117,6 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
               <li>hr</li>
               <li>Die Rheinpfalz</li>
             </ul>
-            <a class="page-body about-page__timeline-link" href={url("/timeline/")}>
-              <span>
-                You can check out my timeline in detail{" "}
-                <span class="about-page__timeline-here">here</span>.
-              </span>
-              <span class="about-page__timeline-arrow" aria-hidden="true" set:html={arrowNarrowRight} />
-            </a>
           </section>
         </div>
       </section>
@@ -260,6 +260,8 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
   }
 
   .about-page__experience .about-page__professional-list {
+    width: 50%; /* half the column: the boxes hug the company names */
+    min-width: min(100%, 260px);
     padding: 0;
     display: grid;
     gap: 4px;
@@ -309,10 +311,10 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--foreground-strong);
+    border: 2px solid var(--background-button);
     border-radius: var(--radius-4);
     color: var(--foreground-inverse);
-    background: var(--foreground-strong);
+    background: var(--background-button);
     text-decoration: none;
     transition:
       color 160ms ease,
@@ -366,7 +368,7 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
 
   /* Timeline teaser: the whole grey box is the link. */
   .about-page__timeline-link {
-    margin-top: 48px;
+    margin-top: 16px; /* + 24px below Startups & Advisory */
     padding: 16px 20px;
     display: inline-flex; /* only as wide as its content */
     max-width: 100%;
@@ -390,7 +392,7 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
     width: 24px;
     height: 24px;
     flex: none;
-    color: var(--foreground-ink, var(--foreground-strong));
+    color: var(--foreground-light);
     transition: color 0.2s ease, transform 0.2s ease;
   }
 

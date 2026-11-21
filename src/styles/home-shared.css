@@ -1,11 +1,5 @@
 /* Text styles shared by the start page and components reused elsewhere (e.g. UxfCard). */
 
-:root {
-  --home-text-strong: #191929;
-  --home-surface-muted: #e6e0dc; /* Figma brown-200 – no shared token yet */
-  --home-link-hover: #00be73; /* Figma foreground/link */
-}
-
 /* ---------- Shared text styles ---------- */
 
 .home-text {
@@ -33,7 +27,7 @@
 .home-card-title a:hover,
 .home-action:hover,
 .area-card:hover .area-card__label {
-  color: var(--home-link-hover);
+  color: var(--foreground-link-hover);
 }
 
 .home-action {

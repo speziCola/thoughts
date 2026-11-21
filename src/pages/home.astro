@@ -39,6 +39,13 @@ import logoDfb from "../assets/icons/ck-r-dfb.svg";
 import logoSwisscom from "../assets/icons/ck-r-swisscom.svg";
 import logoScFreiburg from "../assets/icons/ck-r-scfreiburg.svg";
 import logoReservix from "../assets/icons/ck-r-reservix.svg";
+import logoEtopsDark from "../assets/icons/ck-r-etops--dark.svg";
+import logoPatronasDark from "../assets/icons/ck-r-patronas--dark.svg";
+import logoChrono24Dark from "../assets/icons/ck-r-chrono24--dark.svg";
+import logoDfbDark from "../assets/icons/ck-r-dfb--dark.svg";
+import logoSwisscomDark from "../assets/icons/ck-r-swisscom--dark.svg";
+import logoScFreiburgDark from "../assets/icons/ck-r-scfreiburg--dark.svg";
+import logoReservixDark from "../assets/icons/ck-r-reservix--dark.svg";
 import abundantia from "../assets/images/designsystem.abundantia.png";
 import processCover from "../assets/images/article-process.png";
 import sessionsCover from "../assets/images/article-sessions.png";
@@ -54,13 +61,13 @@ const areas = [
 ];
 
 const references = [
-  { name: "etops", logo: logoEtops },
-  { name: "Patronas", logo: logoPatronas },
-  { name: "Chrono24", logo: logoChrono24 },
-  { name: "Deutscher Fußball-Bund", logo: logoDfb },
-  { name: "Swisscom", logo: logoSwisscom },
-  { name: "SC Freiburg", logo: logoScFreiburg },
-  { name: "Reservix", logo: logoReservix },
+  { name: "etops", logo: logoEtops, logoDark: logoEtopsDark },
+  { name: "Patronas", logo: logoPatronas, logoDark: logoPatronasDark },
+  { name: "Chrono24", logo: logoChrono24, logoDark: logoChrono24Dark },
+  { name: "Deutscher Fußball-Bund", logo: logoDfb, logoDark: logoDfbDark },
+  { name: "Swisscom", logo: logoSwisscom, logoDark: logoSwisscomDark },
+  { name: "SC Freiburg", logo: logoScFreiburg, logoDark: logoScFreiburgDark },
+  { name: "Reservix", logo: logoReservix, logoDark: logoReservixDark },
 ];
 
 ---
@@ -83,7 +90,7 @@ const references = [
         </h1>
         <p class="intro__subtitle enter">
           <span>I build the systems behind strong products.</span>
-          <span>Design Leadership · Product Strategy · Design Systems</span>
+          <span><span class="nowrap">Design Leadership</span> · <span class="nowrap">Product Strategy</span> · <span class="nowrap">Design Systems</span></span>
         </p>
       </div>
 
@@ -134,9 +141,10 @@ const references = [
   <section class="references" aria-label="Companies I worked with">
     <ul class="references__list">
       {
-        references.map(({ name, logo }) => (
+        references.map(({ name, logo, logoDark }) => (
           <li>
-            <Image src={logo} alt={name} />
+            <Image class="logo--light" data-theme-image src={logo} alt={name} />
+            <Image class="logo--dark" data-theme-image src={logoDark} alt={name} />
           </li>
         ))
       }
@@ -176,7 +184,7 @@ const references = [
   <section class="home-section" id="design-system" aria-labelledby="design-system-title">
     <SectionHeader id="design-system-title" title="Design Systems" icon={iconDesignSystem} />
 
-    <HomeCard layout="split" gap={64} labelledby="abundantia-title">
+    <HomeCard layout="split" gap={64} mediaFirst labelledby="abundantia-title">
       <div>
         <h3 class="home-card-title" id="abundantia-title">Abundantia</h3>
         <p class="home-text">
@@ -216,8 +224,8 @@ const references = [
               </p>
             </div>
             <ul class="company-logos">
-              <li><a href="https://www.etops.com/"><Image src={logoEtops} alt="Etops" /></a></li>
-              <li><a href="https://patronas.de/"><Image src={logoPatronas} alt="PATRONAS" /></a></li>
+              <li><a href="https://www.etops.com/"><Image class="logo--light" data-theme-image src={logoEtops} alt="Etops" /><Image class="logo--dark" data-theme-image src={logoEtopsDark} alt="Etops" /></a></li>
+              <li><a href="https://patronas.de/"><Image class="logo--light" data-theme-image src={logoPatronas} alt="PATRONAS" /><Image class="logo--dark" data-theme-image src={logoPatronasDark} alt="PATRONAS" /></a></li>
             </ul>
           </div>
           <div class="experience__details">
@@ -259,8 +267,8 @@ const references = [
               </p>
             </div>
             <ul class="company-logos">
-              <li><a href="https://about.chrono24.com/en/company"><Image src={logoChrono24} alt="Chrono24" /></a></li>
-              <li><a href="https://www.reservix.net/"><Image src={logoReservix} alt="Reservix" /></a></li>
+              <li><a href="https://about.chrono24.com/en/company"><Image class="logo--light" data-theme-image src={logoChrono24} alt="Chrono24" /><Image class="logo--dark" data-theme-image src={logoChrono24Dark} alt="Chrono24" /></a></li>
+              <li><a href="https://www.reservix.net/"><Image class="logo--light" data-theme-image src={logoReservix} alt="Reservix" /><Image class="logo--dark" data-theme-image src={logoReservixDark} alt="Reservix" /></a></li>
             </ul>
           </div>
           <div class="experience__details">

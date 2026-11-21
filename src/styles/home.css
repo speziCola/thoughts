@@ -17,7 +17,7 @@
   margin: 0 48px; /* a bit narrower than the content */
   border: 0;
   border-radius: 999px;
-  background: var(--home-surface-muted);
+  background: var(--border-subtle);
 }
 
 /* ---------- Intro ---------- */
@@ -40,7 +40,7 @@
 
 .intro__title {
   margin: 0;
-  color: var(--home-text-strong);
+  color: var(--foreground-strong);
   font-family: var(--page-font-title); /* Fira Sans */
   font-size: var(--page-title-display-size);
   font-weight: 700;
@@ -49,9 +49,14 @@
 }
 
 /* Each subtitle line balances on its own. */
-.intro__subtitle span {
+.intro__subtitle > span {
   display: block;
   text-wrap: balance;
+}
+
+/* Keep each phrase ("Product Strategy", …) on one line; breaks only at the dots. */
+.intro__subtitle .nowrap {
+  white-space: nowrap;
 }
 
 /* The name always stays on one line: it moves down whole or not at all. */
@@ -103,7 +108,7 @@
 
 .areas__label {
   margin: 0;
-  color: #202430;
+  color: var(--foreground-strong);
   font-family: var(--page-font-body);
   font-size: var(--page-body-size);
   font-weight: 600;
@@ -132,9 +137,9 @@
   align-items: flex-start;
   gap: 16px;
   border-radius: 8px;
-  color: #000;
-  background: #f9f9f9;
-  box-shadow: inset 0 1px 0 #fff;
+  color: var(--foreground-strong);
+  background: var(--background-area-card);
+  box-shadow: var(--shadow-highlight);
   text-decoration: none;
 }
 
@@ -156,26 +161,26 @@
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: var(--home-surface-muted);
+  background: var(--background-muted);
   transition: background-color 0.2s ease;
 }
 
 .area-card__icon svg {
   width: 40px;
   height: 40px;
-  color: #000;
+  color: var(--foreground-strong);
   transition: color 0.2s ease;
 }
 
 /* Hover/focus: green label, black icon tile, green icon. */
 .area-card:hover .area-card__icon,
 .area-card:focus-visible .area-card__icon {
-  background: #000;
+  background: var(--background-inverse);
 }
 
 .area-card:hover .area-card__icon svg,
 .area-card:focus-visible .area-card__icon svg {
-  color: var(--home-link-hover);
+  color: var(--foreground-link-hover);
 }
 
 /* ---------- References ---------- */
@@ -228,9 +233,9 @@
 .framed-image {
   aspect-ratio: 2 / 1;
   overflow: hidden;
-  border: 0.667px solid #d9d9d9;
+  border: 0.667px solid var(--border-subtle);
   border-radius: var(--radius-4);
-  background: #fdfdfd;
+  background: var(--background-muted);
 }
 
 .framed-image img {
@@ -303,6 +308,10 @@
 }
 
 @media (max-width: 900px) {
+  .company-logos {
+    gap: 32px;
+  }
+
   .company-logos img {
     height: 46px;
   }
@@ -331,7 +340,7 @@
   }
 
   .intro__subtitle {
-    color: #444a65;
+    color: var(--foreground-light);
     font-family: var(--page-font-body);
   }
 
@@ -360,7 +369,7 @@
 
   .references__list {
     padding: 0;
-    gap: 12px 16px;
+    gap: 16px 24px;
   }
 
   .references__list img {
@@ -421,4 +430,23 @@
   .areas__list li:nth-child(2) { --enter-delay: 1.1s; }
   .areas__list li:nth-child(3) { --enter-delay: 1.2s; }
   .areas__list li:nth-child(4) { --enter-delay: 1.3s; }
+}
+
+/* Client logos: light SVGs in light mode, the "--dark" SVGs from Figma (Assets page)
+   in dark mode. The dark files carry their final colours, so no extra dimming. */
+:is(.references__list, .company-logos) .logo--dark {
+  display: none;
+}
+
+:root[data-theme="dark"] :is(.references__list, .company-logos) .logo--light {
+  display: none;
+}
+
+:root[data-theme="dark"] :is(.references__list, .company-logos) .logo--dark {
+  display: block;
+}
+
+:root[data-theme="dark"] .references__list,
+:root[data-theme="dark"] .company-logos a {
+  opacity: 1;
 }

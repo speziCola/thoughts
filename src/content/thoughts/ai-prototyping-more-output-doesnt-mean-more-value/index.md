@@ -60,7 +60,7 @@ The next experiment went a little further. We had conducted a workshop exploring
 
 Instead of manually translating everything into requirements and wireframes, I used the board itself as context for AI.
 
-![A FigJam workshop session.](./assets/image-3.png "Workshop prototype: AI turns workshop context into an interface the team can discuss.")
+![A FigJam workshop session.](./assets/image-3.png "Workshop: AI turns workshop context into an interface the team can discuss.")
 
 Proposed illustration: A repeatable workflow that keeps collaboration and problem understanding ahead of prototype generation. Within a short time, AI produced several interactive concepts exploring different questions.
 
@@ -81,9 +81,9 @@ When everyone can create prototypes, who decides which direction to pursue? Who 
 
 These questions become even more important as AI makes production cheaper. The temptation is to skip discussions and jump straight into building. But collaboration isn't overhead. It's how we uncover conflicting assumptions, technical constraints, and opportunities we might otherwise miss.
 
-A developer might identify an existing capability that saves weeks of implementation. A designer might question whether the proposed workflow makes sense. A product manager might challenge whether we're solving the right problem in the first place.
+A developer might identify an existing capability that saves weeks of implementation. A designer might challenge whether we're solving the right problem or whether the proposed experience actually meets user needs. A product manager might question whether the solution delivers meaningful business value.
 
-AI can help explore possible answers. It doesn't replace those conversations. More output doesn't mean more alignment. And more alignment doesn't happen without communication.
+Ultimately, all three should challenge the problem, the solution, and the assumptions behind it. AI can help explore possible answers. It doesn't replace those conversations. More output doesn't mean more alignment. And more alignment doesn't happen without communication.
 
 ---
 
@@ -95,7 +95,7 @@ Being able to prototype a new feature while AI already understands the product's
 
 The next challenge isn't simply making AI better at creating interfaces. It's creating a way of working where teams can use those capabilities without losing the shared understanding that makes good products possible.
 
-Because in the end, AI can help us build a solution. But we still have to understand the problem worth solving.
+Because in the end, AI can help us build a solution. But we still have to understand the problem worth solving. At least for now.
 
 ---
 

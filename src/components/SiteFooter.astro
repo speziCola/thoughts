@@ -20,7 +20,7 @@ const socialColumns = [
  */
 
 const projects = [
-  { label: "UX Freiburg", href: "https://uxfreiburg.de/" },
+  { label: "UX Freiburg", href: "https://uxfreiburg.framer.website/" },
   { label: "Pixelbricks", href: "https://pixelbricks.de/" },
 ];
 ---
@@ -72,8 +72,8 @@ const projects = [
   .site-footer {
     padding: 128px 48px;
     border-radius: 16px;
-    color: var(--foreground-inverse);
-    background: #000;
+    color: var(--footer-title);
+    background: var(--background-inverse);
   }
 
   .site-footer__stack {
@@ -98,7 +98,7 @@ const projects = [
 
   .site-footer__section h2 {
     margin: 0;
-    color: var(--foreground-inverse);
+    color: var(--footer-title);
     font-family: var(--page-font-title);
     font-size: var(--page-title-md-size);
     font-weight: var(--page-weight-semibold);
@@ -123,7 +123,7 @@ const projects = [
   }
 
   .site-footer a {
-    color: #bfbfbf;
+    color: var(--footer-link);
     font-family: var(--page-font-body);
     font-size: var(--page-body-size);
     font-weight: var(--page-weight-regular);
@@ -133,7 +133,7 @@ const projects = [
   }
 
   .site-footer a:hover {
-    color: #00ffa3;
+    color: var(--on-dark-link);
     text-decoration: underline;
   }
 
@@ -142,7 +142,7 @@ const projects = [
     display: flex;
     align-items: center;
     gap: 16px;
-    color: #bfbfbf;
+    color: var(--footer-meta);
     font-family: var(--page-font-title);
     font-size: var(--page-body-size);
     line-height: 24px;

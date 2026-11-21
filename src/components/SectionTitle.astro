@@ -19,7 +19,7 @@ const { as: Tag = "h2", class: className, ...attrs } = Astro.props;
 <style>
   .section-title {
     margin: 0 0 16px;
-    color: var(--foreground-bold);
+    color: var(--foreground-strong);
   }
 
   .section-title::after {
@@ -28,7 +28,7 @@ const { as: Tag = "h2", class: className, ...attrs } = Astro.props;
     margin-top: 4px;
     display: block;
     border-radius: 999px;
-    background: currentColor;
+    background: var(--border-title);
     content: "";
   }
 

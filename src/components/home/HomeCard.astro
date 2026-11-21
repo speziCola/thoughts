@@ -10,7 +10,7 @@ interface Props {
   gap?: 16 | 48 | 64;
   /** Put the last child first when stacked (e.g. images above the text). */
   mediaFirst?: boolean;
-  /** Desktop padding. Mobile is always 24px (or --home-card-padding-mobile). */
+  /** Desktop padding. Laptop (901–1400px) is 48px; mobile 24px (or --home-card-padding-mobile). */
   padding?: 48 | 64;
   labelledby?: string;
   tag?: "article" | "div";
@@ -45,8 +45,8 @@ const {
     container-type: inline-size;
     padding: var(--home-card-padding, 48px);
     border-radius: 8px;
-    background: #fafafa;
-    box-shadow: inset 0 1px 0 #fff;
+    background: var(--background-card);
+    box-shadow: var(--shadow-highlight);
   }
 
   .home-card__body {
@@ -70,6 +70,13 @@ const {
 
     .home-card--media-first .home-card__body > :global(:last-child) {
       order: -1;
+    }
+  }
+
+  /* Laptop: same 48px step as the large Card (Card.astro). */
+  @media (min-width: 901px) and (max-width: 1400px) {
+    .home-card {
+      padding: 48px;
     }
   }
 
