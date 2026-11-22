@@ -190,7 +190,9 @@ const {
   };
   window.addEventListener("scroll", scheduleContrast, { passive: true });
   window.addEventListener("resize", scheduleContrast);
-  updateContrast();
+  // First check in the next frame, not during page load: reading layout
+  // synchronously here forced a reflow (Lighthouse "Forced reflow").
+  scheduleContrast();
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") menus.forEach((menu) => close(menu, true));
