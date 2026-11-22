@@ -1,32 +1,14 @@
 ---
 /**
- * Old address "/home/" → "/" (the start page now lives at the root).
- * Keeps old links and bookmarks working. GitHub Pages has no server-side redirects,
- * so this page forwards before first paint: an inline script replaces the location
- * (no history entry), the meta refresh is the no-JS fallback. Nothing is rendered;
- * the background matches the page in both themes.
+ * Old address "/home/": shows the start page too (its canonical points to "/").
+ *
+ * Deliberately NOT a redirect. Until 2026-11-22 "/" forwarded to "/home/", and
+ * browsers/CDN keep that old "/" for up to 10 minutes (GitHub Pages: max-age=600).
+ * If "/home/" forwarded back to "/", those visitors would bounce between the two
+ * forever. Rendering the page here can never loop; the logo and "Home" link to "/".
+ * Can become a redirect to "/" later, once no one can still have the old "/" cached.
  */
-import { url } from "../lib/url";
-import { canonicalUrl } from "../lib/site";
-
-const target = url("/");
+import StartPage from "./index.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script>
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-    <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href={canonicalUrl("/")} />
-    <title>Chris Kuhrt</title>
-    <style>
-      html { background: #f4f1ef; }
-      @media (prefers-color-scheme: dark) { html { background: #1a1a1a; } }
-    </style>
-  </head>
-  <body>
-    <noscript><a href={target}>Continue to chriskuhrt.de</a></noscript>
-  </body>
-</html>
+<StartPage />
