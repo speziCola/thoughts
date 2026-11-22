@@ -57,7 +57,7 @@ export const person = {
 export const website = {
   "@type": "WebSite",
   "@id": WEBSITE_ID,
-  url: canonicalUrl("/home/"),
+  url: canonicalUrl("/"),
   name: SITE_NAME,
   inLanguage: "en",
   publisher: { "@id": PERSON_ID },

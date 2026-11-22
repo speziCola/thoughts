@@ -9,7 +9,7 @@ export const GET: APIRoute = async () => {
   const day = (d?: Date) => (d ? `\n    <lastmod>${d.toISOString().slice(0, 10)}</lastmod>` : "");
 
   const pages: { path: string; lastmod?: Date }[] = [
-    { path: "/home/" },
+    { path: "/" },
     { path: "/what-i-do/" },
     { path: "/about/" },
     { path: "/timeline/" },

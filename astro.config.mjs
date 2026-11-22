@@ -9,14 +9,14 @@ const base = process.env.SITE_BASE ?? "/";
 export default defineConfig({
   site: "https://chriskuhrt.de",
   base,
-  // Site lives at the domain root: /home/, /timeline/, /thoughts/, /thoughts/<slug>/.
-  // Links are always written with a trailing slash; "ignore" lets /home work too.
+  // Site lives at the domain root: / (start page), /timeline/, /thoughts/, /thoughts/<slug>/.
+  // Links are always written with a trailing slash; "ignore" lets /about work too.
   trailingSlash: "ignore",
   // Inline the (small) CSS into each page: no render-blocking stylesheet request.
   build: {
     inlineStylesheets: "always",
   },
-  // "/" → "/home/" is src/pages/index.astro (instant script redirect, no visible page).
+  // The start page is "/"; the old "/home/" forwards to it (src/pages/home.astro).
   vite: {
     // Staging builds (github.io) set SITE_NOINDEX=true → robots noindex on every page.
     define: {

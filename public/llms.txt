@@ -17,7 +17,7 @@ The linked pages provide detailed employment dates, selected projects, professio
 
 ## Work, writing, and community
 
-- [Portfolio homepage](https://chriskuhrt.de/home/): Introduction and selected financial software, design-system, and e-commerce work.
+- [Portfolio homepage](https://chriskuhrt.de/): Introduction and selected financial software, design-system, and e-commerce work.
 - [Articles and professional writing](https://chriskuhrt.de/thoughts/): Essays on UX, collaboration, Figma, research, design maturity, and AI prototyping.
 - [UX Freiburg](https://uxmf.de/): UX community activity in Freiburg and the Black Forest region.
 - [Pixelbricks](https://pixelbricks.framer.website/): Personal Figma plugin and creative side project.
