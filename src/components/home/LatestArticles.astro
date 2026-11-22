@@ -4,8 +4,8 @@
  * Picked automatically from the blog collection (same source and order as
  * /thoughts/), so the card updates with every new post. No Figma spec yet.
  *
- * Each item: 160px cover left (height from its 16:9 ratio), title + date
- * right, aligned to the top, 24px apart. Items sit side by side on large
+ * Each item: 160px cover left (height from its 16:9 ratio), date + title
+ * right (date first, like the article teasers), aligned to the top, 24px apart. Items sit side by side on large
  * desktops and stack at 1400px and below (or when the card gets narrow).
  * Mobile (≤900px): like the blog overview teasers, without tags and link:
  * full-width cover on top, then date, then title; a divider (48px above and
@@ -38,12 +38,12 @@ const formatDate = (date: Date) =>
                 </a>
               )}
               <div class="latest__text">
-                <h3 class="home-card-title latest__title">
-                  <a href={href}>{post.title}</a>
-                </h3>
                 <time class="latest__date page-label" datetime={post.date.toISOString().slice(0, 10)}>
                   {formatDate(post.date)}
                 </time>
+                <h3 class="home-card-title latest__title">
+                  <a href={href}>{post.title}</a>
+                </h3>
               </div>
             </div>
           </article>
@@ -105,7 +105,6 @@ const formatDate = (date: Date) =>
   }
 
   .latest__title {
-    padding-bottom: 4px;
     overflow-wrap: anywhere;
   }
 
@@ -143,18 +142,6 @@ const formatDate = (date: Date) =>
       gap: 16px;
     }
 
-    .latest__text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .latest__date {
-      order: -1;
-    }
-
-    .latest__title {
-      padding-bottom: 0;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
