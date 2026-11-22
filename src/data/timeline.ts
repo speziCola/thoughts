@@ -38,7 +38,7 @@ export const timelineSections: TimelineSection[] = [
         href: "https://www.etops.com/",
         role: "Head of Research & Design",
         description:
-          "Leading a cross-functional design team of 3–5 designers, driving UX strategy and product harmonization across a growing portfolio of financial software acquired through multiple mergers. My focus is on transforming independently developed applications into a cohesive product ecosystem, establishing scalable design standards and aligning user experience with business and product strategy. Key responsibilities and initiatives:",
+          "Leading a cross-functional design team, driving UX strategy and product harmonization across a growing portfolio of financial software acquired through multiple mergers. My focus is on transforming independently developed applications into a cohesive product ecosystem, establishing scalable design standards and aligning user experience with business and product strategy. Key responsibilities and initiatives:",
         highlights: [
           {
             label: "Driving post-merger UX harmonization",
@@ -54,7 +54,7 @@ export const timelineSections: TimelineSection[] = [
           },
           {
             label: "Leading design across teams",
-            text: "Coordinating a team of 3–5 designers, setting design direction and collaborating with product management, engineering and senior leadership.",
+            text: "Coordinating a team of designers, setting design direction and collaborating with product management, engineering and senior leadership.",
           },
           {
             label: "Introducing AI-assisted UX evaluations",

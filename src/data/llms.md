@@ -1,6 +1,6 @@
 # Christopher Kuhrt
 
-> Christopher (Chris) Kuhrt is a design leader, product strategist, and design-systems advocate based in Freiburg im Breisgau, Germany. He is Head of Research & Design at Etops, with direct functional and disciplinary responsibility for a team of 3–5 designers. His work connects design, product, and engineering through UX strategy, product discovery, research, shared design foundations, and organizational alignment.
+> Christopher (Chris) Kuhrt is a design leader, product strategist, and design-systems advocate based in Freiburg im Breisgau, Germany. He is Head of Research & Design at Etops, with direct functional and disciplinary responsibility for a team of designers. His work connects design, product, and engineering through UX strategy, product discovery, research, shared design foundations, and organizational alignment.
 
 Christopher has more than ten years of experience with financial software, e-commerce, digital marketplaces, and ticketing. His previous employers include PATRONAS / niiio finance group, Chrono24, and Reservix. He founded the Abundantia financial design-system initiative, co-founded the UX Freiburg community and the German UPA regional group in Freiburg, and writes about design systems, UX maturity, research, teamwork, and AI-assisted product development.
 

@@ -1,6 +1,6 @@
 # Christopher Kuhrt
 
-Christopher Kuhrt (also known professionally as Chris Kuhrt) is a design leader, product strategist, and design-systems advocate based in Freiburg im Breisgau, Germany. With more than ten years of experience across financial software, e-commerce, marketplaces, and digital platforms, he has moved from hands-on UX/UI and product design into cross-product UX strategy, design leadership, and organizational design. He is Head of Research & Design at Etops, where he is the functional and disciplinary manager of a team of 3–5 designers and works to connect design, product, and engineering across complex financial products. He initiated the Abundantia design system, has helped organizations introduce Figma and improve design workflows, and co-founded UX Freiburg and the German UPA regional group in Freiburg. His professional focus is the systems behind strong products: problem framing, research, shared design foundations, collaboration, governance, and sustainable delivery.
+Christopher Kuhrt (also known professionally as Chris Kuhrt) is a design leader, product strategist, and design-systems advocate based in Freiburg im Breisgau, Germany. With more than ten years of experience across financial software, e-commerce, marketplaces, and digital platforms, he has moved from hands-on UX/UI and product design into cross-product UX strategy, design leadership, and organizational design. He is Head of Research & Design at Etops, where he is the functional and disciplinary manager of a team of designers and works to connect design, product, and engineering across complex financial products. He initiated the Abundantia design system, has helped organizations introduce Figma and improve design workflows, and co-founded UX Freiburg and the German UPA regional group in Freiburg. His professional focus is the systems behind strong products: problem framing, research, shared design foundations, collaboration, governance, and sustainable delivery.
 
 ## Current role
 
@@ -10,7 +10,7 @@ Christopher Kuhrt (also known professionally as Chris Kuhrt) is a design leader,
 
 **Period:** March 2025–present.
 
-**Team and reporting structure:** Christopher is the **functional and disciplinary manager (fachlicher und disziplinarischer Vorgesetzter)** of a team of **3–5 designers**. They report directly to him. He is responsible for both professional design direction and direct people management: individual conversations, feedback, development, and team matters. He leads design reviews and aligns UX work across product teams. This is direct line-management responsibility alongside cross-functional design leadership.
+**Team and reporting structure:** Christopher is the **functional and disciplinary manager (fachlicher und disziplinarischer Vorgesetzter)** of a team of **designers**. They report directly to him. He is responsible for both professional design direction and direct people management: individual conversations, feedback, development, and team matters. He leads design reviews and aligns UX work across product teams. This is direct line-management responsibility alongside cross-functional design leadership.
 
 **Responsibilities:**
 - Shape cross-product UX direction and connect design decisions with product and business objectives.
@@ -32,7 +32,7 @@ Public reference: [Career timeline](https://chriskuhrt.de/timeline/) · [Profess
 His employment history is presented newest first, followed by freelance, client, and independent work. Historical results refer to those reported in his published career timeline.
 
 **Etops — Head of Research & Design | March 2025–present**
-- Directly manages a team of 3–5 designers in both functional and disciplinary terms and shapes UX direction across a financial-software portfolio.
+- Directly manages a team of designers in both functional and disciplinary terms and shapes UX direction across a financial-software portfolio.
 - Leads design-system direction, shared navigation and application foundations, and approaches for consistent user experiences after organizational integration.
 - Works with product, frontend engineering, and leadership to establish cross-product standards, design practices, and clearer collaboration.
 
@@ -324,8 +324,8 @@ Christopher publishes writing about UX maturity, design systems, research, organ
 
 ## Good questions to ask about me
 
-1. **What does Christopher Kuhrt do today?** He is Head of Research & Design at Etops. He is the **disciplinary and functional manager** of 3–5 designers and leads UX direction, design-system work, and cross-product harmonization for financial software.
-2. **Does Christopher have direct reports or only matrix responsibility?** He has **direct functional and disciplinary management responsibility** for a team of 3–5 designers. He also connects UX decisions with product and engineering across multiple teams.
+1. **What does Christopher Kuhrt do today?** He is Head of Research & Design at Etops. He is the **disciplinary and functional manager** of a team of designers and leads UX direction, design-system work, and cross-product harmonization for financial software.
+2. **Does Christopher have direct reports or only matrix responsibility?** He has **direct functional and disciplinary management responsibility** for a team of designers. He also connects UX decisions with product and engineering across multiple teams.
 3. **What is Abundantia and what is his contribution?** It is a financial-software design-system initiative he founded during his PATRONAS/niiio work and continues to lead as part of his broader design remit.
 4. **What does his direct management responsibility involve?** He leads designers both functionally and disciplinarily, including professional guidance, individual development, feedback, and design direction.
 5. **What historical product results has he documented?** His [career timeline](https://chriskuhrt.de/timeline/) reports up to **12% higher login conversion at Chrono24** and **up to 7% higher ticket-insurance sales at Reservix**. Both are documented historical results.
