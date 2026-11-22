@@ -54,12 +54,47 @@
   font-display: swap;
 }
 
+/* Metric-matched fallbacks: a local Arial resized to the web font's
+   proportions, shown until the web font arrives, so the swap doesn't move text.
+   Values from the font files' vertical metrics, widths calibrated on the site's own copy. */
 @font-face {
-  font-family: "Fira Mono";
-  src: url("../assets/fonts/fira-mono-bold.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
+  font-family: "Fira Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");
+  font-weight: 400 500;
+  size-adjust: 101.9%;
+  ascent-override: 91.75%;
+  descent-override: 26.01%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fira Sans Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Helvetica Bold");
+  font-weight: 600 700;
+  size-adjust: 94.8%;
+  ascent-override: 98.63%;
+  descent-override: 27.96%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Supreme Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");
+  font-weight: 400;
+  size-adjust: 99.06%;
+  ascent-override: 98.93%;
+  descent-override: 28.26%;
+  line-gap-override: 9.09%;
+}
+
+@font-face {
+  font-family: "Supreme Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Helvetica Bold");
+  font-weight: 600 700;
+  size-adjust: 96.5%;
+  ascent-override: 101.56%;
+  descent-override: 29.01%;
+  line-gap-override: 9.32%;
 }
 
 :root {
@@ -137,8 +172,8 @@
 
   --radius-4: 4px;
   --radius-8: 8px;
-  --blog-font-title: "Fira Sans", sans-serif;
-  --blog-font-body: "Supreme", sans-serif;
+  --blog-font-title: "Fira Sans", "Fira Sans Fallback", sans-serif;
+  --blog-font-body: "Supreme", "Supreme Fallback", sans-serif;
   --blog-title-lg-size: clamp(18px, calc(16.6154px + 0.3846vw), 24px);
   --blog-title-lg-line-height: clamp(24.3px, calc(22.4308px + 0.5192vw), 32.4px);
   --blog-title-md-size: clamp(16px, calc(15.5385px + 0.1282vw), 18px);
@@ -149,7 +184,6 @@
   --blog-body-md-line-height: clamp(23.8px, calc(21.5333px + 0.6296vw), 27.2px);
   --blog-utility-sm-size: 13px;
   --blog-utility-sm-line-height: 20.4px;
-  --home-font-mono: "Fira Mono", ui-monospace, monospace;
   --page-font-title: var(--blog-font-title);
   --page-font-body: var(--blog-font-body);
   --page-weight-regular: 400;
@@ -198,7 +232,7 @@
   --background-area-card: #292929;
   --background-surface: #333333;
   --background-header: rgb(41 41 41 / 75%);
-  --background-textblock: #1a1a1a;
+  --background-textblock: #141414;
   --background-muted: #141414;
   --background-code: rgb(254 254 254 / 8%);
   --background-button-primary: #fff;

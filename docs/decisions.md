@@ -54,7 +54,7 @@ Image rules: alt = accessible description (never shown as caption). No colon in 
   |---|---|---|
   | `--page-title-display-size` | 24 → 40 | start-page hero |
   | `--page-title-xl-size` / `.page-title-xl` | 20 → 32 | page H1 (`SectionTitle`) |
-  | `--page-title-section-size` | 20 → 28 | start-page section headers (Fira Mono) |
+  | `--page-title-section-size` | 20 → 28 | start-page section headers (Fira Sans Bold) |
   | `--page-title-lg-size` / `.page-title-lg` | 18 → 24 | H2, hero subtitle |
   | `--page-title-md-size` / `.page-title-md` | 16 → 18 | card/article titles, H3, footer headings |
   | `.page-title-sm` | 15 → 16 | small headings at body size |
