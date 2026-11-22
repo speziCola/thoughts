@@ -6,16 +6,17 @@
  * The prompt is written in the visitor's voice: it points the LLM to /llms-full.txt
  * (Chris's full profile with links to every page) and asks for an overview of his
  * strengths plus suggested follow-up questions.
- * Links are built in the browser from the current address, so they work on github.io
- * now and on chriskuhrt.de later. Native <details>: opens without JS; the script adds
+ * The prompt always points to https://chriskuhrt.de/llms-full.txt (also on localhost),
+ * so the LLM can fetch it. Native <details>: opens without JS; the script adds
  * the links, copy, outside click and Escape.
  */
-import { url } from "../lib/url";
+import { canonicalUrl } from "../lib/site";
 
-const llmsPath = url("/llms-full.txt");
+// Always the public address, also when testing locally: the LLM fetches it from the web.
+const llmsUrl = canonicalUrl("/llms-full.txt");
 ---
 
-<details class="ask-llm" data-ask-llm data-llms-path={llmsPath}>
+<details class="ask-llm" data-ask-llm data-llms-url={llmsUrl}>
   <summary class="button button--highlight button--sm ask-llm__toggle">
     Ask a LLM
     <svg class="ask-llm__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true">
@@ -41,7 +42,7 @@ const llmsPath = url("/llms-full.txt");
     ].join(" ");
 
   document.querySelectorAll<HTMLDetailsElement>("[data-ask-llm]").forEach((menu) => {
-    const llmsUrl = new URL(menu.dataset.llmsPath ?? "/llms-full.txt", location.origin).href;
+    const llmsUrl = menu.dataset.llmsUrl ?? "https://chriskuhrt.de/llms-full.txt";
     const prompt = buildPrompt(llmsUrl);
     const q = encodeURIComponent(prompt);
     const status = menu.querySelector<HTMLElement>(".ask-llm__status");
