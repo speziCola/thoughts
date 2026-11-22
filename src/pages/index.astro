@@ -80,6 +80,7 @@ const references = [
   ogType="profile"
   pageType="ProfilePage"
   layout="split"
+  entrance="none"
 >
 
   <section class="intro" aria-labelledby="intro-title">
@@ -139,7 +140,7 @@ const references = [
     </ul>
   </section>
 
-  <section class="references" aria-label="Companies I worked with">
+  <section class="references" data-reveal aria-label="Companies I worked with">
     <ul class="references__list">
       {
         references.map(({ name, logo, logoDark }) => (
@@ -152,12 +153,12 @@ const references = [
     </ul>
   </section>
 
-  <section class="home-section" id="latest-thoughts" aria-labelledby="latest-thoughts-title">
+  <section class="home-section" data-reveal id="latest-thoughts" aria-labelledby="latest-thoughts-title">
     <SectionHeader id="latest-thoughts-title" title="Sharing Thoughts" />
     <LatestArticles />
   </section>
 
-  <section class="home-section" id="enabling-people" aria-labelledby="enabling-people-title">
+  <section class="home-section" data-reveal id="enabling-people" aria-labelledby="enabling-people-title">
     <SectionHeader id="enabling-people-title" title="Enabling People" icon={iconTeam} />
 
     <UxfCard />
@@ -182,7 +183,7 @@ const references = [
     </CardGrid>
   </section>
 
-  <section class="home-section" id="design-system" aria-labelledby="design-system-title">
+  <section class="home-section" data-reveal id="design-system" aria-labelledby="design-system-title">
     <SectionHeader id="design-system-title" title="Design Systems" icon={iconDesignSystem} />
 
     <HomeCard layout="split" gap={64} mediaFirst labelledby="abundantia-title">
@@ -202,7 +203,7 @@ const references = [
     </HomeCard>
   </section>
 
-  <section class="home-section" id="finance" aria-labelledby="finance-title">
+  <section class="home-section" data-reveal id="finance" aria-labelledby="finance-title">
     <SectionHeader id="finance-title" title="Finance" icon={iconFinance} />
 
     <HomeCard labelledby="finance-card-title">
@@ -244,7 +245,7 @@ const references = [
     </HomeCard>
   </section>
 
-  <section class="home-section" id="e-commerce" aria-labelledby="e-commerce-title">
+  <section class="home-section" data-reveal id="e-commerce" aria-labelledby="e-commerce-title">
     <SectionHeader id="e-commerce-title" title="E-Commerce" icon={iconEcom} />
 
     <HomeCard labelledby="ecom-card-title">
@@ -289,3 +290,33 @@ const references = [
     </HomeCard>
   </section>
 </BlogLayout>
+
+<script>
+  // Scroll reveal for everything below the areas: each block fades and slides up
+  // once it scrolls into view. Blocks already visible on load join the entrance
+  // choreography (after the area cards, before the divider, see home.css).
+  const blocks = document.querySelectorAll<HTMLElement>("[data-reveal]");
+  const INITIAL_START = 1.4; // s
+  const INITIAL_STEP = 0.1; // s between blocks visible on load
+
+  if (!("IntersectionObserver" in window)) {
+    blocks.forEach((block) => block.classList.add("is-revealed"));
+  } else {
+    let initial = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let index = 0;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const block = entry.target as HTMLElement;
+          if (initial) block.style.setProperty("--reveal-delay", `${INITIAL_START + INITIAL_STEP * index++}s`);
+          block.classList.add("is-revealed");
+          observer.unobserve(block);
+        }
+        initial = false;
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    blocks.forEach((block) => observer.observe(block));
+  }
+</script>

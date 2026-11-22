@@ -86,3 +86,8 @@ Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the r
 | Feeds | `/rss.xml` and `/sitemap.xml` are hand-written endpoints (no extra dependencies), always on canonical `https://chriskuhrt.de` URLs. `/robots.txt` points to the sitemap. |
 | Posts | Shared parsing in `src/lib/posts.ts` (title, slug, cover) for index, articles, RSS, sitemap. |
 | Hosting | Since 2026-11-22 chriskuhrt.de points to GitHub Pages (custom domain, Route 53 A/AAAA + www CNAME); the site builds at the root (no `SITE_BASE`). `SITE_NOINDEX=true` in deploy.yml can hide a staging copy. |
+
+## Motion (2026-11-22)
+- Every page: the content column (`<main>`) fades in and slides in 24px from the right on load, 700ms ease-out, as one block. Header, art panel and footer stay put. Layout prop `entrance="none"` opts a page out.
+- Start page keeps its own choreography (Framer values in home.css), plus: blocks below the areas reveal on scroll (fade + 16px slide up, 800ms); blocks visible on load join the entrance from 1.4s, +0.1s each. The divider under the intro zips in left → right last: accelerating ease-in, clip-path, 450ms, from 1.9s.
+- All motion off with `prefers-reduced-motion: reduce`. Scroll-reveal content is only hidden when JS runs (`html.has-js`).

@@ -36,6 +36,12 @@ interface Props {
   breadcrumbs?: { name: string; url: string }[];
   /** schema.org type of this page. */
   pageType?: "WebPage" | "ProfilePage" | "AboutPage" | "CollectionPage";
+  /**
+   * Entrance motion of the content column on page load.
+   * "page" = the whole column fades in and slides in slightly from the right (default).
+   * "none" = the page choreographs its own entrance (start page, see home.css).
+   */
+  entrance?: "page" | "none";
 }
 
 const {
@@ -53,6 +59,7 @@ const {
   jsonLd = [],
   breadcrumbs,
   pageType = "WebPage",
+  entrance = "page",
 } = Astro.props;
 
 // Staging copies (github.io) set SITE_NOINDEX=true so they don't compete with chriskuhrt.de.
@@ -115,6 +122,8 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
       // Theme before first paint (no flash): the visitor's saved choice, otherwise the system setting.
       (() => {
         const root = document.documentElement;
+        // Lets CSS hide scroll-reveal content before first paint, only when JS will reveal it.
+        root.classList.add("has-js");
         const meta = document.querySelector('meta[name="theme-color"]');
         const system = window.matchMedia("(prefers-color-scheme: dark)");
         const saved = () => {
@@ -186,14 +195,14 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
               <ArtPanel />
             </slot>
           </div>
-          <main id="main" class="split-page__main">
+          <main id="main" class="split-page__main" data-entrance={entrance}>
             <slot />
           </main>
           <SiteFooter />
         </div>
       ) : (
         <>
-          <main id="main" class="main-content">
+          <main id="main" class="main-content" data-entrance={entrance}>
             <div class="site-shell">
               <slot />
             </div>

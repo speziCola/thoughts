@@ -7,9 +7,9 @@ tags:
 cover: ./assets/hero.png
 ---
 
-# Asking the right follow-up questions (#14)
+# Asking the right questions in user research (#14)
 
-![An illustrated user-research conversation where one person asks a customer follow-up questions.](<./assets/hero.png> "User research: Follow-up questions help uncover what customers mean.")
+![A chat exchange in which the closed question “Do you find our app useful?” is rephrased as the open question “Can you describe where and when you usually use our app?”](<./assets/hero.png> "Open questions: Asking about real situations reveals more than a yes-or-no answer.")
 
 ## Motivation
 
@@ -19,7 +19,7 @@ In the everyday life of a company, all employees occasionally have to deal with 
 
 ## Challenge
 
-However, crafting the right follow-up questions can be challenging due to several reasons. Please note that some of the examples overlap between categories, as many good UX questions avoid multiple common pitfalls simultaneously.
+However, crafting the right questions can be challenging due to several reasons. Please note that some of the examples overlap between categories, as many good UX questions avoid multiple common pitfalls simultaneously.
 
 ### Determining User Intent
 If a user says the app is slow, instead of simply noting this feedback, ask a follow-up question like, “Could you describe a situation where you felt the app was slow?” to understand the specific issues they’re encountering.
@@ -53,7 +53,7 @@ In each case, the aim is to understand the user’s needs, feelings, and experie
 
 Asking the right questions presents a variety of challenges, including avoiding bias, understanding user terminology, determining user intent, diving deeper into user experiences, balancing between open-ended and closed-ended questions, capturing contextual understanding, showing empathy and sensitivity, and adapting to individual differences. These challenges require us to be meticulous in crafting questions, while also maintaining a flexible and adaptable approach. <br><br>Here is a list of questions that can help you do this: [List](<https://airtable.com/appIhH3QY5Llgycvy/shrq0DWY3y18nJMuV/tbl2AWkCTCjwsgXQP/viwPKUZEUps8b9osS?blocks=hide>)
 
-![A categorized table of sample follow-up questions, with each question tagged by research purpose.](<./assets/image-02.png> "Question examples: A categorized list helps researchers choose useful follow-ups.")
+![A table of sample user-research questions, each tagged by topic such as motivation, pain point, opportunity or device.](<./assets/image-02.png> "Question examples: A categorized list helps you pick the right question for what you want to learn.")
 
 <br>Successfully navigating these challenges and asking insightful, appropriate questions is an invaluable skill set in UX research. When we are proficient in this, several benefits emerge:
 
