@@ -1,0 +1,31 @@
+---
+/**
+ * "/" → "/home/" without a visible redirect page.
+ * GitHub Pages has no server-side redirects, so this page forwards before first paint:
+ * an inline script replaces the location (no history entry), the meta refresh is the
+ * no-JS fallback. Nothing is rendered; the background matches the page in both themes.
+ */
+import { url } from "../lib/url";
+import { canonicalUrl } from "../lib/site";
+
+const target = url("/home/");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={canonicalUrl("/home/")} />
+    <title>Chris Kuhrt</title>
+    <style>
+      html { background: #f4f1ef; }
+      @media (prefers-color-scheme: dark) { html { background: #1a1a1a; } }
+    </style>
+  </head>
+  <body>
+    <noscript><a href={target}>Continue to chriskuhrt.de</a></noscript>
+  </body>
+</html>

@@ -5,7 +5,6 @@ import rehypeBlogRegistry from "./src/lib/rehype-blog-registry.mjs";
 // Base path: "/" (site at the root of chriskuhrt.de). A build for a project-path
 // address (e.g. spezicola.github.io/thoughts/) can set SITE_BASE=/thoughts.
 const base = process.env.SITE_BASE ?? "/";
-const withBase = (path) => base.replace(/\/$/, "") + path;
 
 export default defineConfig({
   site: "https://chriskuhrt.de",
@@ -17,9 +16,7 @@ export default defineConfig({
   build: {
     inlineStylesheets: "always",
   },
-  redirects: {
-    "/": withBase("/home/"),
-  },
+  // "/" → "/home/" is src/pages/index.astro (instant script redirect, no visible page).
   vite: {
     // Staging builds (github.io) set SITE_NOINDEX=true → robots noindex on every page.
     define: {
