@@ -31,15 +31,15 @@ type Note = {
 
 const notes: Note[] = [
   // How I lead
-  { text: "Founded and lead the Abundantia design system", author: "Design", color: "purple", x: 5, y: 14, r: -2 },
-  { text: "Leading a team of designers", author: "Product", color: "green", x: 53, y: 13, r: 2 },
-  { text: "Up to +12% login conversion", author: "Research", color: "orange", x: 8, y: 32, r: 1.5 },
-  { text: "Discovery workshops, JTBD & Lean UX", author: "Product", color: "yellow", x: 50, y: 31, r: -2.5 },
+  { text: "Founded and lead the Abundantia design system", author: "Design", color: "purple", x: 7, y: 14.5, r: -2 },
+  { text: "Leading a team of designers", author: "Product", color: "green", x: 54, y: 14.5, r: 2 },
+  { text: "Up to +12% login conversion", author: "Research", color: "orange", x: 8, y: 33.5, r: 1.5 },
+  { text: "Discovery workshops, JTBD & Lean UX", author: "Product", color: "yellow", x: 53, y: 33.5, r: -2.5 },
   // How I build
-  { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", x: 6, y: 57, r: 2 },
-  { text: "User research & usability testing", author: "Research", color: "pink", x: 52, y: 56, r: -1.5 },
-  { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", x: 9, y: 74, r: -2 },
-  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", x: 51, y: 73, r: 2.5 },
+  { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", x: 7, y: 57.5, r: 2 },
+  { text: "User research & usability testing", author: "Research", color: "pink", x: 54, y: 57.5, r: -1.5 },
+  { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", x: 8, y: 76.5, r: -2 },
+  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", x: 53, y: 76.5, r: 2.5 },
 ];
 
 const cursors = [
@@ -139,7 +139,10 @@ const cursors = [
     inset: 0;
     overflow: hidden;
     container-type: size;
-    --note: min(38cqw, 18cqh);
+    /* Starting layout: a 2×2 grid per section that never overlaps. Each section
+       is ~40cqh tall, so two rows of 16cqh notes leave ~3cqh around and between
+       them; the width cap keeps two columns inside the section. */
+    --note: min(38cqw, 16cqh);
     --heading-size: clamp(14px, 4.4cqw, 22px);
     --reset-space: 104px; /* room for the reset button right of the heading */
     background-color: var(--whiteboard-background);
