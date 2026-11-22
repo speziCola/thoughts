@@ -2,9 +2,8 @@ import { defineConfig } from "astro/config";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeBlogRegistry from "./src/lib/rehype-blog-registry.mjs";
 
-// Base path: "/" locally and on the final domain. The GitHub Pages project
-// address (spezicola.github.io/thoughts/) builds with SITE_BASE=/thoughts,
-// set in .github/workflows/deploy.yml. Remove it there once a custom domain points here.
+// Base path: "/" (site at the root of chriskuhrt.de). A build for a project-path
+// address (e.g. spezicola.github.io/thoughts/) can set SITE_BASE=/thoughts.
 const base = process.env.SITE_BASE ?? "/";
 const withBase = (path) => base.replace(/\/$/, "") + path;
 

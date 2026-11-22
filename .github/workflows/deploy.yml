@@ -35,12 +35,8 @@ jobs:
         run: npm run check
       - name: Build site
         run: npm run build
-        env:
-          # Served at spezicola.github.io/thoughts/ until a custom domain is set up.
-          # Remove this once the domain points here, so the site builds at the root.
-          SITE_BASE: /thoughts
-          # Indexable (2026-11-21). To hide a staging copy from search engines again,
-          # add SITE_NOINDEX: "true" here (noindex meta + empty robots.txt).
+        # Served at the root of the custom domain chriskuhrt.de (set in Settings → Pages).
+        # To hide a staging copy from search engines, add env SITE_NOINDEX: "true" here.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
