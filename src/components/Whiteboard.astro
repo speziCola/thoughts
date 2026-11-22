@@ -87,6 +87,32 @@ const cursors = [
       </div>
     ))
   }
+  <script is:inline>
+    // Restore the board from the previous page (same tab) before the first paint, so notes
+    // and cursors don't jump: positions and stacking order. The module script below
+    // saves the state and restores the reactions.
+    (() => {
+      try {
+        const state = JSON.parse(sessionStorage.getItem("whiteboard-state-v1") || "null");
+        const board = document.currentScript.parentElement;
+        if (!state || !board) return;
+        const notes = board.querySelectorAll("[data-note]");
+        const cursors = board.querySelectorAll("[data-cursor]");
+        if (state.notes?.length !== notes.length || state.cursors?.length !== cursors.length) return;
+        notes.forEach((note, i) => {
+          note.style.setProperty("--x", state.notes[i].x);
+          note.style.setProperty("--y", state.notes[i].y);
+          note.style.zIndex = String(state.order.indexOf(i) + 1);
+        });
+        cursors.forEach((cursor, i) => {
+          cursor.style.setProperty("--cx", state.cursors[i].x);
+          cursor.style.setProperty("--cy", state.cursors[i].y);
+        });
+      } catch {
+        /* storage blocked or bad data: start fresh */
+      }
+    })();
+  </script>
 </div>
 
 <style>
@@ -284,6 +310,10 @@ const cursors = [
     height: 100%;
   }
 
+  .whiteboard :global(.wb-reaction.is-restored) {
+    animation: none;
+  }
+
   .whiteboard :global(.wb-comment) {
     position: absolute;
     z-index: 950;
@@ -344,7 +374,8 @@ const cursors = [
     const notes = [...board.querySelectorAll<HTMLElement>("[data-note]")];
     const cursors = [...board.querySelectorAll<HTMLElement>("[data-cursor]")];
     const busy = new Set<HTMLElement>();
-    const stack = [...notes]; // paint order, last = on top
+    // Paint order, last = on top (restored z-index from the previous page, if any).
+    const stack = [...notes].sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0));
     let visible = false;
     let loopsStarted = false;
     let waiting: Array<() => void> = [];
@@ -388,6 +419,7 @@ const cursors = [
           note.classList.remove("is-dragging");
           note.removeEventListener("pointermove", onMove);
           busy.delete(note);
+          save();
         };
         note.addEventListener("pointermove", onMove);
         note.addEventListener("pointerup", onUp, { once: true });
@@ -442,7 +474,9 @@ const cursors = [
       const reaction = document.createElement("span");
       reaction.className = "wb-reaction";
       reaction.setAttribute("aria-hidden", "true");
-      reaction.innerHTML = pick(Object.values(ICONS));
+      const icon = pick(Object.keys(ICONS) as Array<keyof typeof ICONS>);
+      reaction.dataset.icon = icon;
+      reaction.innerHTML = ICONS[icon];
       reaction.style.left = `${clamp(((x - note.offsetLeft) / note.offsetWidth) * 100, 12, 88)}%`;
       reaction.style.top = `${clamp(((y - note.offsetTop) / note.offsetHeight) * 100, 12, 88)}%`;
       note.append(reaction);
@@ -506,6 +540,66 @@ const cursors = [
         await sleep(rand(600, 1800));
       }
     };
+
+    /* ---------- Keep the board between pages (sessionStorage, this tab only) ---------- */
+    const STORAGE_KEY = "whiteboard-state-v1";
+
+    const save = () => {
+      const box = board.getBoundingClientRect();
+      if (!box.width || !box.height) return; // hidden (mobile): keep the last state
+      const state = {
+        notes: notes.map((note) => ({ x: getVar(note, "--x"), y: getVar(note, "--y") })),
+        order: stack.map((note) => notes.indexOf(note)),
+        reactions: notes.map((note) =>
+          [...note.querySelectorAll<HTMLElement>(".wb-reaction:not(.is-leaving)")].map((reaction) => ({
+            icon: reaction.dataset.icon,
+            left: reaction.style.left,
+            top: reaction.style.top,
+          })),
+        ),
+        // Where each cursor is right now, also mid-move, as % of the board.
+        cursors: cursors.map((cursor) => {
+          const rect = cursor.getBoundingClientRect();
+          return {
+            x: (((rect.left - box.left) / box.width) * 100).toFixed(2),
+            y: (((rect.top - box.top) / box.height) * 100).toFixed(2),
+          };
+        }),
+      };
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        /* storage full or blocked */
+      }
+    };
+
+    const restoreReactions = () => {
+      try {
+        const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null");
+        if (state?.reactions?.length !== notes.length) return;
+        state.reactions.forEach((list: Array<{ icon: keyof typeof ICONS; left: string; top: string }>, i: number) => {
+          list.forEach(({ icon, left, top }) => {
+            if (!ICONS[icon]) return;
+            const reaction = document.createElement("span");
+            reaction.className = "wb-reaction is-restored";
+            reaction.setAttribute("aria-hidden", "true");
+            reaction.dataset.icon = icon;
+            reaction.innerHTML = ICONS[icon];
+            reaction.style.left = left;
+            reaction.style.top = top;
+            notes[i].append(reaction);
+          });
+        });
+      } catch {
+        /* bad data: ignore */
+      }
+    };
+
+    restoreReactions();
+    // Save when leaving the page (link click, reload, tab switch) and every few seconds.
+    window.addEventListener("pagehide", save);
+    document.addEventListener("visibilitychange", () => document.hidden && save());
+    setInterval(() => running() && save(), 3000);
 
     const startLoops = () => {
       if (loopsStarted || !running()) return;
