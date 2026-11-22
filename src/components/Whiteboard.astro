@@ -12,7 +12,7 @@
  *   fits any panel size.
  * - Light/dark: the board background, dots and sections follow the theme tokens; the
  *   sticky colours stay the same.
- * - A reset button (data-whiteboard-reset, in the art panel bar) appears once a visitor
+ * - A reset button (top right, next to the heading) appears once a visitor
  *   has moved a note and puts the board back to its starting layout.
  * - The loop pauses when the board is off screen or the tab is hidden, and does not run
  *   with prefers-reduced-motion (the cursors then stay parked; dragging still works).
@@ -52,6 +52,14 @@ const cursors = [
 
 <div class="whiteboard" data-whiteboard>
   <p class="whiteboard__heading">How might we build better products?</p>
+  {/* Shown by the script once a visitor has moved a note. */}
+  <button class="button button--secondary button--sm whiteboard__reset" type="button" data-whiteboard-reset hidden>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 12a9 9 0 1 0 3-6.7" />
+      <path d="M3 4v5h5" />
+    </svg>
+    <span class="whiteboard__reset-label">Reset</span>
+  </button>
   <div class="whiteboard__section whiteboard__section--lead" aria-hidden="true">
     <span class="whiteboard__label">How I lead</span>
   </div>
@@ -125,6 +133,8 @@ const cursors = [
     overflow: hidden;
     container-type: size;
     --note: min(38cqw, 18cqh);
+    --heading-size: clamp(14px, 4.4cqw, 22px);
+    --reset-space: 104px; /* room for the reset button right of the heading */
     background-color: var(--whiteboard-background);
     background-image: radial-gradient(var(--whiteboard-dot) 1px, transparent 1.4px);
     background-size: 20px 20px;
@@ -136,15 +146,48 @@ const cursors = [
     position: absolute;
     top: 3%;
     left: 6%;
-    right: 6%;
+    right: calc(3% + var(--reset-space));
     margin: 0;
     color: var(--foreground-strong);
     font-family: var(--page-font-title);
-    font-size: clamp(14px, 4.4cqw, 22px);
+    font-size: var(--heading-size);
     font-weight: var(--page-weight-semibold);
     line-height: 1.25;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* Reset: top right, right edge in line with the sections, centred on the heading's first line. */
+  .whiteboard__reset {
+    position: absolute;
+    z-index: 1000;
+    top: calc(3% + (var(--heading-size) * 1.25 - 32px) / 2);
+    right: 3%;
+  }
+
+  .whiteboard__reset[hidden] {
+    display: none;
+  }
+
+  /* Narrow board: icon only. */
+  @container (max-width: 420px) {
+    .whiteboard__heading {
+      right: calc(3% + 40px);
+    }
+
+    .whiteboard__reset {
+      width: 32px;
+      padding: 0;
+    }
+
+    .whiteboard__reset-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
 
   /* Coloured areas like FigJam sections. */
@@ -377,7 +420,7 @@ const cursors = [
     const notes = [...board.querySelectorAll<HTMLElement>("[data-note]")];
     const cursors = [...board.querySelectorAll<HTMLElement>("[data-cursor]")];
     const busy = new Set<HTMLElement>();
-    const resetButton = document.querySelector<HTMLButtonElement>("[data-whiteboard-reset]");
+    const resetButton = board.querySelector<HTMLButtonElement>("[data-whiteboard-reset]");
     let dirty = false; // a visitor has moved a note
     const setDirty = (value: boolean) => {
       dirty = value;

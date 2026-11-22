@@ -19,16 +19,7 @@ import Whiteboard from "./Whiteboard.astro";
       <a href="https://github.chriskuhrt.de/">GitHub</a>
     </li>
   </ul>
-  <div class="art-panel__actions">
-    {/* Shown by the whiteboard script once a visitor has moved a note. */}
-    <button class="art-panel__reset" type="button" aria-label="Reset whiteboard" title="Reset whiteboard" data-whiteboard-reset hidden>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 12a9 9 0 1 0 3-6.7" />
-        <path d="M3 4v5h5" />
-      </svg>
-    </button>
-    <ThemeToggle variant="board" />
-  </div>
+  <ThemeToggle variant="board" />
   </div>
 </div>
 
@@ -67,42 +58,6 @@ import Whiteboard from "./Whiteboard.astro";
   /* Prefixed first: the build's CSS minifier keeps only the last of the pair. */
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-}
-
-.art-panel__actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Same look as the theme switch next to it. */
-.art-panel__reset {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: var(--radius-8);
-  color: var(--foreground-regular);
-  background: transparent;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.art-panel__reset[hidden] {
-  display: none;
-}
-
-.art-panel__reset:hover {
-  color: var(--foreground-link-hover);
-  background: var(--background-button-secondary-hover);
-}
-
-.art-panel__reset:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
 }
 
 .art-panel__links {
