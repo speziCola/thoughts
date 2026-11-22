@@ -1,0 +1,713 @@
+---
+/**
+ * Whiteboard hero (replaces the hero art in the art panel): a FigJam-style board with
+ * sticky notes about Chris's skills. Role cursors (Research, Design, Product,
+ * Engineering) wander between the notes, leave reactions and comments and nudge notes
+ * around; visitors can drag the notes too.
+ *
+ * Plain HTML/CSS + a small script, no library:
+ * - The notes are a real list, so the content is readable without JS and by screen readers.
+ *   Cursors, reactions and comments are decorative (aria-hidden).
+ * - Positions are percentages of the board and sizes use container units, so the board
+ *   fits any panel size.
+ * - Light/dark: the board background, dots and sections follow the theme tokens; the
+ *   sticky colours stay the same.
+ * - A reset button (top right, next to the heading) appears once a visitor
+ *   has moved a note and puts the board back to its starting layout.
+ * - The loop pauses when the board is off screen or the tab is hidden, and does not run
+ *   with prefers-reduced-motion (the cursors then stay parked; dragging still works).
+ *
+ * Provisional – design pending: colours, layout and copy are not from Figma yet.
+ */
+
+type Note = {
+  text: string;
+  author: "Research" | "Design" | "Product" | "Engineering";
+  color: "yellow" | "orange" | "pink" | "purple" | "blue" | "green";
+  x: number; // left, % of board width
+  y: number; // top, % of board height
+  r: number; // rotation, deg
+};
+
+const notes: Note[] = [
+  // How I lead
+  { text: "Founded and lead the Abundantia design system", author: "Design", color: "purple", x: 5, y: 14, r: -2 },
+  { text: "Leading a team of 3–5 designers", author: "Product", color: "green", x: 53, y: 13, r: 2 },
+  { text: "Up to +12% login conversion", author: "Research", color: "orange", x: 8, y: 32, r: 1.5 },
+  { text: "Discovery workshops, JTBD & Lean UX", author: "Product", color: "yellow", x: 50, y: 31, r: -2.5 },
+  // How I build
+  { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", x: 6, y: 57, r: 2 },
+  { text: "User research & usability testing", author: "Research", color: "pink", x: 52, y: 56, r: -1.5 },
+  { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", x: 9, y: 74, r: -2 },
+  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", x: 51, y: 73, r: 2.5 },
+];
+
+const cursors = [
+  { name: "Research", color: "research", x: 30, y: 24 },
+  { name: "Design", color: "design", x: 72, y: 46 },
+  { name: "Product", color: "product", x: 26, y: 68 },
+  { name: "Engineering", color: "engineering", x: 74, y: 86 },
+];
+---
+
+<div class="whiteboard" data-whiteboard>
+  <p class="whiteboard__heading">How might we build better products?</p>
+  {/* Shown by the script once a visitor has moved a note. */}
+  <button class="button button--secondary button--sm whiteboard__reset" type="button" data-whiteboard-reset hidden>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 12a9 9 0 1 0 3-6.7" />
+      <path d="M3 4v5h5" />
+    </svg>
+    <span class="whiteboard__reset-label">Reset</span>
+  </button>
+  <div class="whiteboard__section whiteboard__section--lead" aria-hidden="true">
+    <span class="whiteboard__label">How I lead</span>
+  </div>
+  <div class="whiteboard__section whiteboard__section--build" aria-hidden="true">
+    <span class="whiteboard__label">How I build</span>
+  </div>
+
+  <ul class="whiteboard__notes" aria-label="Skills and highlights">
+    {
+      notes.map((note) => (
+        <li
+          class:list={["note", `note--${note.color}`]}
+          style={`--x: ${note.x}; --y: ${note.y}; --r: ${note.r}deg`}
+          data-note
+          data-home={`${note.x},${note.y}`}
+        >
+          <span class="note__text">{note.text}</span>
+          <span class="note__author">{note.author}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    cursors.map((cursor) => (
+      <div
+        class:list={["wb-cursor", `wb-cursor--${cursor.color}`]}
+        style={`--cx: ${cursor.x}; --cy: ${cursor.y}`}
+        aria-hidden="true"
+        data-cursor
+      >
+        <svg class="wb-cursor__arrow" width="18" height="20" viewBox="0 0 18 20" fill="none">
+          <path d="M1.5 1.5 16 8.6l-6.4 1.9-3.1 6.2L1.5 1.5Z" fill="currentColor" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" />
+        </svg>
+        <span class="wb-cursor__name">{cursor.name}</span>
+      </div>
+    ))
+  }
+  <script is:inline>
+    // Restore the board from the previous page (same tab) before the first paint, so notes
+    // and cursors don't jump: positions and stacking order. The module script below
+    // saves the state and restores the reactions.
+    (() => {
+      try {
+        const state = JSON.parse(sessionStorage.getItem("whiteboard-state-v1") || "null");
+        const board = document.currentScript.parentElement;
+        if (!state || !board) return;
+        const notes = board.querySelectorAll("[data-note]");
+        const cursors = board.querySelectorAll("[data-cursor]");
+        if (state.notes?.length !== notes.length || state.cursors?.length !== cursors.length) return;
+        notes.forEach((note, i) => {
+          note.style.setProperty("--x", state.notes[i].x);
+          note.style.setProperty("--y", state.notes[i].y);
+          note.style.zIndex = String(state.order.indexOf(i) + 1);
+        });
+        cursors.forEach((cursor, i) => {
+          cursor.style.setProperty("--cx", state.cursors[i].x);
+          cursor.style.setProperty("--cy", state.cursors[i].y);
+        });
+      } catch {
+        /* storage blocked or bad data: start fresh */
+      }
+    })();
+  </script>
+</div>
+
+<style>
+  .whiteboard {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    container-type: size;
+    --note: min(38cqw, 18cqh);
+    --heading-size: clamp(14px, 4.4cqw, 22px);
+    --reset-space: 104px; /* room for the reset button right of the heading */
+    background-color: var(--whiteboard-background);
+    background-image: radial-gradient(var(--whiteboard-dot) 1px, transparent 1.4px);
+    background-size: 20px 20px;
+    background-position: 10px 10px;
+    touch-action: pan-y;
+  }
+
+  .whiteboard__heading {
+    position: absolute;
+    top: 3%;
+    left: 6%;
+    right: calc(3% + var(--reset-space));
+    margin: 0;
+    color: var(--foreground-strong);
+    font-family: var(--page-font-title);
+    font-size: var(--heading-size);
+    font-weight: var(--page-weight-semibold);
+    line-height: 1.25;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Reset: top right, right edge in line with the sections, centred on the heading's first line. */
+  .whiteboard__reset {
+    position: absolute;
+    z-index: 1000;
+    top: calc(3% + (var(--heading-size) * 1.25 - 32px) / 2);
+    right: 3%;
+    /* Extra subtle: canvas-coloured with a thin edge instead of the secondary fill. */
+    color: var(--foreground-regular);
+    background: var(--whiteboard-background);
+    box-shadow: inset 0 0 0 1px var(--border-subtle);
+  }
+
+  .whiteboard__reset:hover {
+    color: var(--foreground-button-regular);
+    background: var(--background-button-secondary);
+  }
+
+  .whiteboard__reset[hidden] {
+    display: none;
+  }
+
+  /* Narrow board: icon only. */
+  @container (max-width: 420px) {
+    .whiteboard__heading {
+      right: calc(3% + 40px);
+    }
+
+    .whiteboard__reset {
+      width: 32px;
+      padding: 0;
+    }
+
+    .whiteboard__reset-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  /* Coloured areas like FigJam sections. */
+  .whiteboard__section {
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    border-radius: 12px;
+  }
+
+  .whiteboard__section--lead {
+    top: 11%;
+    height: 41%;
+    background: var(--whiteboard-section-warm);
+  }
+
+  .whiteboard__section--build {
+    top: 54%;
+    height: 40%;
+    background: var(--whiteboard-section-cool);
+  }
+
+  .whiteboard__label {
+    position: absolute;
+    top: -11px;
+    left: 12px;
+    padding: 2px 8px;
+    border-radius: var(--radius-4);
+    color: var(--foreground-strong);
+    background: var(--whiteboard-background);
+    font-family: var(--page-font-title);
+    font-size: 12px;
+    font-weight: var(--page-weight-semibold);
+    line-height: 18px;
+  }
+
+  .whiteboard__notes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ---------- Sticky notes: same colours in light and dark ---------- */
+  .note {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: var(--note);
+    height: var(--note);
+    padding: calc(var(--note) * 0.09);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 2px;
+    color: #1e1e1e;
+    background: var(--note-color);
+    box-shadow: var(--whiteboard-note-shadow);
+    transform: rotate(var(--r));
+    cursor: grab;
+    touch-action: none;
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .note--yellow { --note-color: #ffe99a; }
+  .note--orange { --note-color: #fcd19c; }
+  .note--pink { --note-color: #f7c1cf; }
+  .note--purple { --note-color: #d3c6f7; }
+  .note--blue { --note-color: #bfd6f6; }
+  .note--green { --note-color: #c9e7bd; }
+
+  .note__text {
+    font-family: var(--page-font-title);
+    font-size: calc(var(--note) * 0.1);
+    font-weight: var(--page-weight-semibold);
+    line-height: 1.25;
+  }
+
+  .note__author {
+    color: rgb(0 0 0 / 55%);
+    font-family: var(--page-font-body);
+    font-size: max(10px, calc(var(--note) * 0.07));
+    line-height: 1.2;
+  }
+
+  .note:hover {
+    box-shadow: var(--whiteboard-note-shadow-raised);
+  }
+
+  .note.is-dragging {
+    cursor: grabbing;
+    transform: rotate(0deg) scale(1.04);
+    box-shadow: var(--whiteboard-note-shadow-raised);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  /* Moved by a cursor: glide to the new position. */
+  .note.is-moving {
+    transition:
+      left var(--move-duration, 1200ms) cubic-bezier(0.45, 0, 0.2, 1),
+      top var(--move-duration, 1200ms) cubic-bezier(0.45, 0, 0.2, 1),
+      transform 200ms ease;
+  }
+
+  /* ---------- Cursors (decorative) ---------- */
+  .wb-cursor {
+    position: absolute;
+    z-index: 900;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    pointer-events: none;
+    transform: translate(calc(var(--cx) * 1cqw), calc(var(--cy) * 1cqh));
+    will-change: transform;
+  }
+
+  .wb-cursor__arrow {
+    flex: none;
+    color: var(--cursor-color);
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 20%));
+  }
+
+  .wb-cursor__name {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    padding: 1px 7px;
+    border-radius: 4px 10px 10px;
+    color: var(--cursor-text, #fff);
+    background: var(--cursor-color);
+    font-family: var(--page-font-title);
+    font-size: 12px;
+    font-weight: var(--page-weight-semibold);
+    line-height: 18px;
+    white-space: nowrap;
+  }
+
+  /* Near the right edge the name tag flips to the left of the arrow. */
+  .wb-cursor.is-flipped .wb-cursor__name {
+    right: 12px;
+    left: auto;
+    border-radius: 10px 4px 10px 10px;
+  }
+
+  .wb-cursor--research { --cursor-color: #d1401f; }
+  .wb-cursor--design { --cursor-color: #7b3fe4; }
+  .wb-cursor--product { --cursor-color: #ffc943; --cursor-text: #1e1e1e; }
+  .wb-cursor--engineering { --cursor-color: #0b78d0; }
+
+  /* ---------- Reactions and comments (added by the script) ---------- */
+  .whiteboard :global(.wb-reaction) {
+    position: absolute;
+    width: calc(var(--note) * 0.22);
+    height: calc(var(--note) * 0.22);
+    margin: calc(var(--note) * -0.11) 0 0 calc(var(--note) * -0.11);
+    pointer-events: none;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 18%));
+    animation: wb-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .whiteboard :global(.wb-reaction svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .whiteboard :global(.wb-reaction.is-restored) {
+    animation: none;
+  }
+
+  .whiteboard :global(.wb-comment) {
+    position: absolute;
+    z-index: 950;
+    padding: 6px 12px;
+    border-radius: 16px 16px 16px 4px;
+    color: #fff;
+    background: #5b6585;
+    font-family: var(--page-font-title);
+    font-size: 13px;
+    font-weight: var(--page-weight-semibold);
+    line-height: 18px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    animation: wb-pop 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .whiteboard :global(.is-leaving) {
+    animation: wb-out 260ms ease forwards;
+  }
+
+  @keyframes wb-pop {
+    from { opacity: 0; transform: scale(0.4); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes wb-out {
+    to { opacity: 0; transform: scale(0.6); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note,
+    .note.is-moving {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const ICONS = {
+    heart:
+      '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3 1.7-1.8 3.2-3 5.3-3 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21Z" fill="#f2737d" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+    star:
+      '<svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8 2.9-6Z" fill="#ffc943" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+    thumb:
+      '<svg viewBox="0 0 24 24"><path d="M7 10.5V20H4.5A1.5 1.5 0 0 1 3 18.5v-6.5A1.5 1.5 0 0 1 4.5 10.5H7Zm2 9.5h7.6a2 2 0 0 0 2-1.6l1.2-6a2 2 0 0 0-2-2.4H14l.7-3.4A1.9 1.9 0 0 0 12.9 4h-.4L9 10v10Z" fill="#4caf50" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  } as const;
+  const COMMENTS = ["Good idea!", "Love this", "Ship it!", "+1", "Let's test it", "Nice!"];
+
+  const rand = (min: number, max: number) => min + Math.random() * (max - min);
+  const pick = <T,>(items: readonly T[]) => items[Math.floor(Math.random() * items.length)];
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+  function initBoard(board: HTMLElement) {
+    const notes = [...board.querySelectorAll<HTMLElement>("[data-note]")];
+    const cursors = [...board.querySelectorAll<HTMLElement>("[data-cursor]")];
+    const busy = new Set<HTMLElement>();
+    const resetButton = board.querySelector<HTMLButtonElement>("[data-whiteboard-reset]");
+    let dirty = false; // a visitor has moved a note
+    const setDirty = (value: boolean) => {
+      dirty = value;
+      if (resetButton) resetButton.hidden = !value;
+    };
+    // Paint order, last = on top (restored z-index from the previous page, if any).
+    const stack = [...notes].sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0));
+    let visible = false;
+    let loopsStarted = false;
+    let waiting: Array<() => void> = [];
+
+    const getVar = (el: HTMLElement, name: string) => parseFloat(el.style.getPropertyValue(name));
+    const setPos = (note: HTMLElement, x: number, y: number) => {
+      note.style.setProperty("--x", x.toFixed(2));
+      note.style.setProperty("--y", y.toFixed(2));
+    };
+    const bringToFront = (note: HTMLElement) => {
+      stack.splice(stack.indexOf(note), 1);
+      stack.push(note);
+      stack.forEach((item, index) => (item.style.zIndex = String(index + 1)));
+    };
+
+    // Keep a note inside the board.
+    const clampPos = (note: HTMLElement, x: number, y: number) => {
+      const maxX = 100 - (note.offsetWidth / board.clientWidth) * 100;
+      const maxY = 100 - (note.offsetHeight / board.clientHeight) * 100;
+      return [clamp(x, 0, maxX), clamp(y, 0, maxY)] as const;
+    };
+
+    /* ---------- Visitors drag the notes ---------- */
+    notes.forEach((note) => {
+      note.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        const start = { px: event.clientX, py: event.clientY, x: getVar(note, "--x"), y: getVar(note, "--y") };
+        busy.add(note);
+        note.classList.remove("is-moving");
+        note.classList.add("is-dragging");
+        bringToFront(note);
+        note.setPointerCapture(event.pointerId);
+
+        const onMove = (move: PointerEvent) => {
+          const x = start.x + ((move.clientX - start.px) / board.clientWidth) * 100;
+          const y = start.y + ((move.clientY - start.py) / board.clientHeight) * 100;
+          setPos(note, ...clampPos(note, x, y));
+        };
+        const onUp = () => {
+          note.classList.remove("is-dragging");
+          note.removeEventListener("pointermove", onMove);
+          busy.delete(note);
+          setDirty(true);
+          save();
+        };
+        note.addEventListener("pointermove", onMove);
+        note.addEventListener("pointerup", onUp, { once: true });
+        note.addEventListener("pointercancel", onUp, { once: true });
+      });
+    });
+
+    /* ---------- Ambient loop: role cursors ---------- */
+    const running = () => visible && !document.hidden && !reducedMotion.matches;
+    const untilRunning = () =>
+      running() ? Promise.resolve() : new Promise<void>((resolve) => waiting.push(resolve));
+    const wake = () => {
+      if (!running()) return;
+      waiting.forEach((resolve) => resolve());
+      waiting = [];
+    };
+
+    // Cursor positions in px, relative to the board.
+    const position = new Map<HTMLElement, { x: number; y: number }>();
+    cursors.forEach((cursor) => {
+      position.set(cursor, {
+        x: (getVar(cursor, "--cx") / 100) * board.clientWidth,
+        y: (getVar(cursor, "--cy") / 100) * board.clientHeight,
+      });
+    });
+
+    const flip = (cursor: HTMLElement, x: number) => {
+      const name = cursor.querySelector<HTMLElement>(".wb-cursor__name");
+      cursor.classList.toggle("is-flipped", x + 12 + (name?.offsetWidth ?? 0) > board.clientWidth - 8);
+    };
+    position.forEach((pos, cursor) => flip(cursor, pos.x));
+
+    const moveCursor = async (cursor: HTMLElement, x: number, y: number, duration: number) => {
+      const from = position.get(cursor)!;
+      flip(cursor, x);
+      const animation = cursor.animate(
+        [
+          { transform: `translate(${from.x}px, ${from.y}px)` },
+          { transform: `translate(${x}px, ${y}px)` },
+        ],
+        { duration, easing: "cubic-bezier(0.45, 0, 0.2, 1)", fill: "forwards" },
+      );
+      await animation.finished.catch(() => {});
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
+      animation.cancel();
+      position.set(cursor, { x, y });
+    };
+
+    const addReaction = (note: HTMLElement, x: number, y: number) => {
+      const old = note.querySelectorAll(".wb-reaction:not(.is-leaving)");
+      if (old.length >= 2) leave(old[0] as HTMLElement);
+      const reaction = document.createElement("span");
+      reaction.className = "wb-reaction";
+      reaction.setAttribute("aria-hidden", "true");
+      const icon = pick(Object.keys(ICONS) as Array<keyof typeof ICONS>);
+      reaction.dataset.icon = icon;
+      reaction.innerHTML = ICONS[icon];
+      reaction.style.left = `${clamp(((x - note.offsetLeft) / note.offsetWidth) * 100, 12, 88)}%`;
+      reaction.style.top = `${clamp(((y - note.offsetTop) / note.offsetHeight) * 100, 12, 88)}%`;
+      note.append(reaction);
+    };
+
+    const addComment = (x: number, y: number) => {
+      const comment = document.createElement("span");
+      comment.className = "wb-comment";
+      comment.setAttribute("aria-hidden", "true");
+      comment.textContent = pick(COMMENTS);
+      board.append(comment);
+      const left = clamp(x + 16, 8, board.clientWidth - comment.offsetWidth - 8);
+      comment.style.left = `${left}px`;
+      comment.style.top = `${clamp(y - 36, 8, board.clientHeight - 40)}px`;
+      setTimeout(() => leave(comment), 2200);
+    };
+
+    const leave = (el: HTMLElement) => {
+      el.classList.add("is-leaving");
+      el.addEventListener("animationend", () => el.remove(), { once: true });
+    };
+
+    const loop = async (cursor: HTMLElement, delay: number) => {
+      await sleep(delay);
+      while (true) {
+        await untilRunning();
+        const free = notes.filter((note) => !busy.has(note));
+        if (!free.length) {
+          await sleep(800);
+          continue;
+        }
+        const note = pick(free);
+        busy.add(note);
+        const x = note.offsetLeft + note.offsetWidth * rand(0.3, 0.8);
+        const y = note.offsetTop + note.offsetHeight * rand(0.35, 0.85);
+        await moveCursor(cursor, x, y, rand(1400, 2600));
+
+        if (running() && !note.classList.contains("is-dragging")) {
+          const action = Math.random();
+          if (action < 0.4) {
+            addReaction(note, x, y);
+          } else if (action < 0.65) {
+            // Grab the note and nudge it a little, the cursor moves along.
+            const dx = rand(-5, 5);
+            const dy = rand(-3, 3);
+            const [nx, ny] = clampPos(note, getVar(note, "--x") + dx, getVar(note, "--y") + dy);
+            const shiftX = ((nx - getVar(note, "--x")) / 100) * board.clientWidth;
+            const shiftY = ((ny - getVar(note, "--y")) / 100) * board.clientHeight;
+            const duration = rand(900, 1400);
+            bringToFront(note);
+            note.style.setProperty("--move-duration", `${duration}ms`);
+            note.classList.add("is-moving");
+            setPos(note, nx, ny);
+            await moveCursor(cursor, x + shiftX, y + shiftY, duration);
+            note.classList.remove("is-moving");
+          } else if (action < 0.85) {
+            addComment(x, y);
+          }
+        }
+        busy.delete(note);
+        await sleep(rand(600, 1800));
+      }
+    };
+
+    /* ---------- Keep the board between pages (sessionStorage, this tab only) ---------- */
+    const STORAGE_KEY = "whiteboard-state-v1";
+
+    const save = () => {
+      const box = board.getBoundingClientRect();
+      if (!box.width || !box.height) return; // hidden (mobile): keep the last state
+      const state = {
+        dirty,
+        notes: notes.map((note) => ({ x: getVar(note, "--x"), y: getVar(note, "--y") })),
+        order: stack.map((note) => notes.indexOf(note)),
+        reactions: notes.map((note) =>
+          [...note.querySelectorAll<HTMLElement>(".wb-reaction:not(.is-leaving)")].map((reaction) => ({
+            icon: reaction.dataset.icon,
+            left: reaction.style.left,
+            top: reaction.style.top,
+          })),
+        ),
+        // Where each cursor is right now, also mid-move, as % of the board.
+        cursors: cursors.map((cursor) => {
+          const rect = cursor.getBoundingClientRect();
+          return {
+            x: (((rect.left - box.left) / box.width) * 100).toFixed(2),
+            y: (((rect.top - box.top) / box.height) * 100).toFixed(2),
+          };
+        }),
+      };
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        /* storage full or blocked */
+      }
+    };
+
+    const restoreReactions = () => {
+      try {
+        const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null");
+        if (state?.reactions?.length !== notes.length) return;
+        setDirty(Boolean(state.dirty));
+        state.reactions.forEach((list: Array<{ icon: keyof typeof ICONS; left: string; top: string }>, i: number) => {
+          list.forEach(({ icon, left, top }) => {
+            if (!ICONS[icon]) return;
+            const reaction = document.createElement("span");
+            reaction.className = "wb-reaction is-restored";
+            reaction.setAttribute("aria-hidden", "true");
+            reaction.dataset.icon = icon;
+            reaction.innerHTML = ICONS[icon];
+            reaction.style.left = left;
+            reaction.style.top = top;
+            notes[i].append(reaction);
+          });
+        });
+      } catch {
+        /* bad data: ignore */
+      }
+    };
+
+    restoreReactions();
+
+    // Reset: notes glide back to their starting spots, reactions disappear.
+    resetButton?.addEventListener("click", () => {
+      notes.forEach((note, index) => {
+        const [x, y] = (note.dataset.home ?? "0,0").split(",").map(Number);
+        note.style.setProperty("--move-duration", "600ms");
+        note.classList.add("is-moving");
+        setPos(note, x, y);
+        note.style.zIndex = String(index + 1);
+        note.querySelectorAll<HTMLElement>(".wb-reaction").forEach(leave);
+        setTimeout(() => note.classList.remove("is-moving"), 650);
+      });
+      stack.splice(0, stack.length, ...notes);
+      // The button disappears: keep keyboard focus in the bar.
+      document.querySelector<HTMLElement>(".art-panel [data-theme-toggle]")?.focus();
+      setDirty(false);
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
+    });
+    // Save when leaving the page (link click, reload, tab switch) and every few seconds.
+    window.addEventListener("pagehide", save);
+    document.addEventListener("visibilitychange", () => document.hidden && save());
+    setInterval(() => running() && save(), 3000);
+
+    const startLoops = () => {
+      if (loopsStarted || !running()) return;
+      loopsStarted = true;
+      cursors.forEach((cursor, index) => loop(cursor, index * 500));
+    };
+
+    new IntersectionObserver((entries) => {
+      visible = entries.some((entry) => entry.isIntersecting);
+      startLoops();
+      wake();
+    }).observe(board);
+
+    document.addEventListener("visibilitychange", () => {
+      startLoops();
+      wake();
+    });
+    reducedMotion.addEventListener("change", () => {
+      startLoops();
+      wake();
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-whiteboard]").forEach(initBoard);
+</script>
