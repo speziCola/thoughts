@@ -12,6 +12,8 @@
  *   fits any panel size.
  * - Light/dark: the board background, dots and sections follow the theme tokens; the
  *   sticky colours stay the same.
+ * - A reset button (data-whiteboard-reset, in the art panel bar) appears once a visitor
+ *   has moved a note and puts the board back to its starting layout.
  * - The loop pauses when the board is off screen or the tab is hidden, and does not run
  *   with prefers-reduced-motion (the cursors then stay parked; dragging still works).
  *
@@ -64,6 +66,7 @@ const cursors = [
           class:list={["note", `note--${note.color}`]}
           style={`--x: ${note.x}; --y: ${note.y}; --r: ${note.r}deg`}
           data-note
+          data-home={`${note.x},${note.y}`}
         >
           <span class="note__text">{note.text}</span>
           <span class="note__author">{note.author}</span>
@@ -374,6 +377,12 @@ const cursors = [
     const notes = [...board.querySelectorAll<HTMLElement>("[data-note]")];
     const cursors = [...board.querySelectorAll<HTMLElement>("[data-cursor]")];
     const busy = new Set<HTMLElement>();
+    const resetButton = document.querySelector<HTMLButtonElement>("[data-whiteboard-reset]");
+    let dirty = false; // a visitor has moved a note
+    const setDirty = (value: boolean) => {
+      dirty = value;
+      if (resetButton) resetButton.hidden = !value;
+    };
     // Paint order, last = on top (restored z-index from the previous page, if any).
     const stack = [...notes].sort((a, b) => (Number(a.style.zIndex) || 0) - (Number(b.style.zIndex) || 0));
     let visible = false;
@@ -419,6 +428,7 @@ const cursors = [
           note.classList.remove("is-dragging");
           note.removeEventListener("pointermove", onMove);
           busy.delete(note);
+          setDirty(true);
           save();
         };
         note.addEventListener("pointermove", onMove);
@@ -548,6 +558,7 @@ const cursors = [
       const box = board.getBoundingClientRect();
       if (!box.width || !box.height) return; // hidden (mobile): keep the last state
       const state = {
+        dirty,
         notes: notes.map((note) => ({ x: getVar(note, "--x"), y: getVar(note, "--y") })),
         order: stack.map((note) => notes.indexOf(note)),
         reactions: notes.map((note) =>
@@ -577,6 +588,7 @@ const cursors = [
       try {
         const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null");
         if (state?.reactions?.length !== notes.length) return;
+        setDirty(Boolean(state.dirty));
         state.reactions.forEach((list: Array<{ icon: keyof typeof ICONS; left: string; top: string }>, i: number) => {
           list.forEach(({ icon, left, top }) => {
             if (!ICONS[icon]) return;
@@ -596,6 +608,28 @@ const cursors = [
     };
 
     restoreReactions();
+
+    // Reset: notes glide back to their starting spots, reactions disappear.
+    resetButton?.addEventListener("click", () => {
+      notes.forEach((note, index) => {
+        const [x, y] = (note.dataset.home ?? "0,0").split(",").map(Number);
+        note.style.setProperty("--move-duration", "600ms");
+        note.classList.add("is-moving");
+        setPos(note, x, y);
+        note.style.zIndex = String(index + 1);
+        note.querySelectorAll<HTMLElement>(".wb-reaction").forEach(leave);
+        setTimeout(() => note.classList.remove("is-moving"), 650);
+      });
+      stack.splice(0, stack.length, ...notes);
+      // The button disappears: keep keyboard focus in the bar.
+      document.querySelector<HTMLElement>(".art-panel [data-theme-toggle]")?.focus();
+      setDirty(false);
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* ignore */
+      }
+    });
     // Save when leaving the page (link click, reload, tab switch) and every few seconds.
     window.addEventListener("pagehide", save);
     document.addEventListener("visibilitychange", () => document.hidden && save());
