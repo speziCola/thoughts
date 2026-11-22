@@ -10,7 +10,7 @@
  */
 interface Props {
   /** "on-dark" = white icon on the glass bar; "panel" = bordered button in the menu panel. */
-  variant?: "on-dark" | "panel";
+  variant?: "on-dark" | "panel" | "board";
 }
 
 const { variant = "on-dark" } = Astro.props;
@@ -133,6 +133,21 @@ const { variant = "on-dark" } = Astro.props;
 
   .theme-toggle--on-dark:focus-visible {
     outline: 2px solid var(--on-dark-foreground);
+    outline-offset: 2px;
+  }
+
+  /* Bar on the whiteboard hero: normal text colours (light and dark board). */
+  .theme-toggle--board {
+    color: var(--foreground-regular);
+  }
+
+  .theme-toggle--board:hover {
+    color: var(--foreground-link-hover);
+    background: var(--background-button-secondary-hover);
+  }
+
+  .theme-toggle--board:focus-visible {
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
   }
 

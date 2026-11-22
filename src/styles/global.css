@@ -88,6 +88,15 @@
   --background-button-highlight-hover: rgb(0 190 115 / 14%);
   --background-inverse: #000; /* label badges, section tiles, footer, menu pill */
 
+  /* Whiteboard hero (provisional – design pending, not in Figma yet).
+     Sticky-note colours live in Whiteboard.astro and are the same in both modes. */
+  --whiteboard-background: #fafafa;
+  --whiteboard-dot: #d6d0cb;
+  --whiteboard-section-warm: rgb(252 209 156 / 30%);
+  --whiteboard-section-cool: rgb(201 231 189 / 35%);
+  --whiteboard-note-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 10px rgb(0 0 0 / 6%);
+  --whiteboard-note-shadow-raised: 0 2px 4px rgb(0 0 0 / 10%), 0 12px 24px rgb(0 0 0 / 12%);
+
   /* Text */
   --foreground-strong: #0a0a0a;
   --foreground-regular: #414141;
@@ -198,6 +207,13 @@
   --background-button-highlight: rgb(0 255 163 / 8%);
   --background-button-highlight-hover: rgb(0 255 163 / 14%);
   --background-inverse: #000;
+
+  --whiteboard-background: #212121;
+  --whiteboard-dot: #3d3d3d;
+  --whiteboard-section-warm: rgb(252 209 156 / 7%);
+  --whiteboard-section-cool: rgb(201 231 189 / 7%);
+  --whiteboard-note-shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 10px rgb(0 0 0 / 30%);
+  --whiteboard-note-shadow-raised: 0 2px 4px rgb(0 0 0 / 45%), 0 12px 24px rgb(0 0 0 / 45%);
 
   --foreground-strong: #fefefe;
   --foreground-regular: #bdbdbd;
