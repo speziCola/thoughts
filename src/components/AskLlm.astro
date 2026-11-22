@@ -3,19 +3,20 @@
  * "Ask a LLM" (header, top right): opens a small menu to start a chat about Chris in
  * Claude or ChatGPT with a prefilled prompt, or to copy the prompt for any other LLM.
  *
- * The prompt ("AMA Chris") points the LLM to /llms.txt (a profile of Chris with links to
- * every page) as its knowledge base and opens with a welcome question.
+ * The prompt is written in the visitor's voice: it points the LLM to /llms-full.txt
+ * (Chris's full profile with links to every page) and asks for an overview of his
+ * strengths plus suggested follow-up questions.
  * Links are built in the browser from the current address, so they work on github.io
  * now and on chriskuhrt.de later. Native <details>: opens without JS; the script adds
  * the links, copy, outside click and Escape.
  */
 import { url } from "../lib/url";
 
-const llmsPath = url("/llms.txt");
+const llmsPath = url("/llms-full.txt");
 ---
 
 <details class="ask-llm" data-ask-llm data-llms-path={llmsPath}>
-  <summary class="button button--secondary button--sm ask-llm__toggle">
+  <summary class="button button--highlight button--sm ask-llm__toggle">
     Ask a LLM
     <svg class="ask-llm__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true">
       <path d="M14 3.5c.6 3.4 2.6 5.4 6 6-3.4.6-5.4 2.6-6 6-.6-3.4-2.6-5.4-6-6 3.4-.6 5.4-2.6 6-6Z" />
@@ -33,13 +34,14 @@ const llmsPath = url("/llms.txt");
 <script>
   const buildPrompt = (llmsUrl: string) =>
     [
-      `You are AMA Chris, an AI-powered way to explore Christopher Kuhrt's work, experience, and ideas.`,
-      `Read ${llmsUrl} and its linked resources as your knowledge base. Answer questions about Chris using verified information. Be conversational, concise, and transparent about anything you don't know.`,
-      `Start with:\n"Welcome to AMA Chris! What would you like to know about me, my work, or how we could collaborate?"`,
-    ].join("\n");
+      `I'd like to learn about Christopher Kuhrt, Head of Research & Design.`,
+      `Please read ${llmsUrl} and the pages it links to, then give me a short overview of his strengths, standout projects and the impact he's had.`,
+      `After that, suggest a few questions I could ask about his experience, how he leads design and research, or what he could bring to a team.`,
+      `If something I ask isn't covered on his site, point me to his closest relevant experience and suggest reaching out to him directly.`,
+    ].join(" ");
 
   document.querySelectorAll<HTMLDetailsElement>("[data-ask-llm]").forEach((menu) => {
-    const llmsUrl = new URL(menu.dataset.llmsPath ?? "/llms.txt", location.origin).href;
+    const llmsUrl = new URL(menu.dataset.llmsPath ?? "/llms-full.txt", location.origin).href;
     const prompt = buildPrompt(llmsUrl);
     const q = encodeURIComponent(prompt);
     const status = menu.querySelector<HTMLElement>(".ask-llm__status");

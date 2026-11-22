@@ -80,11 +80,12 @@
   --background-textblock: #e8e5e3; /* blockquotes */
   --background-muted: #e6e0dc; /* area card icon tiles, image placeholders */
   --background-code: rgb(10 10 10 / 6%);
-  --background-button: #000; /* primary button */
-  /* Button hovers, derived from the button colour so they follow light/dark automatically:
-     primary fill shifts slightly towards the page, secondary gets a faint tint. */
-  --background-button-hover: color-mix(in srgb, var(--background-button) 85%, var(--background-page));
-  --background-button-secondary-hover: color-mix(in srgb, var(--background-button) 8%, transparent);
+  /* Buttons (Figma background/button-*) */
+  --background-button-primary: #000;
+  --background-button-secondary: #e6e0dc;
+  --background-button-secondary-hover: #ddd5cf;
+  --background-button-highlight: rgb(0 190 115 / 8%);
+  --background-button-highlight-hover: rgb(0 190 115 / 14%);
   --background-inverse: #000; /* label badges, section tiles, footer, menu pill */
 
   /* Text */
@@ -94,7 +95,9 @@
   --foreground-inverse: #fdfdfd;
   --foreground-link-hover: #00be73;
   --foreground-button-onregular: #fefefe; /* text on primary buttons (Figma foreground/button-Onregular) */
+  --foreground-button-onregular-hover: #00ffa3; /* primary button text on hover */
   --foreground-button-regular: #0a0a0a; /* text on secondary buttons */
+  --foreground-button-highlight: #00be73;
   --foreground-stage01: #303859;
   --foreground-stage02: #d92b2b; /* darkened from #e23131 for 4.5:1 on cards */
   --foreground-stage03: #186daa;
@@ -102,7 +105,6 @@
 
   /* Lines, focus, effects */
   --border-subtle: #e6e0dc; /* dividers, fine frames */
-  --border-button: #000; /* secondary button outline */
   --border-title: var(--foreground-strong); /* bar under section titles */
   --border-highlight: #fff;
   --border-highlight-soft: rgb(255 255 255 / 30%);
@@ -190,7 +192,11 @@
   --background-textblock: #1a1a1a;
   --background-muted: #141414;
   --background-code: rgb(254 254 254 / 8%);
-  --background-button: #fff;
+  --background-button-primary: #fff;
+  --background-button-secondary: #333333;
+  --background-button-secondary-hover: rgb(255 255 255 / 8%);
+  --background-button-highlight: rgb(0 255 163 / 8%);
+  --background-button-highlight-hover: rgb(0 255 163 / 14%);
   --background-inverse: #000;
 
   --foreground-strong: #fefefe;
@@ -206,9 +212,10 @@
   --border-title: #404040;
   --border-highlight: #4c4c4c;
   --border-table: rgb(254 254 254 / 20%);
-  --border-button: #fff;
   --foreground-button-onregular: #0a0a0a;
+  --foreground-button-onregular-hover: #00be73;
   --foreground-button-regular: #fefefe;
+  --foreground-button-highlight: #00ffa3;
 
   /* Glass bar on the hero art: black glass, only the card-like top highlight. */
   --on-dark-glass: rgb(0 0 0 / 30%);
@@ -412,15 +419,15 @@ a:focus-visible {
   display: block;
 }
 
-/* ---------- Buttons (Figma: primary / secondary, default + small) ---------- */
+/* ---------- Buttons (Figma: primary / secondary / highlight, default + small) ---------- */
 .button {
   min-height: 40px;
-  padding: 7px 23px; /* 8/24 incl. the 1px border */
+  padding: 8px 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid transparent;
+  border: 0;
   border-radius: var(--radius-8);
   font-family: var(--page-font-title);
   font-size: var(--page-body-size);
@@ -431,37 +438,40 @@ a:focus-visible {
   cursor: pointer;
   transition:
     color 160ms ease,
-    background-color 160ms ease,
-    border-color 160ms ease;
+    background-color 160ms ease;
 }
 
 .button--sm {
   min-height: 32px;
-  padding: 3px 15px; /* 4/16 incl. border */
+  padding: 4px 16px;
   font-size: var(--page-small-size);
 }
 
 .button--primary {
-  border-color: var(--background-button);
   color: var(--foreground-button-onregular);
-  background: var(--background-button);
+  background: var(--background-button-primary);
+}
+
+.button--primary:hover {
+  color: var(--foreground-button-onregular-hover);
 }
 
 .button--secondary {
-  border-color: var(--border-button);
   color: var(--foreground-button-regular);
-  background: transparent;
-}
-
-/* Hover: primary stays filled, the fill shifts slightly; secondary keeps its outline and
-   gets a faint tint. Provisional – design pending. */
-.button--primary:hover {
-  border-color: var(--background-button-hover);
-  background: var(--background-button-hover);
+  background: var(--background-button-secondary);
 }
 
 .button--secondary:hover {
   background: var(--background-button-secondary-hover);
+}
+
+.button--highlight {
+  color: var(--foreground-button-highlight);
+  background: var(--background-button-highlight);
+}
+
+.button--highlight:hover {
+  background: var(--background-button-highlight-hover);
 }
 
 .button:focus-visible {
