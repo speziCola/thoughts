@@ -102,8 +102,14 @@ const cursors = [
     // Restore the board from the previous page (same tab) before the first paint, so notes
     // and cursors don't jump: positions and stacking order. The module script below
     // saves the state and restores the reactions.
+    // A reload (F5) is a hard reset: the saved board is dropped and it starts fresh.
     (() => {
       try {
+        const navigation = performance.getEntriesByType("navigation")[0];
+        if (navigation && navigation.type === "reload") {
+          sessionStorage.removeItem("whiteboard-state-v1");
+          return;
+        }
         const state = JSON.parse(sessionStorage.getItem("whiteboard-state-v1") || "null");
         const board = document.currentScript.parentElement;
         if (!state || !board) return;
@@ -113,6 +119,7 @@ const cursors = [
         notes.forEach((note, i) => {
           note.style.setProperty("--x", state.notes[i].x);
           note.style.setProperty("--y", state.notes[i].y);
+          if (state.notes[i].moved) note.dataset.moved = "";
           note.style.zIndex = String(state.order.indexOf(i) + 1);
         });
         cursors.forEach((cursor, i) => {
@@ -480,6 +487,7 @@ const cursors = [
           note.classList.remove("is-dragging");
           note.removeEventListener("pointermove", onMove);
           busy.delete(note);
+          note.dataset.moved = ""; // placed by the visitor: cursors leave it where it is
           setDirty(true);
           save();
         };
@@ -580,10 +588,15 @@ const cursors = [
           const action = Math.random();
           if (action < 0.4) {
             addReaction(note, x, y);
-          } else if (action < 0.65) {
-            // Grab the note and nudge it a little, the cursor moves along.
-            const dx = rand(-5, 5);
-            const dy = rand(-3, 3);
+          } else if (action < 0.65 && !("moved" in note.dataset)) {
+            // Grab the note and nudge it a little, the cursor moves along. Once a note has
+            // drifted away from its starting spot, nudges pull it back, so the board stays tidy.
+            const [homeX, homeY] = (note.dataset.home ?? "0,0").split(",").map(Number);
+            const offX = homeX - getVar(note, "--x");
+            const offY = homeY - getVar(note, "--y");
+            const far = Math.hypot(offX, offY) > 6;
+            const dx = far ? offX * rand(0.5, 0.9) : rand(-4, 4);
+            const dy = far ? offY * rand(0.5, 0.9) : rand(-2.5, 2.5);
             const [nx, ny] = clampPos(note, getVar(note, "--x") + dx, getVar(note, "--y") + dy);
             const shiftX = ((nx - getVar(note, "--x")) / 100) * board.clientWidth;
             const shiftY = ((ny - getVar(note, "--y")) / 100) * board.clientHeight;
@@ -611,7 +624,7 @@ const cursors = [
       if (!box.width || !box.height) return; // hidden (mobile): keep the last state
       const state = {
         dirty,
-        notes: notes.map((note) => ({ x: getVar(note, "--x"), y: getVar(note, "--y") })),
+        notes: notes.map((note) => ({ x: getVar(note, "--x"), y: getVar(note, "--y"), moved: "moved" in note.dataset })),
         order: stack.map((note) => notes.indexOf(note)),
         reactions: notes.map((note) =>
           [...note.querySelectorAll<HTMLElement>(".wb-reaction:not(.is-leaving)")].map((reaction) => ({
@@ -668,6 +681,7 @@ const cursors = [
         note.style.setProperty("--move-duration", "600ms");
         note.classList.add("is-moving");
         setPos(note, x, y);
+        delete note.dataset.moved;
         note.style.zIndex = String(index + 1);
         note.querySelectorAll<HTMLElement>(".wb-reaction").forEach(leave);
         setTimeout(() => note.classList.remove("is-moving"), 650);
