@@ -833,6 +833,13 @@ a:focus-visible {
   padding: 48px 48px 128px;
 }
 
+/* Desktop (above the 1600px laptop range): more room left and right of the content. */
+@media (min-width: 1601px) {
+  .split-page__main {
+    padding-inline: 96px;
+  }
+}
+
 .split-page > .site-footer {
   grid-area: footer;
 }
