@@ -141,9 +141,10 @@ const { variant = "on-dark" } = Astro.props;
     color: var(--foreground-regular);
   }
 
+  /* Subtle hover: a faint tint of the text colour, so it works on the light and dark bar alike. */
   .theme-toggle--board:hover {
     color: var(--foreground-link-hover);
-    background: var(--background-button-secondary-hover);
+    background: color-mix(in srgb, var(--foreground-strong) 5%, transparent);
   }
 
   .theme-toggle--board:focus-visible {

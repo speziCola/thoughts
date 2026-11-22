@@ -473,6 +473,27 @@ const cursors = [
       return [clamp(x, 0, maxX), clamp(y, 0, maxY)] as const;
     };
 
+    // Keep a cursor's nudge inside the note's own section (the one its home spot is in),
+    // with a small inset. Bounds also always include the home spot, so a layout where a
+    // note starts slightly over an edge never makes it jump. Visitors may still drag freely.
+    const sections = [...board.querySelectorAll<HTMLElement>(".whiteboard__section")];
+    const SECTION_INSET = 8; // px
+    const clampToSection = (note: HTMLElement, x: number, y: number) => {
+      const [homeX, homeY] = (note.dataset.home ?? "0,0").split(",").map(Number);
+      const w = board.clientWidth;
+      const h = board.clientHeight;
+      const centerY = (homeY / 100) * h + note.offsetHeight / 2;
+      const section = sections.find((el) => centerY >= el.offsetTop && centerY <= el.offsetTop + el.offsetHeight);
+      if (!section) return clampPos(note, x, y);
+      const toX = (px: number) => (px / w) * 100;
+      const toY = (px: number) => (px / h) * 100;
+      const minX = Math.min(homeX, toX(section.offsetLeft + SECTION_INSET));
+      const minY = Math.min(homeY, toY(section.offsetTop + SECTION_INSET));
+      const maxX = Math.max(homeX, toX(section.offsetLeft + section.offsetWidth - SECTION_INSET - note.offsetWidth));
+      const maxY = Math.max(homeY, toY(section.offsetTop + section.offsetHeight - SECTION_INSET - note.offsetHeight));
+      return [clamp(x, minX, maxX), clamp(y, minY, maxY)] as const;
+    };
+
     /* ---------- Visitors drag the notes ---------- */
     notes.forEach((note) => {
       note.addEventListener("pointerdown", (event) => {
@@ -604,7 +625,7 @@ const cursors = [
             const far = Math.hypot(offX, offY) > 6;
             const dx = far ? offX * rand(0.5, 0.9) : rand(-4, 4);
             const dy = far ? offY * rand(0.5, 0.9) : rand(-2.5, 2.5);
-            const [nx, ny] = clampPos(note, getVar(note, "--x") + dx, getVar(note, "--y") + dy);
+            const [nx, ny] = clampToSection(note, getVar(note, "--x") + dx, getVar(note, "--y") + dy);
             const shiftX = ((nx - getVar(note, "--x")) / 100) * board.clientWidth;
             const shiftY = ((ny - getVar(note, "--y")) / 100) * board.clientHeight;
             const duration = rand(900, 1400);
