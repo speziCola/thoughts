@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import SiteFooter from "../components/SiteFooter.astro";
+import WebMcp from "../components/WebMcp.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import ArtPanel from "../components/ArtPanel.astro";
 import firaSansSemibold from "../assets/fonts/fira-sans-semibold.woff2?url";
@@ -42,6 +43,8 @@ interface Props {
    * "none" = the page choreographs its own entrance (start page, see home.css).
    */
   entrance?: "page" | "none";
+  /** Root-relative URL of a plain-Markdown version of this page (articles), linked as rel="alternate". */
+  markdown?: string;
 }
 
 const {
@@ -58,6 +61,7 @@ const {
   tags = [],
   jsonLd = [],
   breadcrumbs,
+  markdown,
   pageType = "WebPage",
   entrance = "page",
 } = Astro.props;
@@ -115,6 +119,7 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {markdown && <link rel="alternate" type="text/markdown" href={url(markdown)} />}
     <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
     <meta name="author" content="Chris Kuhrt" />
     <meta name="theme-color" content="#f4f1ef" />
@@ -183,6 +188,7 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
       type="font/woff2"
       crossorigin
     />
+    <WebMcp />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

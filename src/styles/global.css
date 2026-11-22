@@ -106,7 +106,7 @@
   --foreground-button-onregular: #fefefe; /* text on primary buttons (Figma foreground/button-Onregular) */
   --foreground-button-onregular-hover: #00ffa3; /* primary button text on hover */
   --foreground-button-regular: #0a0a0a; /* text on secondary buttons */
-  --foreground-button-highlight: #00be73;
+  --foreground-button-highlight: #006b42; /* darkened from #00be73 for 4.5:1 on the highlight tint, incl. hover */
   --foreground-stage01: #303859;
   --foreground-stage02: #d92b2b; /* darkened from #e23131 for 4.5:1 on cards */
   --foreground-stage03: #186daa;

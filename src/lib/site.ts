@@ -32,7 +32,7 @@ export const person = {
   name: "Chris Kuhrt",
   alternateName: "Christopher Kuhrt",
   url: canonicalUrl("/about/"),
-  jobTitle: "Head of UX",
+  jobTitle: "Head of Research & Design",
   description:
     "Design leader, product strategist and design systems advocate based in Freiburg, Germany.",
   worksFor: { "@type": "Organization", name: "etops", url: "https://www.etops.com/" },

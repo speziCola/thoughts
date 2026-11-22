@@ -91,3 +91,11 @@ Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the r
 - Every page: the content column (`<main>`) fades in and slides in 24px from the right on load, 700ms ease-out, as one block. Header, art panel and footer stay put. Layout prop `entrance="none"` opts a page out.
 - Start page keeps its own choreography (Framer values in home.css), plus: blocks below the areas reveal on scroll (fade + 16px slide up, 800ms); blocks visible on load join the entrance from 1.4s, +0.1s each. The divider under the intro zips in left → right last: accelerating ease-in, clip-path, 450ms, from 1.9s.
 - All motion off with `prefers-reduced-motion: reduce`. Scroll-reveal content is only hidden when JS runs (`html.has-js`).
+
+## AI agents & LLMs (2026-11-22)
+- `/llms.txt` and `/llms-full.txt` are generated (`src/pages/llms*.txt.ts`): the hand-written profile in `src/data/llms.md` / `src/data/llms-full.md`, plus an auto-generated "Articles" section (every published post, newest first). Edit the profile in `src/data`, never in `public/`.
+- Every article also exists as plain Markdown at `/thoughts/<slug>/index.md` (metadata header + body; local images become `*[Image: alt – caption]*` notes because their built paths are hashed). Linked from the article via `<link rel="alternate" type="text/markdown">`.
+- `/thoughts/index.json`: machine-readable article index (slug, title, description, date, tags, URLs).
+- WebMCP (`src/components/WebMcp.astro`, rendered in every page `<head>`): three read-only tools – `search_posts`, `get_post`, `get_profile`. Progressive enhancement: no-op without `document.modelContext`/`navigator.modelContext`; data fetched only when a tool is called. Chrome-only and experimental – the API may change.
+- `.button--highlight` text is `#006b42` in light mode (was `#00be73`, 2.1:1) for 4.5:1 on its tint, hover included.
+- Portraits use `<Image>` with `widths`/`sizes`; UX Freiburg gallery `sizes` match the measured layout (switch at ≈1170px viewport, container query).

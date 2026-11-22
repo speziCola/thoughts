@@ -111,12 +111,12 @@ const references = [
       </div>
     </div>
 
-    <img
+    <Image
       class="intro__portrait enter"
-      src={portrait.src}
+      src={portrait}
       alt="Portrait of Chris Kuhrt"
-      width="256"
-      height="256"
+      widths={[128, 256, 320, 512]}
+      sizes="(max-width: 900px) 128px, 320px"
       loading="eager"
       fetchpriority="high"
     />

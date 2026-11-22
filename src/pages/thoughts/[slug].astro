@@ -75,6 +75,7 @@ const blogPosting = {
     { name: post.seoTitle, url: canonical },
   ]}
   jsonLd={[blogPosting]}
+  markdown={`/thoughts/${post.slug}/index.md`}
 >
   <article class="blog-article">
     <time class="post-date" datetime={date}>{formattedDate}</time>
