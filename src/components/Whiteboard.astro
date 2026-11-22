@@ -163,6 +163,15 @@ const cursors = [
     z-index: 1000;
     top: calc(3% + (var(--heading-size) * 1.25 - 32px) / 2);
     right: 3%;
+    /* Extra subtle: canvas-coloured with a thin edge instead of the secondary fill. */
+    color: var(--foreground-regular);
+    background: var(--whiteboard-background);
+    box-shadow: inset 0 0 0 1px var(--border-subtle);
+  }
+
+  .whiteboard__reset:hover {
+    color: var(--foreground-button-regular);
+    background: var(--background-button-secondary);
   }
 
   .whiteboard__reset[hidden] {
