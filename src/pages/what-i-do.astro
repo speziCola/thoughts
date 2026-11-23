@@ -397,8 +397,10 @@ const articles = [
     color: var(--foreground-strong);
   }
 
+  /* Very subtle hover: a faint tint of the page colour, so it never reads
+     as a second selected state. */
   .view-switch label:hover input:not(:checked) + span {
-    background: var(--background-page);
+    background: color-mix(in srgb, var(--background-page) 30%, transparent);
   }
 
   .view-switch input:focus-visible + span {
