@@ -109,6 +109,11 @@
   --background-page: #f4f1ef;
   --page-background: var(--background-page);
   --background-card: #fafafa;
+  /* Card grain, layered over --background-card (Card, HomeCard).
+     Dark mode matches the Figma "Service card" noise (monotone black, 15%, 1px,
+     density 100%): black at 0–15% per pixel. Light mode uses the same grain at about a
+     fifth of the strength, so cards stay lighter than the page. */
+  --card-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0 0 0 -0.025'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 160px 160px;
   --background-area-card: #f9f9f9;
   --background-surface: #fff; /* menu panel, light menu pill */
   --background-header: rgb(250 250 250 / 75%); /* blurred sticky header */
@@ -229,6 +234,7 @@
 
   --background-page: #1a1a1a;
   --background-card: #292929;
+  --card-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0 0 0 -0.125'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 160px 160px;
   --background-area-card: #292929;
   --background-surface: #333333;
   --background-header: rgb(41 41 41 / 75%);
