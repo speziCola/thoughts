@@ -24,22 +24,23 @@ type Note = {
   text: string;
   author: "Research" | "Design" | "Product" | "Engineering";
   color: "yellow" | "orange" | "pink" | "purple" | "blue" | "green";
-  x: number; // left, % of board width
+  col: 0 | 1; // left or right column; centred in its half of the section by the script
+  dx: number; // small horizontal offset from the column centre, % of board width
   y: number; // top, % of board height
   r: number; // rotation, deg
 };
 
 const notes: Note[] = [
   // How I lead
-  { text: "Founded and lead the Abundantia design system", author: "Design", color: "purple", x: 7, y: 14.5, r: -2 },
-  { text: "Leading a team of designers", author: "Product", color: "green", x: 54, y: 14.5, r: 2 },
-  { text: "Up to +12% login conversion", author: "Research", color: "orange", x: 8, y: 33.5, r: 1.5 },
-  { text: "Discovery workshops, JTBD & Lean UX", author: "Product", color: "yellow", x: 53, y: 33.5, r: -2.5 },
+  { text: "Founded and lead the Abundantia design system", author: "Design", color: "purple", col: 0, dx: -1, y: 14.5, r: -2 },
+  { text: "Leading a team of designers", author: "Product", color: "green", col: 1, dx: 0.5, y: 14.5, r: 2 },
+  { text: "Up to +12% login conversion", author: "Research", color: "orange", col: 0, dx: 0.5, y: 33.5, r: 1.5 },
+  { text: "Discovery workshops, JTBD & Lean UX", author: "Product", color: "yellow", col: 1, dx: -0.5, y: 33.5, r: -2.5 },
   // How I build
-  { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", x: 7, y: 57.5, r: 2 },
-  { text: "User research & usability testing", author: "Research", color: "pink", x: 54, y: 57.5, r: -1.5 },
-  { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", x: 8, y: 76.5, r: -2 },
-  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", x: 53, y: 76.5, r: 2.5 },
+  { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", col: 0, dx: -0.5, y: 57.5, r: 2 },
+  { text: "User research & usability testing", author: "Research", color: "pink", col: 1, dx: 0.5, y: 57.5, r: -1.5 },
+  { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", col: 0, dx: 1, y: 76.5, r: -2 },
+  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", col: 1, dx: -1, y: 76.5, r: 2.5 },
 ];
 
 const cursors = [
@@ -48,9 +49,16 @@ const cursors = [
   { name: "Product", color: "product", x: 26, y: 68 },
   { name: "Engineering", color: "engineering", x: 74, y: 86 },
 ];
+
+// Cursors wander, react and comment only on the start page. On every other page
+// they glide to a stop and stay parked; back on the start page they slowly resume.
+const path = Astro.url.pathname;
+const ambient = path === "/" || path.startsWith("/home");
+// Fallback left position (no JS): roughly the column centre on a typical panel.
+const fallbackX = (note: Note) => (note.col === 0 ? 15 : 62) + note.dx;
 ---
 
-<div class="whiteboard" data-whiteboard>
+<div class="whiteboard" data-whiteboard data-ambient={ambient ? "" : undefined}>
   <p class="whiteboard__heading">How might we build better products?</p>
   {/* Shown by the script once a visitor has moved a note. */}
   <button class="button button--secondary button--sm whiteboard__reset" type="button" data-whiteboard-reset hidden>
@@ -72,9 +80,11 @@ const cursors = [
       notes.map((note) => (
         <li
           class:list={["note", `note--${note.color}`]}
-          style={`--x: ${note.x}; --y: ${note.y}; --r: ${note.r}deg`}
+          style={`--x: ${fallbackX(note)}; --y: ${note.y}; --r: ${note.r}deg`}
           data-note
-          data-home={`${note.x},${note.y}`}
+          data-col={note.col}
+          data-dx={note.dx}
+          data-home={`${fallbackX(note)},${note.y}`}
         >
           <span class="note__text">{note.text}</span>
           <span class="note__author">{note.author}</span>
@@ -104,15 +114,32 @@ const cursors = [
     // saves the state and restores the reactions.
     // A reload (F5) is a hard reset: the saved board is dropped and it starts fresh.
     (() => {
+      // Starting layout: centre each column in its half of the section (sections run
+      // from 3% to 97% of the board, so the halves are centred at 26.5% and 73.5%).
+      // Note size depends on the board's width and height, so this is measured here,
+      // before the first paint. The module script repeats it on resize.
+      const board = document.currentScript.parentElement;
+      const layoutHomes = () => {
+        const w = board.clientWidth;
+        if (!w) return;
+        board.querySelectorAll("[data-note]").forEach((note) => {
+          const half = (note.offsetWidth / w) * 50;
+          const x = (note.dataset.col === "1" ? 73.5 : 26.5) - half + Number(note.dataset.dx || 0);
+          const y = note.dataset.home.split(",")[1];
+          note.dataset.home = `${x.toFixed(2)},${y}`;
+          note.style.setProperty("--x", x.toFixed(2));
+        });
+      };
+      board.layoutHomes = layoutHomes;
+      layoutHomes();
       try {
         const navigation = performance.getEntriesByType("navigation")[0];
         if (navigation && navigation.type === "reload") {
-          sessionStorage.removeItem("whiteboard-state-v1");
+          sessionStorage.removeItem("whiteboard-state-v2");
           return;
         }
-        const state = JSON.parse(sessionStorage.getItem("whiteboard-state-v1") || "null");
-        const board = document.currentScript.parentElement;
-        if (!state || !board) return;
+        const state = JSON.parse(sessionStorage.getItem("whiteboard-state-v2") || "null");
+        if (!state) return;
         const notes = board.querySelectorAll("[data-note]");
         const cursors = board.querySelectorAll("[data-cursor]");
         if (state.notes?.length !== notes.length || state.cursors?.length !== cursors.length) return;
@@ -529,7 +556,8 @@ const cursors = [
     });
 
     /* ---------- Ambient loop: role cursors ---------- */
-    const running = () => visible && !document.hidden && !reducedMotion.matches;
+    const ambient = "ambient" in board.dataset;
+    const running = () => ambient && visible && !document.hidden && !reducedMotion.matches;
     const untilRunning = () =>
       running() ? Promise.resolve() : new Promise<void>((resolve) => waiting.push(resolve));
     const wake = () => {
@@ -553,7 +581,8 @@ const cursors = [
     };
     position.forEach((pos, cursor) => flip(cursor, pos.x));
 
-    const moveCursor = async (cursor: HTMLElement, x: number, y: number, duration: number) => {
+    const EASE = "cubic-bezier(0.45, 0, 0.2, 1)";
+    const moveCursor = async (cursor: HTMLElement, x: number, y: number, duration: number, easing = EASE) => {
       const from = position.get(cursor)!;
       flip(cursor, x);
       const animation = cursor.animate(
@@ -561,7 +590,7 @@ const cursors = [
           { transform: `translate(${from.x}px, ${from.y}px)` },
           { transform: `translate(${x}px, ${y}px)` },
         ],
-        { duration, easing: "cubic-bezier(0.45, 0, 0.2, 1)", fill: "forwards" },
+        { duration, easing, fill: "forwards" },
       );
       await animation.finished.catch(() => {});
       cursor.style.transform = `translate(${x}px, ${y}px)`;
@@ -602,6 +631,7 @@ const cursors = [
 
     const loop = async (cursor: HTMLElement, delay: number) => {
       await sleep(delay);
+      let first = true; // first move after arriving: slow, easing in from rest
       while (true) {
         await untilRunning();
         const free = notes.filter((note) => !busy.has(note));
@@ -613,7 +643,12 @@ const cursors = [
         busy.add(note);
         const x = note.offsetLeft + note.offsetWidth * rand(0.3, 0.8);
         const y = note.offsetTop + note.offsetHeight * rand(0.35, 0.85);
-        await moveCursor(cursor, x, y, rand(1400, 2600));
+        if (first) {
+          first = false;
+          await moveCursor(cursor, x, y, rand(2800, 3800), "cubic-bezier(0.55, 0, 0.35, 1)");
+        } else {
+          await moveCursor(cursor, x, y, rand(1400, 2600));
+        }
 
         if (running() && !note.classList.contains("is-dragging")) {
           const action = Math.random();
@@ -648,7 +683,7 @@ const cursors = [
     };
 
     /* ---------- Keep the board between pages (sessionStorage, this tab only) ---------- */
-    const STORAGE_KEY = "whiteboard-state-v1";
+    const STORAGE_KEY = "whiteboard-state-v2";
 
     const save = () => {
       const box = board.getBoundingClientRect();
@@ -735,8 +770,37 @@ const cursors = [
     const startLoops = () => {
       if (loopsStarted || !running()) return;
       loopsStarted = true;
-      cursors.forEach((cursor, index) => loop(cursor, index * 500));
+      // Staggered and unhurried, so the board wakes up slowly.
+      cursors.forEach((cursor, index) => loop(cursor, 400 + index * 900));
     };
+
+    // Not the start page: each cursor drifts a little further and glides to a stop,
+    // then stays parked (positions are saved, so the start page resumes from there).
+    if (!ambient && !reducedMotion.matches) {
+      cursors.forEach((cursor) => {
+        const { x, y } = position.get(cursor)!;
+        const nx = clamp(x + rand(-24, 24), 8, board.clientWidth - 24);
+        const ny = clamp(y + rand(-16, 16), 8, board.clientHeight - 24);
+        moveCursor(cursor, nx, ny, rand(1200, 1800), "cubic-bezier(0.2, 0.6, 0.3, 1)").then(save);
+      });
+    }
+
+    // Keep the columns centred when the panel changes size: notes still at their old
+    // starting spot move with it.
+    let resizeFrame = 0;
+    new ResizeObserver(() => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        const before = notes.map((note) => note.dataset.home);
+        const current = notes.map((note) => [getVar(note, "--x"), getVar(note, "--y")]);
+        (board as HTMLElement & { layoutHomes?: () => void }).layoutHomes?.();
+        notes.forEach((note, i) => {
+          const [hx, hy] = (before[i] ?? "0,0").split(",").map(Number);
+          const atHome = Math.abs(current[i][0] - hx) < 0.05 && Math.abs(current[i][1] - hy) < 0.05;
+          if (!atHome) setPos(note, current[i][0], current[i][1]);
+        });
+      });
+    }).observe(board);
 
     new IntersectionObserver((entries) => {
       visible = entries.some((entry) => entry.isIntersecting);
