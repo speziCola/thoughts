@@ -24,7 +24,7 @@ type Note = {
   text: string;
   author: "Research" | "Design" | "Product" | "Engineering";
   color: "yellow" | "orange" | "pink" | "purple" | "blue" | "green";
-  col: 0 | 1; // left or right column; centred in its half of the section by the script
+  col: 0 | 1; // left column (centred in its half by the script) or right column (fixed start)
   dx: number; // small horizontal offset from the column centre, % of board width
   y: number; // top, % of board height
   r: number; // rotation, deg
@@ -40,7 +40,7 @@ const notes: Note[] = [
   { text: "Design tokens, theming & light/dark modes", author: "Engineering", color: "blue", col: 0, dx: -0.5, y: 57.5, r: 2 },
   { text: "User research & usability testing", author: "Research", color: "pink", col: 1, dx: 0.5, y: 57.5, r: -1.5 },
   { text: "AI prototyping & UX assessments", author: "Design", color: "yellow", col: 0, dx: 1, y: 76.5, r: -2 },
-  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", col: 1, dx: -1, y: 76.5, r: 2.5 },
+  { text: "UX Freiburg: 600+ community members", author: "Product", color: "green", col: 1, dx: -0.5, y: 76.5, r: 2.5 },
 ];
 
 const cursors = [
@@ -55,7 +55,7 @@ const cursors = [
 const path = Astro.url.pathname;
 const ambient = path === "/" || path.startsWith("/home");
 // Fallback left position (no JS): roughly the column centre on a typical panel.
-const fallbackX = (note: Note) => (note.col === 0 ? 15 : 62) + note.dx;
+const fallbackX = (note: Note) => (note.col === 0 ? 15 : 53.5) + note.dx;
 ---
 
 <div class="whiteboard" data-whiteboard data-ambient={ambient ? "" : undefined}>
@@ -114,8 +114,9 @@ const fallbackX = (note: Note) => (note.col === 0 ? 15 : 62) + note.dx;
     // saves the state and restores the reactions.
     // A reload (F5) is a hard reset: the saved board is dropped and it starts fresh.
     (() => {
-      // Starting layout: centre each column in its half of the section (sections run
-      // from 3% to 97% of the board, so the halves are centred at 26.5% and 73.5%).
+      // Starting layout: the left column is centred in the left half of the section
+      // (sections run from 3% to 97% of the board, so that half is centred at 26.5%);
+      // the right column starts at a fixed 53.5%, just right of the middle.
       // Note size depends on the board's width and height, so this is measured here,
       // before the first paint. The module script repeats it on resize.
       const board = document.currentScript.parentElement;
@@ -124,7 +125,8 @@ const fallbackX = (note: Note) => (note.col === 0 ? 15 : 62) + note.dx;
         if (!w) return;
         board.querySelectorAll("[data-note]").forEach((note) => {
           const half = (note.offsetWidth / w) * 50;
-          const x = (note.dataset.col === "1" ? 73.5 : 26.5) - half + Number(note.dataset.dx || 0);
+          const base = note.dataset.col === "1" ? 53.5 : 26.5 - half;
+          const x = base + Number(note.dataset.dx || 0);
           const y = note.dataset.home.split(",")[1];
           note.dataset.home = `${x.toFixed(2)},${y}`;
           note.style.setProperty("--x", x.toFixed(2));
