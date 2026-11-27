@@ -1,0 +1,224 @@
+From 9bbb11a29c071d983a86258eed2f76568a77a458 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 22 Nov 2026 21:54:34 +0100
+Subject: [PATCH] Start page: Sharing Thoughts uses full article teasers 50/50;
+ How I Work switcher without gap
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01CufHutfQcHDfqNW52pXk28
+---
+ src/components/home/LatestArticles.astro | 157 +++--------------------
+ src/pages/what-i-do.astro                |   6 +-
+ 2 files changed, 23 insertions(+), 140 deletions(-)
+
+diff --git a/src/components/home/LatestArticles.astro b/src/components/home/LatestArticles.astro
+index b2db7c7..b18db3d 100644
+--- a/src/components/home/LatestArticles.astro
++++ b/src/components/home/LatestArticles.astro
+@@ -1,152 +1,35 @@
+ ---
+ /**
+- * Start page: the two newest articles in one card ("Sharing Thoughts").
++ * Start page: the two newest articles ("Sharing Thoughts").
+  * Picked automatically from the blog collection (same source and order as
+- * /thoughts/), so the card updates with every new post. No Figma spec yet.
++ * /thoughts/), so the section updates with every new post.
+  *
+- * Each item: 160px cover left (height from its 16:9 ratio), date + title
+- * right (date first, like the article teasers), aligned to the top, 24px apart. Items sit side by side on large
+- * desktops and stack at 1400px and below (or when the card gets narrow).
+- * Mobile (≤900px): like the blog overview teasers, without tags and link:
+- * full-width cover on top, then date, then title; a divider (48px above and
+- * below) between the two posts.
+- * The cover link repeats the title link, so it is hidden from the tab order
+- * and accessibility tree.
++ * Uses the same stacked article teaser as "Enabling People" (cover, date,
++ * title, description, "Read article"), two cards 50/50, one per row on
++ * mobile (CardGrid). One card style for articles across the start page.
+  */
+-import { Image } from "astro:assets";
+-import HomeCard from "./HomeCard.astro";
++import ArticleTeaser from "../ArticleTeaser.astro";
++import CardGrid from "../CardGrid.astro";
+ import { getPosts } from "../../lib/posts";
+ import { url } from "../../lib/url";
+ 
+ const latest = (await getPosts()).slice(0, 2);
+-const formatDate = (date: Date) =>
+-  date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+ ---
+ 
+ {
+   latest.length > 0 && (
+-    <HomeCard tag="div">
+-      <div class="latest-list">
+-      {latest.map((post) => {
+-        const href = url(`/thoughts/${post.slug}/`);
+-        return (
+-          <article class="latest">
+-            <div class="latest__inner">
+-              {post.coverImage && (
+-                <a class="latest__image" href={href} tabindex="-1" aria-hidden="true">
+-                  <Image src={post.coverImage} alt="" widths={[160, 320, 640, 960]} sizes="(max-width: 900px) calc(100vw - 80px), 160px" />
+-                </a>
+-              )}
+-              <div class="latest__text">
+-                <time class="latest__date page-label" datetime={post.date.toISOString().slice(0, 10)}>
+-                  {formatDate(post.date)}
+-                </time>
+-                <h3 class="home-card-title latest__title">
+-                  <a href={href}>{post.title}</a>
+-                </h3>
+-              </div>
+-            </div>
+-          </article>
+-        );
+-      })}
+-      </div>
+-    </HomeCard>
++    <CardGrid columns={2} gap="md">
++      {latest.map((post) => (
++        <ArticleTeaser
++          title={post.title}
++          href={url(`/thoughts/${post.slug}/`)}
++          description={post.description}
++          date={post.date}
++          image={post.coverImage}
++          alt={post.coverAlt}
++          headingLevel={3}
++        />
++      ))}
++    </CardGrid>
+   )
+ }
+-
+-<style>
+-  /* Side by side on large desktops (64px apart); one post per row at
+-     1400px and below, or whenever the card is narrow (32px apart). */
+-  .latest-list {
+-    display: grid;
+-    grid-template-columns: repeat(2, minmax(0, 1fr));
+-    gap: 64px;
+-  }
+-
+-  @media (max-width: 1400px) {
+-    .latest-list {
+-      grid-template-columns: minmax(0, 1fr);
+-      gap: 32px;
+-    }
+-  }
+-
+-  @container (max-width: 640px) {
+-    .latest-list {
+-      grid-template-columns: minmax(0, 1fr);
+-      gap: 32px;
+-    }
+-  }
+-
+-  .latest__inner {
+-    display: grid;
+-    grid-template-columns: 160px minmax(0, 1fr);
+-    gap: 24px;
+-    align-items: start;
+-  }
+-
+-  .latest__image {
+-    display: block;
+-    aspect-ratio: 16 / 9;
+-    overflow: hidden;
+-    border-radius: var(--radius-4);
+-    background: var(--foreground-inverse);
+-  }
+-
+-  .latest__image :global(img) {
+-    width: 100%;
+-    height: 100%;
+-    display: block;
+-    object-fit: cover;
+-    transition: transform 240ms ease;
+-  }
+-
+-  .latest__image:hover :global(img) {
+-    transform: scale(1.03);
+-  }
+-
+-  .latest__title {
+-    overflow-wrap: anywhere;
+-  }
+-
+-  .latest__date {
+-    display: block;
+-    color: var(--foreground-light);
+-  }
+-
+-  @media (max-width: 900px) {
+-    .latest-list {
+-      grid-template-columns: minmax(0, 1fr);
+-      gap: 0;
+-    }
+-
+-    /* Divider between the posts, same look as the start page divider. The
+-       divider alone carries the spacing: 48px above and below it. */
+-    .latest + .latest {
+-      position: relative;
+-      padding-top: calc(48px + 2px + 48px);
+-    }
+-
+-    .latest + .latest::before {
+-      position: absolute;
+-      top: 48px;
+-      right: 0;
+-      left: 0;
+-      height: 2px;
+-      border-radius: 999px;
+-      background: var(--border-subtle);
+-      content: "";
+-    }
+-
+-    .latest__inner {
+-      grid-template-columns: minmax(0, 1fr);
+-      gap: 16px;
+-    }
+-
+-  }
+-
+-  @media (prefers-reduced-motion: reduce) {
+-    .latest__image :global(img) {
+-      transition: none;
+-    }
+-  }
+-</style>
+diff --git a/src/pages/what-i-do.astro b/src/pages/what-i-do.astro
+index a42fd66..87f2580 100755
+--- a/src/pages/what-i-do.astro
++++ b/src/pages/what-i-do.astro
+@@ -342,7 +342,7 @@ const articles = [
+     display: inline-grid;
+     grid-auto-columns: minmax(0, 1fr);
+     grid-auto-flow: column;
+-    gap: 16px;
++    gap: 0;
+     min-width: min(100%, 308px);
+     border: 0;
+     border-radius: var(--radius-8);
+@@ -355,7 +355,7 @@ const articles = [
+     top: 4px;
+     bottom: 4px;
+     left: 4px;
+-    width: calc((100% - 8px - 16px) / 2);
++    width: calc((100% - 8px) / 2);
+     border-radius: var(--radius-4);
+     background: var(--background-muted);
+     box-shadow: var(--shadow-highlight);
+@@ -364,7 +364,7 @@ const articles = [
+   }
+ 
+   .view-switch:has(#view-operational:checked)::before {
+-    transform: translateX(calc(100% + 16px));
++    transform: translateX(100%);
+   }
+ 
+   .view-switch label {
+-- 
+2.43.0
+

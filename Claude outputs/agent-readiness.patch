@@ -1,0 +1,504 @@
+From 584637c06ffff76001595cb16b82e75ec4b9f095 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 22 Nov 2026 14:56:27 +0100
+Subject: [PATCH] Agent readiness: WebMCP tools, generated llms.txt, Markdown
+ articles, contrast + image fixes
+
+- WebMCP: read-only search_posts, get_post, get_profile tools on every page
+- llms.txt / llms-full.txt generated with an Articles section from the blog collection
+- /thoughts/<slug>/index.md plain-Markdown versions + rel="alternate" link; /thoughts/index.json
+- Ask LLM button: darker highlight text (#006b42) for WCAG AA contrast
+- Portraits via <Image>, UX Freiburg gallery sizes matched to layout
+- JSON-LD jobTitle: Head of Research & Design
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01CufHurxgs1Nnmip2xKky9Q
+---
+ docs/decisions.md                             |   8 ++
+ src/components/WebMcp.astro                   | 114 ++++++++++++++++++
+ src/components/home/UxfCard.astro             |   8 +-
+ public/llms-full.txt => src/data/llms-full.md |   0
+ public/llms.txt => src/data/llms.md           |   0
+ src/layouts/BlogLayout.astro                  |   6 +
+ src/lib/markdown.ts                           |  68 +++++++++++
+ src/lib/site.ts                               |   2 +-
+ src/pages/about.astro                         |   9 +-
+ src/pages/index.astro                         |   8 +-
+ src/pages/llms-full.txt.ts                    |  13 ++
+ src/pages/llms.txt.ts                         |  13 ++
+ src/pages/thoughts/[slug].astro               |   1 +
+ src/pages/thoughts/[slug]/index.md.ts         |  16 +++
+ src/pages/thoughts/index.json.ts              |  23 ++++
+ src/styles/global.css                         |   2 +-
+ 16 files changed, 277 insertions(+), 14 deletions(-)
+ create mode 100644 src/components/WebMcp.astro
+ rename public/llms-full.txt => src/data/llms-full.md (100%)
+ rename public/llms.txt => src/data/llms.md (100%)
+ create mode 100644 src/lib/markdown.ts
+ create mode 100644 src/pages/llms-full.txt.ts
+ create mode 100644 src/pages/llms.txt.ts
+ create mode 100644 src/pages/thoughts/[slug]/index.md.ts
+ create mode 100644 src/pages/thoughts/index.json.ts
+
+diff --git a/docs/decisions.md b/docs/decisions.md
+index bdee0a7..2c8324b 100644
+--- a/docs/decisions.md
++++ b/docs/decisions.md
+@@ -91,3 +91,11 @@ Supersedes the `/thoughts` base path above. No Astro `base`: pages live at the r
+ - Every page: the content column (`<main>`) fades in and slides in 24px from the right on load, 700ms ease-out, as one block. Header, art panel and footer stay put. Layout prop `entrance="none"` opts a page out.
+ - Start page keeps its own choreography (Framer values in home.css), plus: blocks below the areas reveal on scroll (fade + 16px slide up, 800ms); blocks visible on load join the entrance from 1.4s, +0.1s each. The divider under the intro zips in left → right last: accelerating ease-in, clip-path, 450ms, from 1.9s.
+ - All motion off with `prefers-reduced-motion: reduce`. Scroll-reveal content is only hidden when JS runs (`html.has-js`).
++
++## AI agents & LLMs (2026-11-22)
++- `/llms.txt` and `/llms-full.txt` are generated (`src/pages/llms*.txt.ts`): the hand-written profile in `src/data/llms.md` / `src/data/llms-full.md`, plus an auto-generated "Articles" section (every published post, newest first). Edit the profile in `src/data`, never in `public/`.
++- Every article also exists as plain Markdown at `/thoughts/<slug>/index.md` (metadata header + body; local images become `*[Image: alt – caption]*` notes because their built paths are hashed). Linked from the article via `<link rel="alternate" type="text/markdown">`.
++- `/thoughts/index.json`: machine-readable article index (slug, title, description, date, tags, URLs).
++- WebMCP (`src/components/WebMcp.astro`, rendered in every page `<head>`): three read-only tools – `search_posts`, `get_post`, `get_profile`. Progressive enhancement: no-op without `document.modelContext`/`navigator.modelContext`; data fetched only when a tool is called. Chrome-only and experimental – the API may change.
++- `.button--highlight` text is `#006b42` in light mode (was `#00be73`, 2.1:1) for 4.5:1 on its tint, hover included.
++- Portraits use `<Image>` with `widths`/`sizes`; UX Freiburg gallery `sizes` match the measured layout (switch at ≈1170px viewport, container query).
+diff --git a/src/components/WebMcp.astro b/src/components/WebMcp.astro
+new file mode 100644
+index 0000000..7c21bd6
+--- /dev/null
++++ b/src/components/WebMcp.astro
+@@ -0,0 +1,114 @@
++---
++/**
++ * WebMCP tools (https://developer.chrome.com/docs/ai/webmcp): lets an AI agent running
++ * in the visitor's browser query the site through structured, read-only tools instead
++ * of scraping the page.
++ *
++ * - search_posts: find articles by keyword and/or tag (from /thoughts/index.json)
++ * - get_post: full article as Markdown (/thoughts/<slug>/index.md)
++ * - get_profile: Christopher's professional profile (/llms.txt or /llms-full.txt)
++ *
++ * Progressive enhancement: does nothing in browsers without WebMCP (everything but
++ * Chrome with the API enabled). Data is fetched only when an agent calls a tool.
++ * Rendered once per page from BlogLayout.
++ */
++import { url } from "../lib/url";
++---
++
++<script
++  is:inline
++  data-webmcp
++  data-index={url("/thoughts/index.json")}
++  data-llms={url("/llms.txt")}
++  data-llms-full={url("/llms-full.txt")}
++  type="module"
++>
++  const mc = document.modelContext ?? navigator.modelContext;
++  // Module scripts have no document.currentScript, so read the URLs from the tag itself.
++  const config = document.querySelector("script[data-webmcp]")?.dataset ?? {};
++
++  if (mc && typeof mc.registerTool === "function") {
++    const fetchText = async (path, signal) => {
++      const response = await fetch(path, { signal });
++      if (!response.ok) throw new Error(`Could not load ${path} (${response.status}).`);
++      return response.text();
++    };
++
++    let indexPromise;
++    const loadIndex = (signal) =>
++      (indexPromise ??= fetchText(config.index, signal)
++        .then(JSON.parse)
++        .catch((error) => {
++          indexPromise = undefined;
++          throw error;
++        }));
++
++    const tools = [
++      {
++        name: "search_posts",
++        description:
++          "Search the articles Christopher Kuhrt has written on UX, research, design systems, design leadership and AI in product work. Returns matching articles (title, description, date, tags, URLs), newest first. Call without arguments to list all articles.",
++        inputSchema: {
++          type: "object",
++          properties: {
++            query: { type: "string", description: "Keywords to look for in titles, descriptions and tags." },
++            tag: { type: "string", description: "Only return articles with this tag, e.g. \"ux\" or \"research\"." },
++            limit: { type: "integer", minimum: 1, maximum: 50, description: "Maximum number of results (default 10)." },
++          },
++        },
++        annotations: { readOnlyHint: true },
++        execute: async ({ query = "", tag = "", limit = 10 } = {}, { signal } = {}) => {
++          const posts = await loadIndex(signal);
++          const words = String(query).toLowerCase().split(/\s+/).filter(Boolean);
++          const wantedTag = String(tag).toLowerCase().trim();
++          const hits = posts.filter((post) => {
++            if (wantedTag && !post.tags.some((t) => t.toLowerCase() === wantedTag)) return false;
++            const haystack = `${post.title} ${post.description} ${post.tags.join(" ")}`.toLowerCase();
++            return words.every((word) => haystack.includes(word));
++          });
++          return JSON.stringify({ total: hits.length, results: hits.slice(0, Math.max(1, Math.min(50, limit))) });
++        },
++      },
++      {
++        name: "get_post",
++        description:
++          "Get the full text of one of Christopher Kuhrt's articles as Markdown. Use the slug or URL from search_posts.",
++        inputSchema: {
++          type: "object",
++          properties: {
++            slug: { type: "string", description: "Article slug or full article URL, as returned by search_posts." },
++          },
++          required: ["slug"],
++        },
++        annotations: { readOnlyHint: true },
++        execute: async ({ slug } = {}, { signal } = {}) => {
++          const posts = await loadIndex(signal);
++          const key = String(slug ?? "").replace(/\/index\.md$/, "").replace(/\/+$/, "").split("/").pop();
++          const post = posts.find((p) => p.slug === key);
++          if (!post) return `No article found for "${slug}". Use search_posts to list available articles.`;
++          return fetchText(new URL(post.markdown).pathname, signal);
++        },
++      },
++      {
++        name: "get_profile",
++        description:
++          "Get Christopher Kuhrt's professional profile: current role, career history, expertise, projects, community work and links. Use detail \"full\" for the complete version with FAQs.",
++        inputSchema: {
++          type: "object",
++          properties: {
++            detail: { type: "string", enum: ["summary", "full"], description: "\"summary\" (default) or \"full\"." },
++          },
++        },
++        annotations: { readOnlyHint: true },
++        execute: async ({ detail = "summary" } = {}, { signal } = {}) =>
++          fetchText(detail === "full" ? config.llmsFull : config.llms, signal),
++      },
++    ];
++
++    for (const tool of tools) {
++      Promise.resolve()
++        .then(() => mc.registerTool(tool))
++        .catch((error) => console.warn(`WebMCP: could not register ${tool.name}`, error));
++    }
++  }
++</script>
+diff --git a/src/components/home/UxfCard.astro b/src/components/home/UxfCard.astro
+index dceaec1..6a946f9 100644
+--- a/src/components/home/UxfCard.astro
++++ b/src/components/home/UxfCard.astro
+@@ -85,12 +85,12 @@ const channels: { name: string; members: number; icon: string; href?: string }[]
+ 
+   <div class="uxf-gallery">
+     <div class="uxf-gallery__row uxf-gallery__row--a">
+-      <Image src={uxfRooftop} alt="UX Freiburg members chatting over food on a rooftop terrace" widths={[200, 400]} sizes="(max-width: 900px) 35vw, 12vw" />
+-      <Image class="uxf-gallery__speaker" src={uxfSpeaker} alt="A speaker addressing the audience at a UX Freiburg meetup" widths={[360, 720]} sizes="(max-width: 900px) 60vw, 20vw" />
++      <Image src={uxfRooftop} alt="UX Freiburg members chatting over food on a rooftop terrace" widths={[120, 200, 300, 400, 600]} sizes="(max-width: 900px) 32vw, (max-width: 1170px) 20vw, 10vw" />
++      <Image class="uxf-gallery__speaker" src={uxfSpeaker} alt="A speaker addressing the audience at a UX Freiburg meetup" widths={[200, 300, 400, 560, 720]} sizes="(max-width: 900px) 55vw, (max-width: 1170px) 35vw, 17vw" />
+     </div>
+     <div class="uxf-gallery__row uxf-gallery__row--b">
+-      <Image src={uxfChallenges} alt="A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”" widths={[200, 400]} sizes="(max-width: 900px) 30vw, 10vw" />
+-      <Image class="uxf-gallery__agenda" src={uxfAgenda} alt="An audience watching a talk with an agenda slide at a UX Freiburg event" widths={[460, 920]} sizes="(max-width: 900px) 70vw, 24vw" />
++      <Image src={uxfChallenges} alt="A speaker in front of a screen reading “UX, Team, Challenges, Learnings!”" widths={[100, 160, 240, 320, 480]} sizes="(max-width: 900px) 25vw, (max-width: 1170px) 16vw, 8vw" />
++      <Image class="uxf-gallery__agenda" src={uxfAgenda} alt="An audience watching a talk with an agenda slide at a UX Freiburg event" widths={[240, 320, 460, 640, 846]} sizes="(max-width: 900px) 62vw, (max-width: 1170px) 39vw, 19vw" />
+     </div>
+   </div>
+ </HomeCard>
+diff --git a/public/llms-full.txt b/src/data/llms-full.md
+similarity index 100%
+rename from public/llms-full.txt
+rename to src/data/llms-full.md
+diff --git a/public/llms.txt b/src/data/llms.md
+similarity index 100%
+rename from public/llms.txt
+rename to src/data/llms.md
+diff --git a/src/layouts/BlogLayout.astro b/src/layouts/BlogLayout.astro
+index eaefcf5..116e45a 100644
+--- a/src/layouts/BlogLayout.astro
++++ b/src/layouts/BlogLayout.astro
+@@ -1,6 +1,7 @@
+ ---
+ import "../styles/global.css";
+ import SiteFooter from "../components/SiteFooter.astro";
++import WebMcp from "../components/WebMcp.astro";
+ import SiteHeader from "../components/SiteHeader.astro";
+ import ArtPanel from "../components/ArtPanel.astro";
+ import firaSansSemibold from "../assets/fonts/fira-sans-semibold.woff2?url";
+@@ -42,6 +43,8 @@ interface Props {
+    * "none" = the page choreographs its own entrance (start page, see home.css).
+    */
+   entrance?: "page" | "none";
++  /** Root-relative URL of a plain-Markdown version of this page (articles), linked as rel="alternate". */
++  markdown?: string;
+ }
+ 
+ const {
+@@ -58,6 +61,7 @@ const {
+   tags = [],
+   jsonLd = [],
+   breadcrumbs,
++  markdown,
+   pageType = "WebPage",
+   entrance = "page",
+ } = Astro.props;
+@@ -115,6 +119,7 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
+     <title>{fullTitle}</title>
+     <meta name="description" content={description} />
+     <link rel="canonical" href={canonical} />
++    {markdown && <link rel="alternate" type="text/markdown" href={url(markdown)} />}
+     <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+     <meta name="author" content="Chris Kuhrt" />
+     <meta name="theme-color" content="#f4f1ef" />
+@@ -183,6 +188,7 @@ const ldJson = JSON.stringify({ "@context": "https://schema.org", "@graph": grap
+       type="font/woff2"
+       crossorigin
+     />
++    <WebMcp />
+   </head>
+   <body>
+     <a class="skip-link" href="#main">Skip to content</a>
+diff --git a/src/lib/markdown.ts b/src/lib/markdown.ts
+new file mode 100644
+index 0000000..b80fc50
+--- /dev/null
++++ b/src/lib/markdown.ts
+@@ -0,0 +1,68 @@
++/**
++ * Plain-Markdown output for AI agents and LLMs: /thoughts/<slug>/index.md and the
++ * article lists in /llms.txt and /llms-full.txt. Shared by those endpoints so they
++ * always describe the same set of published posts.
++ */
++import type { Post } from "./posts";
++import { canonicalUrl } from "./site";
++
++const isoDate = (date: Date) => date.toISOString().slice(0, 10);
++
++/** Canonical URL of an article and of its Markdown version. */
++export const postUrl = (post: Post) => canonicalUrl(`/thoughts/${post.slug}/`);
++export const postMarkdownUrl = (post: Post) => `${postUrl(post)}index.md`;
++
++/**
++ * Article body for agents. Local images are only served under hashed build paths,
++ * so they become a short text note (alt text + caption) instead of broken links.
++ */
++export function postBodyAsMarkdown(post: Post): string {
++  const body = post.entry.body ?? "";
++  return body.replace(
++    /!\[([^\]]*)\]\(\s*<?[^)\s>]+>?(?:\s+"([^"]*)")?\s*\)/g,
++    (_match, alt: string, title?: string) => {
++      const caption = title ? ` – ${title}` : "";
++      return `*[Image: ${alt.trim()}${caption}]*`;
++    },
++  );
++}
++
++/** Full Markdown document for /thoughts/<slug>/index.md, with a small metadata header. */
++export function postAsMarkdownDocument(post: Post): string {
++  const meta = [
++    `> ${post.description}`,
++    "",
++    `- Author: Christopher Kuhrt`,
++    `- Published: ${isoDate(post.date)}`,
++    ...(post.updated ? [`- Updated: ${isoDate(post.updated)}`] : []),
++    ...(post.tags.length ? [`- Tags: ${post.tags.join(", ")}`] : []),
++    `- Web version: ${postUrl(post)}`,
++  ].join("\n");
++
++  // The body starts with the article's H1; the metadata goes right below it.
++  const body = postBodyAsMarkdown(post).trim();
++  const h1 = body.match(/^#\s+.+$/m)?.[0] ?? `# ${post.title}`;
++  const rest = body.replace(h1, "").trim();
++  return `${h1}\n\n${meta}\n\n${rest}\n`;
++}
++
++/** "## Articles" section listing every published post (newest first), llms.txt style. */
++export function articlesSection(posts: Post[]): string {
++  const lines = posts.map(
++    (post) =>
++      `- [${post.seoTitle}](${postMarkdownUrl(post)}): ${post.description} (${isoDate(post.date)})`,
++  );
++  return [
++    "## Articles",
++    "",
++    "Every published article as plain Markdown, newest first. Each article is also available as HTML at the same URL without `index.md`.",
++    "",
++    ...lines,
++  ].join("\n");
++}
++
++export const markdownResponse = (text: string) =>
++  new Response(text, { headers: { "Content-Type": "text/markdown; charset=utf-8" } });
++
++export const textResponse = (text: string) =>
++  new Response(text, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+diff --git a/src/lib/site.ts b/src/lib/site.ts
+index 4a97ba9..d34e315 100644
+--- a/src/lib/site.ts
++++ b/src/lib/site.ts
+@@ -32,7 +32,7 @@ export const person = {
+   name: "Chris Kuhrt",
+   alternateName: "Christopher Kuhrt",
+   url: canonicalUrl("/about/"),
+-  jobTitle: "Head of UX",
++  jobTitle: "Head of Research & Design",
+   description:
+     "Design leader, product strategist and design systems advocate based in Freiburg, Germany.",
+   worksFor: { "@type": "Organization", name: "etops", url: "https://www.etops.com/" },
+diff --git a/src/pages/about.astro b/src/pages/about.astro
+index 1a7c7e7..a8aecc8 100755
+--- a/src/pages/about.astro
++++ b/src/pages/about.astro
+@@ -1,4 +1,5 @@
+ ---
++import { Image } from "astro:assets";
+ import portrait from "../assets/images/about-portrait.jpg";
+ import Card from "../components/Card.astro";
+ import SectionTitle from "../components/SectionTitle.astro";
+@@ -55,12 +56,12 @@ const arrowNarrowRight = arrowNarrowRightRaw.replace(/stroke="black"/g, 'stroke=
+             an organizational capability rather than an isolated function.
+           </p>
+         </div>
+-        <img
++        <Image
+           class="about-page__portrait"
+-          src={portrait.src}
++          src={portrait}
+           alt="Portrait of Chris Kuhrt"
+-          width="512"
+-          height="512"
++          widths={[144, 288, 320, 512]}
++          sizes="(max-width: 700px) 144px, 320px"
+           loading="eager"
+         />
+       </section>
+diff --git a/src/pages/index.astro b/src/pages/index.astro
+index 9bccd9c..d2b4011 100644
+--- a/src/pages/index.astro
++++ b/src/pages/index.astro
+@@ -111,12 +111,12 @@ const references = [
+       </div>
+     </div>
+ 
+-    <img
++    <Image
+       class="intro__portrait enter"
+-      src={portrait.src}
++      src={portrait}
+       alt="Portrait of Chris Kuhrt"
+-      width="256"
+-      height="256"
++      widths={[128, 256, 320, 512]}
++      sizes="(max-width: 900px) 128px, 320px"
+       loading="eager"
+       fetchpriority="high"
+     />
+diff --git a/src/pages/llms-full.txt.ts b/src/pages/llms-full.txt.ts
+new file mode 100644
+index 0000000..16c5c01
+--- /dev/null
++++ b/src/pages/llms-full.txt.ts
+@@ -0,0 +1,13 @@
++/**
++ * /llms-full.txt: the detailed hand-written profile in src/data/llms-full.md,
++ * followed by the generated "Articles" section (same list as /llms.txt).
++ */
++import type { APIRoute } from "astro";
++import profile from "../data/llms-full.md?raw";
++import { getPosts } from "../lib/posts";
++import { articlesSection, textResponse } from "../lib/markdown";
++
++export const GET: APIRoute = async () => {
++  const posts = await getPosts();
++  return textResponse(`${profile.trimEnd()}\n\n${articlesSection(posts)}\n`);
++};
+diff --git a/src/pages/llms.txt.ts b/src/pages/llms.txt.ts
+new file mode 100644
+index 0000000..4ebf21e
+--- /dev/null
++++ b/src/pages/llms.txt.ts
+@@ -0,0 +1,13 @@
++/**
++ * /llms.txt (https://llmstxt.org/): the hand-written profile in src/data/llms.md,
++ * followed by an "Articles" section generated from the blog collection at build time.
++ */
++import type { APIRoute } from "astro";
++import profile from "../data/llms.md?raw";
++import { getPosts } from "../lib/posts";
++import { articlesSection, textResponse } from "../lib/markdown";
++
++export const GET: APIRoute = async () => {
++  const posts = await getPosts();
++  return textResponse(`${profile.trimEnd()}\n\n${articlesSection(posts)}\n`);
++};
+diff --git a/src/pages/thoughts/[slug].astro b/src/pages/thoughts/[slug].astro
+index c788c3d..ef407f7 100644
+--- a/src/pages/thoughts/[slug].astro
++++ b/src/pages/thoughts/[slug].astro
+@@ -75,6 +75,7 @@ const blogPosting = {
+     { name: post.seoTitle, url: canonical },
+   ]}
+   jsonLd={[blogPosting]}
++  markdown={`/thoughts/${post.slug}/index.md`}
+ >
+   <article class="blog-article">
+     <time class="post-date" datetime={date}>{formattedDate}</time>
+diff --git a/src/pages/thoughts/[slug]/index.md.ts b/src/pages/thoughts/[slug]/index.md.ts
+new file mode 100644
+index 0000000..14985ca
+--- /dev/null
++++ b/src/pages/thoughts/[slug]/index.md.ts
+@@ -0,0 +1,16 @@
++/**
++ * Plain-Markdown version of each article at /thoughts/<slug>/index.md, for AI agents
++ * and LLMs. Linked from the article page via <link rel="alternate" type="text/markdown">,
++ * from /llms.txt, and returned by the WebMCP get_post tool.
++ */
++import type { APIRoute, GetStaticPaths } from "astro";
++import { getPosts, type Post } from "../../../lib/posts";
++import { markdownResponse, postAsMarkdownDocument } from "../../../lib/markdown";
++
++export const getStaticPaths: GetStaticPaths = async () => {
++  const posts = await getPosts();
++  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
++};
++
++export const GET: APIRoute = ({ props }) =>
++  markdownResponse(postAsMarkdownDocument((props as { post: Post }).post));
+diff --git a/src/pages/thoughts/index.json.ts b/src/pages/thoughts/index.json.ts
+new file mode 100644
+index 0000000..178a9cc
+--- /dev/null
++++ b/src/pages/thoughts/index.json.ts
+@@ -0,0 +1,23 @@
++/**
++ * /thoughts/index.json: machine-readable article index (newest first).
++ * Used by the WebMCP tools (src/components/WebMcp.astro); also handy for any agent.
++ */
++import type { APIRoute } from "astro";
++import { getPosts } from "../../lib/posts";
++import { postMarkdownUrl, postUrl } from "../../lib/markdown";
++
++export const GET: APIRoute = async () => {
++  const posts = await getPosts();
++  const index = posts.map((post) => ({
++    slug: post.slug,
++    title: post.seoTitle,
++    description: post.description,
++    date: post.date.toISOString().slice(0, 10),
++    tags: post.tags,
++    url: postUrl(post),
++    markdown: postMarkdownUrl(post),
++  }));
++  return new Response(JSON.stringify(index), {
++    headers: { "Content-Type": "application/json; charset=utf-8" },
++  });
++};
+diff --git a/src/styles/global.css b/src/styles/global.css
+index 2b614af..37e9c40 100644
+--- a/src/styles/global.css
++++ b/src/styles/global.css
+@@ -106,7 +106,7 @@
+   --foreground-button-onregular: #fefefe; /* text on primary buttons (Figma foreground/button-Onregular) */
+   --foreground-button-onregular-hover: #00ffa3; /* primary button text on hover */
+   --foreground-button-regular: #0a0a0a; /* text on secondary buttons */
+-  --foreground-button-highlight: #00be73;
++  --foreground-button-highlight: #006b42; /* darkened from #00be73 for 4.5:1 on the highlight tint, incl. hover */
+   --foreground-stage01: #303859;
+   --foreground-stage02: #d92b2b; /* darkened from #e23131 for 4.5:1 on cards */
+   --foreground-stage03: #186daa;
+-- 
+2.43.0
+
